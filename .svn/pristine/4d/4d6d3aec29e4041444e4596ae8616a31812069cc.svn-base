@@ -1,0 +1,14 @@
+.login .container {
+  width: 920px;
+  margin: 0 auto;
+  position: relative;
+}
+.login .header {
+  margin-top: 100px;
+  text-align: center;
+}
+.login h1 {
+  color: #999;
+  font-weight: normal;
+  font-size: 18px;
+}

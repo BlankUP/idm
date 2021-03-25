@@ -1,0 +1,13 @@
+package com.idm.app.system.auth.mapper;
+
+import java.util.List;
+
+import com.idm.app.system.auth.model.Organization;
+import com.idm.app.system.auth.model.OrganizationExample;
+import com.idm.app.system.auth.model.Role;
+
+public interface OrganizationMapper {
+	Integer saveOrgInfo(Organization organization);
+	Integer updateOrgInfo(Organization organization);
+	List<Organization> selectAllByStruts();
+}

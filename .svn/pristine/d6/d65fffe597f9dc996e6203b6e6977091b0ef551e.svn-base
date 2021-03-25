@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.system.threadMonitor.mapper.ServerMapper">
+   
+   
+   
+       <select id="queryServerInfo" 
+	    resultType="com.idm.app.system.threadMonitor.model.ServerInfo">
+		SELECT
+			serverid,NAME,IP,PORT,TYPE,F5URL,SERVERURL,REMARK,
+			STATUS,CREATETIME,CREATEUSER,UPDATETIME,UPDATEUSER
+		FROM idm_server_info where 1=1
+		   
+      </select>
+      
+        <select id="queryServerById"  parameterType="java.lang.String"
+	    resultType="com.idm.app.system.threadMonitor.model.ServerInfo">
+		SELECT
+		serverid,NAME,IP,PORT,TYPE,F5URL,SERVERURL,REMARK,
+		STATUS,CREATETIME,CREATEUSER,UPDATETIME,UPDATEUSER
+		FROM idm_server_info where serverid=#{id,jdbcType=VARCHAR}
+		   
+      </select>
+</mapper>

@@ -1,0 +1,73 @@
+package com.idm.app.system.csvprocess.util;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
+import java.util.List;
+import java.util.TimerTask;
+import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+
+import com.alibaba.fastjson.JSONObject;
+import com.idm.app.system.auth.model.Organization;
+import com.idm.app.system.auth.service.OrganizationService;
+/**  
+* <p>Title: TaskTimer</p>  
+* @Description: 执行读取机构文件入口
+* @author wangke  
+* @date 2019年6月27日
+* @version  1.0
+*/ 
+public class TaskTimer  extends TimerTask{
+
+	static Logger logger = Logger.getLogger(TaskTimer.class);
+	@Value("${FTPPATH}")
+	private String FTPPATH;
+	@Value("${FILENAME}")
+	private String FILENAME;
+	
+	@Autowired
+	private OrganizationService organizationService;
+	@Override
+	public void run() {
+		List<Organization> orgList = organizationService.selectAll();
+		for (Organization organization : orgList) {
+			organization.setOrgStatus("1");
+		}
+		//读文件，存库
+		FTPUtils ftpUtils = new FTPUtils();
+		InputStream in = ftpUtils.getInputStreamByName(FTPPATH, FILENAME);
+		String str ="";
+		InputStreamReader reader = null;
+		BufferedReader br = null;
+		Organization org = null;
+//		List<Organization> orgs = null;
+		try {
+//			orgs = new ArrayList<>();
+			reader =  new InputStreamReader(in); // 建立一个输入流对象reader	
+			//转为字节流
+			br = new BufferedReader(reader);
+			while ((str = br.readLine())!=null) {
+				String[] str1 = str.split("\\|");
+				org = new Organization();
+                org.setOrgNo(str1[0]);
+                org.setOrgName(str1[1]);
+                org.setOrgNc(str1[2]);
+                org.setOrgStatus("0");
+//                orgs.add(org);					
+                organizationService.saveOrgInfo(org);
+			}
+			
+			br.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}

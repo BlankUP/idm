@@ -1,0 +1,42 @@
+//
+// Layouts
+// --------------------------------------------------
+
+
+// Container (centered, fixed-width layouts)
+.container {
+  .container-fixed();
+  position: relative;
+  .btn-bar{
+  	margin:5px 0;
+  }
+}
+
+
+// Fluid layout (left aligned, with sidebar, min- & max-width content)
+.page-fluid {
+  .container {
+    padding: 0 @gridGutterWidth;
+    width: auto;
+    .clearfix();
+  }
+  .navbar-fixed-top .container,
+  .navbar-fixed-bottom .container {
+    padding: 0;
+    width: auto;
+    .clearfix();
+  }
+}
+
+// Hybird layout (content centered and fixed-width, but navbar is full width)
+.page-hybird {
+  .navbar-fixed-top .container,
+  .navbar-fixed-bottom .container {
+    padding: 0;
+    width: auto;
+    .clearfix();
+  }
+}
+
+
+// ----------------------------------------------------

@@ -1,0 +1,174 @@
+
+// dialog 
+// --------------------------------------------
+.over-body{
+	overflow: hidden;
+}
+.dialog{
+	border: @baseBorder;
+	background: @contentBackground;
+	border-radius: 5px;
+	box-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+	width: 400px;
+	z-index:1000;
+	position: absolute;
+	overflow: hidden;
+
+	.dialog-header{
+		padding: 4px 10px 4px 10px;
+		position: relative;
+		border-radius:4px 4px 0 0;
+		h1,h2,h3,h4,h5{
+			margin: 0;
+		}
+
+		border-bottom: 1px solid lighten(desaturate(@gray,10%),20%);
+		.dialog-title { 
+			font-size: @fontSizeLarge; 
+			padding: 10px;
+		}
+
+		//控制按扭(关闭，最大化)
+		.dialog-control{
+			position: absolute;
+			right: 10px;
+			top: 4px;
+			i{ cursor: pointer;}
+		}
+	
+	}
+
+	.dialog-footer{
+		border-top: 1px solid lighten(desaturate(@gray,10%),20%);
+		text-align: right;
+		padding: @baseGapSmall @baseGapLarge @baseGapSmall @baseGapLarge;
+		background-color: @whiteGray;
+		.dialog-buttons{
+			text-align: right;
+		}
+	}
+
+	.dialog-content{
+		position: relative;
+		padding: 4px 10px 4px 10px;
+	}
+
+	.dialog-body{
+		overflow: auto;
+	}
+
+	.dialog-mask{
+		top:0;
+		left:0;
+		position:absolute;
+		z-index:10;
+		background:rgba(0,0,0,0.4) #000;
+		/*background:red !important;*/
+		filter: alpha(opacity=20);
+		overflow:hidden;
+		width:100%;
+	}
+
+	.icon-minimal{
+  		.icon-minus;
+	}
+
+	.icon-normal{
+  		.icon-th-large;
+	}
+
+	.icon-close {
+		.icon-remove;
+	}
+
+	.icon-maximal{
+		.icon-fullscreen;
+	}
+
+}
+
+/* 图标 */
+.msg-icon{ 
+	display: block; 
+	text-indent: -99999px; 
+	overflow: hidden; 
+	border:none;
+	background-image:url("@{imageFolderPath}/msg-icons.png");
+	_background-image:url("@{imageFolderPath}/msg-icons.gif");
+	width:48px;
+	height:48px;
+}
+
+.msg-icon-info{ background-position: 0px 0px;}
+.msg-icon-warn{ background-position: -48px 0px;}
+.msg-icon-error{ background-position: -96px 0px;}
+.msg-icon-help{ background-position: -144px 0px;}
+.msg-icon-find{ background-position: -192px 0px;}
+.msg-icon-forbidden{ background-position: -240px 0px;}
+.msg-icon-critical{ background-position: 0px -48px;}
+.msg-icon-tips{ background-position: -48px -48px;}
+.msg-icon-delete{ background-position: -96px -48px;}
+.msg-icon-heart{ background-position: -144px -48px;}
+.msg-icon-star{ background-position: -192px -48px;}
+
+
+/************************ 遮罩层 *************************/
+.mask-layer{
+	background:url('@{imageFolderPath}/ui-bg-none.gif') repeat;
+	position: fixed !important;
+	position: absolute;
+	top: 0;
+	left:0;
+	width: 100%;
+	height: 100%;
+	cursor: pointer;
+}
+
+.mask-layer-black{
+	background:rgba(0,0,0,0.3) !important;
+	background: #000;
+	filter:alpha(opacity=20);
+
+	position: fixed;
+	top: 0;
+	left:0;
+	cursor: pointer;
+}
+
+
+/********************************** 提示框 ***********************************/
+.alert-box{
+	background: @contentBackground;
+	padding:10px;
+	.clearfix();
+
+	i{
+		float: left;
+	}
+
+	.alert-content{
+		margin:8px 0 0 8px;
+		white-space:normal;
+		word-break:break-all; 
+		float:left;
+		width: 200px;
+	}
+}
+
+.confirm-box{
+	background: @contentBackground;
+	padding:10px;
+	.clearfix();
+
+	i{
+		float: left;
+	}
+
+	.confirm-content{
+		margin:8px 0 0 8px;
+		white-space:normal;
+		word-break:break-all; 
+		float:left;
+		width: 200px;
+	}
+}

@@ -1,0 +1,156 @@
+
+// Page  结构
+// -------------------------  
+
+.page {
+  padding-top: 40px;
+  _padding-top: 0;
+  background-color: @darkBackground;
+  .page-header {
+    min-width: 980px;
+    border-bottom: @baseBorder;
+    .btn-bar{
+      border: 0;
+      float: right;
+      position:absolute;
+      right:0;
+      bottom:0;
+      margin:0;
+    }
+  }
+  .page-content {
+    min-width: 980px;
+    background-color: @white;
+  }
+  .page-footer {
+    min-width: 980px;
+    border-top: @baseBorder;
+    clear: both;
+    float: left;
+    width: 100%;
+    .footer-body {
+      color: @gray;
+      line-height: @baseLineHeight;
+      margin: @baseLineHeight auto;
+      padding: 0 @baseGapLarge;
+      text-align: center;
+      *width: 20%;
+      ul{
+        display: block;
+        li {
+          display: inline-block;
+          white-space: nowrap;
+          &:after {
+            content: "·";
+            margin-left: @baseGapLarge;
+          }
+          &:last-child:after {
+            display: none;
+          }
+        }
+        &:first-child {
+          margin: 0;
+        }
+      }
+    }
+  }
+}
+
+.page-head-fixed{
+	padding-top: 80px;
+  	_padding-top: 0;
+  	.page-header{
+  		width:100%;
+  		position:fixed;
+  		top:0px;
+  		z-index: 999;
+  		background-color: @darkBackground;
+  	}
+}
+
+// login 页面 ----------------
+.page {
+  .login-panel {
+    .panel();
+  	padding: @baseLineHeight; 
+    margin: 10% auto;
+    display: block;
+    width: 600px;
+
+    .logo {                  // 页面系统图标
+    height: 32px;
+    width: 32px;
+    margin: 0 @baseGapLarge;
+    }
+  }
+}
+
+.margin-fix {
+  margin-top: @baseGapLarge*2;
+}
+
+
+// page-header -----
+.page-header {
+  .page-header-main {
+    padding: 10px 0;
+    float: left;
+    box-sizing: border-box;
+    height: auto;
+    ul{
+      margin: 0;
+      padding: 0;
+    }
+    h1{
+      margin: 0;
+    }
+  }
+  .page-header-actions {
+    padding: 1em 0 0 0;
+    float: right;
+    box-sizing: border-box;
+    height: auto;
+    .form, .form-search, .form-inline, .btn-group {
+      display: inline-block;
+      _display: inline;
+    }
+  }
+}
+
+// page-content -----
+.page-content{
+  margin: 0;
+   .content{ 
+    border-left:@baseBorder;
+    padding: @baseGapLarge 0 @baseGapLarge @baseGapLarge;
+    margin-left: -1px;
+  }
+}
+
+// 提示信息框 ----------
+.popover {
+  .panel();
+  padding: 0;
+  float: left;
+  
+  position: relative;
+  width: 260px;
+  _border-width: 0; // 为ie6修改的样式
+  _padding: 10px;
+  
+  .popover-title{
+    background: @darkBackground;
+    border-bottom: 1px solid @grayLighter;
+    padding: 3px 14px;
+    h4{ margin:5px 0;}
+    _border-bottom-width: 0;  // 为ie6修改的样式
+  }
+  .popover-content{ 
+    padding: 9px 14px;
+    _padding-bottom: 0; // 为ie6修改的样式
+    _border: 1px solid @grayLighter; 
+    _border-top-width: 0;
+  }
+}
+
+

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.idpconfig.modelRule.mapper.ModelRuleMapper">
+  <select id="queryPatameteFieldsInfo" resultType="com.idm.app.idpconfig.modelRule.model.ModelRuleInfo">
+	select * from (select t1.*,rownum rnm from (  
+	   select mtrid,seqno,modelcode,
+	   	modelname,rulecode,rulename,ruletype,createtime,createuser,status
+	   
+	    	from idm_modeltorule_info where 1=1
+	    <if test="modelcode !=null and modelcode!='' ">
+	        and modelcode like '%'||#{modelcode}||'%'
+	    </if>
+	    <if test="modelname!=null and modelname!='' ">
+	        and modelname like '%'||#{modelname}||'%'
+	    </if>
+	    order by modelcode desc
+	  )t1
+	 <if test="page!= null and size!= null">
+      where rownum &lt;= #{page}*#{size}
+      </if>
+    )
+    <if test="page!= null and size!= null">
+      where rnm &gt;= (#{page}-1)*#{size} +1 
+    </if>  
+   </select>
+   
+   <select id="queryPatameteFieldsInfoY" resultType="com.idm.app.idpconfig.modelRule.model.ModelRuleInfo">
+	   select mtrid,seqno,modelcode,
+	   	modelname,rulecode,rulename,ruletype,createtime,createuser,status
+	    	from idm_modeltorule_info where status='0'
+	       order by modelcode desc
+   </select>
+   
+   <select id="queryPatameteFieldsInfoYR" resultType="com.idm.app.idpconfig.modelRule.model.ModelRuleInfo">
+	   select modelcode,modelname,rulecode,rulename,ruletype
+	    	from idm_modeltorule_info where status='0'
+	       order by modelcode desc
+   </select>
+
+   <select id="selectCountByAll" parameterType="com.idm.app.idpconfig.modelRule.model.ModelRuleInfo"  resultType="java.lang.Integer">
+    select count(1)
+    	from idm_modeltorule_info where 1=1
+    	<if test="modelcode !=null and modelcode!='' ">
+	        and modelcode like '%'||#{modelcode}||'%'
+	    </if>
+	    <if test="modelname!=null and modelname!='' ">
+	        and modelname like '%'||#{modelname}||'%'
+	    </if>
+   </select>
+   
+    <update id="updateParameterFieldsInfo" parameterType="com.idm.app.idpconfig.modelRule.model.ModelRuleInfo">
+        UPDATE idm_modeltorule_info SET seqno=#{seqno}, modelcode=#{modelcode},modelname=#{modelname}, 
+        rulecode=#{rulecode},rulename=#{rulename},ruletype=#{ruletype},createtime=#{createtime},createuser=#{createuser},status=#{status} WHERE mtrid=#{mtrid}
+    </update>
+    
+	
+	<insert id="addParaBaseInfoList" parameterType="java.util.ArrayList" >
+	   insert into idm_modeltorule_info (mtrid,seqno,modelcode,
+	   	modelname,rulecode,rulename,ruletype,createtime,createuser,status) 
+	   	   SELECT idm_field_info_seq.NEXTVAL,a.* FROM ( 
+	   <foreach collection="list" item="data" index="index" separator=" union all ">
+	    SELECT #{data.seqno,jdbcType=VARCHAR}, #{data.modelcode,jdbcType=VARCHAR}, 
+	    #{data.modelname,jdbcType=VARCHAR}, #{data.rulecode,jdbcType=VARCHAR},#{data.rulename,jdbcType=VARCHAR},
+	   	#{data.ruletype,jdbcType=VARCHAR},#{data.createtime,jdbcType=VARCHAR},#{data.createuser,jdbcType=VARCHAR},
+	   	#{data.status,jdbcType=VARCHAR}
+	     FROM DUAL
+	    </foreach> 
+	    ) a
+	</insert>
+</mapper>

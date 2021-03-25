@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.system.timedtaskmng.mapper.TimedTaskMapper">
+<select id="queryTaskInfo" parameterType="java.lang.String" resultType="com.idm.app.system.timedtaskmng.model.TaskTriggerInfo">
+    SELECT task_name taskName, task_group taskGroup, task_class taskClass, trigger_time triggerTime,
+    subSystem, state, create_date createDate, create_datetime createDatetime
+    FROM mng_task_trigger_info WHERE 1=1
+    <if test="taskName!=null and taskName!='' ">
+        AND task_name=#{taskName}
+    </if>
+    <if test="taskGroup!=null and taskGroup!='' ">
+        AND task_group=#{taskGroup}
+    </if>
+    <if test="subsystem!=null and subsystem!='' ">
+        AND subsystem=#{subsystem}
+    </if>
+    <if test="state!=null and state!='' ">
+        AND state=#{state}
+    </if>
+</select>
+
+    <insert id="addTaskInfo" parameterType="com.idm.app.system.timedtaskmng.model.TaskTriggerInfo">
+      INSERT INTO mng_task_trigger_info
+      VALUES (#{taskName}, #{taskGroup},#{taskClass}, #{triggerTime},
+     #{subsystem}, #{state}, #{createDate}, #{createDatetime} )
+    </insert>
+
+    <update id="updateTaskInfo" parameterType="com.idm.app.system.timedtaskmng.model.TaskTriggerInfo">
+        UPDATE  mng_task_trigger_info
+        <set>
+            <if test="taskClass!=null">
+                task_class=#{taskClass},
+            </if>
+            <if test="triggerTime!=null">
+                trigger_time=#{triggerTime},
+            </if>
+            <if test="subsystem!=null">
+                subsystem=#{subsystem},
+            </if>
+            <if test="state!=null">
+                state=#{state}
+            </if>
+        </set>
+        WHERE task_name=#{taskName} AND task_group=#{taskGroup}
+    </update>
+    <delete id="deleteTaskInfo" parameterType="java.lang.String" >
+        DELETE FROM mng_task_trigger_info WHERE task_name=#{taskName} ANd task_group=#{taskGroup}
+    </delete>
+</mapper>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.idpconfig.pmmlConfig.mapper.PmmlConfigMapper">
+<select id="queryPmmlConfig" parameterType="com.idm.app.idpconfig.pmmlConfig.model.PmmlConfig"
+        resultType="com.idm.app.idpconfig.pmmlConfig.model.PmmlConfig">
+ select * from (select t1.*,rownum rnm from ( 
+		  SELECT
+		      C.PMMLID PMMLID,
+		      C.PMMLCODE PMMLCODE,
+		      C.PMMLNAME PMMLNAME,
+		      C.PMMLDESC PMMLDESC,
+		      C.CREATEUSER CREATEUSER,
+		      C.CREATETIME CREATETIME,
+		      C.UPDATEUSER UPDATEUSER,
+		      C.UPDATETIME UPDATETIME,
+		      C.STATUS STATUS,
+		      C.INTERFACECODE INTERFACECODE,
+		      COUNT(F.PMMLID) FILENUM
+		  FROM IDP_PMML_CONFIG C LEFT JOIN IDP_PMML_FILE F ON C.PMMLID=F.PMMLID  WHERE 1=1
+		    <if test="pmmlCode!=null and pmmlCode!='' ">
+		        and PMMLCODE like '%'||#{pmmlCode}||'%'
+		    </if>
+		    <if test="pmmlName!=null and pmmlName!='' ">
+		        and PMMLNAME like '%'||#{pmmlName}||'%'
+		    </if>
+		      GROUP BY
+		      C.PMMLID,
+		      C.PMMLCODE,
+		      C.PMMLNAME,
+		      C.PMMLDESC,
+		      C.CREATEUSER,
+		      C.CREATETIME,
+		      C.UPDATEUSER,
+		      C.UPDATETIME,
+		      C.STATUS,
+		      C.INTERFACECODE
+		 
+		      ORDER BY
+		      C.CREATETIME desc
+      
+          )t1 
+    <if test="page!= null and size!= null">
+      where rownum &lt;= #{page}*#{size}
+    </if>
+    )
+    <if test="page!= null and size!= null">
+      where rnm &gt;= (#{page}-1)*#{size} +1 
+    </if>
+</select>
+
+  <select id="selectCountByAll" parameterType="com.idm.app.idpconfig.pmmlConfig.model.PmmlConfig"  resultType="java.lang.Integer">
+    select count(1)
+    from IDP_PMML_CONFIG c LEFT JOIN IDP_PMML_FILE F ON C.PMMLID=F.PMMLID  WHERE 1=1
+    <if test="pmmlCode!=null and pmmlCode!='' ">
+        and PMMLCODE like '%'||#{pmmlCode}||'%'
+    </if>
+    <if test="pmmlName!=null and pmmlName!='' ">
+        and PMMLNAME like '%'||#{pmmlName}||'%'
+    </if>
+   
+  </select>
+
+  <insert id="addPmmlConfig" parameterType="com.idm.app.idpconfig.pmmlConfig.model.PmmlConfig">
+    insert into IDP_PMML_CONFIG (PMMLID, PMMLCODE, PMMLNAME, PMMLDESC, CREATEUSER,CREATETIME, STATUS,INTERFACECODE)
+    values (IDP_EVENT_CONFIG_SEQ.NEXTVAL, #{pmmlCode,jdbcType=VARCHAR},#{pmmlName,jdbcType=VARCHAR},#{pmmlDesc,jdbcType=VARCHAR},
+    		#{createUser,jdbcType=VARCHAR},#{createTime,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},#{interfaceCode,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="updatePmmlConfig" parameterType="com.idm.app.idpconfig.pmmlConfig.model.PmmlConfig">
+        UPDATE IDP_PMML_CONFIG SET PMMLDESC=#{pmmlDesc},UPDATETIME=#{updateTime},UPDATEUSER=#{updateUser},INTERFACECODE=#{interfaceCode},STATUS=#{status}
+        WHERE PMMLID=#{pmmlId}
+  </update>
+  
+    <select id="repeatPmmlCode" parameterType="com.idm.app.idpconfig.pmmlConfig.model.PmmlConfig"
+        resultType="java.lang.Long">
+	select count(*)
+	from IDP_PMML_CONFIG where 1=1  and PMMLCODE = #{pmmlCode}
+</select>
+
+    <select id="repeatPmmlName" parameterType="com.idm.app.idpconfig.pmmlConfig.model.PmmlConfig"
+        resultType="java.lang.Long">
+	select count(*)
+	from IDP_PMML_CONFIG where 1=1  and PMMLNAME = #{pmmlName}
+</select>
+</mapper>

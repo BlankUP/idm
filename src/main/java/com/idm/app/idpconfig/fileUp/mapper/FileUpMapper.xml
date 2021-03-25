@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.idpconfig.fileUp.mapper.FileUpMapper">
+    <!--<select id="selectAllFiles" parameterType="">
+
+    </select>-->
+    <insert id="insertFiles" parameterType="com.idm.app.idpconfig.fileUp.model.FileUp">
+        insert into test_file (fileCode,fileName,status)
+        values (#{fileCode,jdbcType=VARCHAR},#{fileName,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR})
+    </insert>
+</mapper>

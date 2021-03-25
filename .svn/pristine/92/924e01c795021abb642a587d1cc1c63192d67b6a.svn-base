@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.idpconfig.mqiCountAnalysis.mapper.MqiIdpResponseMapper">
+  
+	
+	<select  id="selectCountByAll" parameterType="com.idm.app.idpconfig.mqiCountAnalysis.model.MqiResponseReport"  resultType="java.lang.Integer" >
+	
+	  
+      select count(1) from ( 
+   SELECT
+       distinct c.businessno   ,
+
+  c.serialno      ,
+  c.businessno   ,
+  c.deptid         ,
+  c.deptname       ,
+  c.productid      ,
+  c.productname    ,
+  c.modelcode      ,
+  c.modelname      ,
+  c.ruleresult     ,
+  c.suggestamount ,
+  c.score        ,
+  c.loanrate    ,
+  c.customertype   ,
+  c.ratingresults  ,
+  a.productname,
+  a.cifname,
+  a.cifno,
+  a.idtype,
+  a.modelcode,
+  c.joint        ,
+  c.elapsedtime    ,
+  c.errorcode   ,
+  c.errormsg     ,
+  c.srcdate      ,
+  c.srctime        ,
+  c.rkdate      ,
+  c.rktime         ,
+   to_char（c.message） message  
+  FROM Mqi_Response_Info c left join Mqi_Request_Info a  on  c.businessno=a.businessno WHERE 1=1
+
+           <if test="businessNo!=null and businessNo!='' ">
+		        and c.businessNo like '%'||#{businessNo}||'%'
+		    </if>
+
+		    <if test=" serialNo !=null and serialNo !='' ">
+		        and c.serialNo like '%'||#{serialNo}||'%'
+		    </if>
+		    <if test=" modelCode !=null and modelCode !='' ">
+		        and c.modelCode like '%'||#{modelCode}||'%'
+		    </if> 
+		    <if test=" productId !=null and productId !='' ">
+		        and c.productId like '%'||#{productId}||'%'
+		    </if> 
+      
+        
+          ORDER BY
+          c.rkdate desc,c.serialno         
+          )t1   
+	
+	</select>
+	
+	
+		
+	<select  id="queryIdpResponseInfo" parameterType="com.idm.app.idpconfig.mqiCountAnalysis.model.MqiResponseReport"
+        resultType="com.idm.app.idpconfig.mqiCountAnalysis.model.MqiResponseReport" >
+		 select * from (select t1.*,rownum rnm from (
+ SELECT
+       distinct c.businessno   ,
+
+  c.serialno      ,
+
+  c.deptid         ,
+  c.deptname       ,
+  c.productid      ,
+  c.productname    ,
+
+  c.modelname      ,
+  c.ruleresult     ,
+  c.suggestamount ,
+  c.score        ,
+  c.loanrate    ,
+  c.customertype   ,
+  c.ratingresults  ,
+
+  a.cifname,
+  a.cifno,
+  a.idtype,
+  a.modelcode,
+  c.joint        ,
+  c.elapsedtime    ,
+  c.errorcode   ,
+  c.errormsg     ,
+  c.srcdate      ,
+  c.srctime        ,
+  c.rkdate      ,
+  c.rktime         ,
+   to_char（c.message） message  
+  FROM Mqi_Response_Info c left join Mqi_Request_Info a  on  c.businessno=a.businessno WHERE 1=1
+
+          
+           <if test="businessNo!=null and businessNo!='' ">
+		        and c.businessNo like '%'||#{businessNo}||'%'
+		    </if>
+
+		    <if test=" serialNo !=null and serialNo !='' ">
+		        and c.serialNo like '%'||#{serialNo}||'%'
+		    </if>
+		    <if test=" modelCode !=null and modelCode !='' ">
+		        and c.modelCode like '%'||#{modelCode}||'%'
+		    </if> 
+		    <if test=" productId !=null and productId !='' ">
+		        and c.productId like '%'||#{productId}||'%'
+		    </if> 
+
+          ORDER BY
+          c.rkdate desc,c.serialno         
+          )t1 
+   <if test="page!= null and size!= null">
+      where rownum &lt;= #{page}*#{size}
+    </if>
+    )
+    <if test="page!= null and size!= null">
+      where rnm &gt;= (#{page}-1)*#{size} +1 
+    </if>
+	
+	
+	</select>
+	
+	
+</mapper>

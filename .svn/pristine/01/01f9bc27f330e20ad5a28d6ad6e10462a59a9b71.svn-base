@@ -1,0 +1,123 @@
+.clearfix {
+  *zoom: 1;
+}
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+.clearfix:after {
+  clear: both;
+}
+.inline-block {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+}
+.common {
+  background: #fafafa;
+}
+.common .container {
+  width: 100%;
+}
+.common .header {
+  background: #fff;
+}
+.common .header .container {
+  border-bottom: 3px solid #ee6600;
+  padding: 10px 0px;
+}
+.common .header .container .logo {
+  background: url("../images/logo.png") no-repeat;
+  height: 43px;
+  width: 280px;
+}
+.common .header .navs {
+  position: absolute;
+  left: 300px;
+  top: 50%;
+  margin-top: -0.7em;
+}
+.common .header .navs li {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  text-align: center;
+  margin-right: 32px;
+}
+.common .header .navs li a {
+  font-size: 14px;
+  color: #777;
+}
+.common .header .navs li a .active,
+.common .header .navs li a:hover {
+  color: #ee6600;
+}
+.common .header .navs li a .active i,
+.common .header .navs li a:hover i {
+  color: #ee6600;
+}
+.common .header .navs li i {
+  color: #999;
+}
+.common .header .userinfo {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  margin-top: -0.5em;
+}
+.common .header .userinfo .link {
+  margin-left: 5px;
+}
+.common .content .navpages .navpage {
+  padding: 20px;
+}
+.common .content .navpages .navpage ul {
+  width: 600px;
+  margin: 40px auto;
+}
+.common .content .navpages .navpage ul li {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  height: 120px;
+  width: 120px;
+  text-align: center;
+  margin: 10px;
+}
+.common .content .navpages .navpage ul li a {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 1px dashed #d8d8d8;
+  border-radius: 10px;
+  background: #fff;
+}
+.common .content .navpages .navpage ul li a i {
+  position: absolute;
+  top: 20px;
+  text-align: center;
+  display: block;
+  width: 100%;
+  font-size: 48px;
+  color: #aaa;
+}
+.common .content .navpages .navpage ul li a span {
+  position: absolute;
+  display: block;
+  text-align: center;
+  width: 100%;
+  bottom: 20px;
+}
+.common .content .navpages .navpage ul li a .active,
+.common .content .navpages .navpage ul li a:hover {
+  border: 1px dashed #ee6600;
+}
+.common .content .navpages .navpage ul li a .active i,
+.common .content .navpages .navpage ul li a:hover i,
+.common .content .navpages .navpage ul li a .active span,
+.common .content .navpages .navpage ul li a:hover span {
+  color: #ee6600;
+}

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.idpconfig.flowInfo.mapper.FlowInfoMapper">
+<select id="queryFlowInfo" parameterType="com.idm.app.idpconfig.flowInfo.model.FlowInfo"
+        resultType="com.idm.app.idpconfig.flowInfo.model.FlowInfo">
+         select * from (select t1.*,rownum rnm from ( 
+  select f.flowid,
+       f.startmodel,
+       f.nextmodel,
+       f.key,
+       f.value,
+       f.createtime,
+       f.updatetime,
+       f.createuser,
+       f.updateuser,
+       f.flowcode,
+       f.flowname,
+       f.status,
+       case
+       when  f.startmodel ='start' then 'start'else m1.modelname end as startmodelname,
+        case
+       when  f.nextmodel ='end' then 'end'else m2.modelname end as nextmodelname
+       from mqi_flow_info f 
+       left join idm_model_info m1 on f.startmodel=m1.modelcode 
+       left join idm_model_info m2 on f.nextmodel=m2.modelcode
+       where 1=1
+    <if test="flowCode!=null and flowCode!='' ">
+        and f.flowcode like '%'||#{flowCode}||'%'
+    </if>
+    <if test="flowName!=null and flowName!='' ">
+        and f.flowName like '%'||#{flowName}||'%'
+    </if>
+     ) t1 
+    <if test="page!= null and size!= null">
+      where rownum &lt;= #{page}*#{size}
+    </if>
+    )
+    <if test="page!= null and size!= null">
+      where rnm &gt;= (#{page}-1)*#{size} +1 
+    </if>
+</select>
+  <select id="selectCountByAll" parameterType="com.idm.app.idpconfig.flowInfo.model.FlowInfo"  resultType="java.lang.Integer">
+    select count(1)
+    from mqi_flow_info  
+    WHERE 1=1
+    <if test="flowCode!=null and flowCode!='' ">
+        and f.flowcode like '%'||#{flowCode}||'%'
+    </if>
+    <if test="flowName!=null and flowName!='' ">
+        and f.flowName like '%'||#{flowName}||'%'
+    </if>
+  </select>
+  <insert id="addFlowInfo" parameterType="com.idm.app.idpconfig.flowInfo.model.FlowInfo">
+   insert into mqi_flow_info (flowid,startmodel,nextmodel,key,value,createtime,createuser,flowcode,flowname,status)
+    values (IDP_EVENT_CONFIG_SEQ.NEXTVAL, #{startModel,jdbcType=VARCHAR},#{nextModel,jdbcType=VARCHAR},#{key,jdbcType=VARCHAR},
+    		#{value,jdbcType=VARCHAR},#{createTime,jdbcType=VARCHAR},#{createUser,jdbcType=VARCHAR},#{flowCode,jdbcType=VARCHAR},#{flowName,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="updateFlowInfo" parameterType="com.idm.app.idpconfig.flowInfo.model.FlowInfo">
+        UPDATE mqi_flow_info SET STATUS=#{status}
+        WHERE flowid=#{flowId}
+  </update>
+  
+  	<insert id="addFlowInfoList" parameterType="java.util.ArrayList" >
+	  insert into mqi_flow_info (flowid,startmodel,nextmodel,key,value,createtime,createuser,flowcode,status,flowname)
+	    SELECT IDP_EVENT_CONFIG_SEQ.NEXTVAL,a.* FROM ( 
+	   <foreach collection="list" item="data" index="index" separator=" union all ">
+	    SELECT #{data.startModel,jdbcType=VARCHAR}, #{data.nextModel,jdbcType=VARCHAR}, 
+	    #{data.key,jdbcType=VARCHAR}, #{data.value,jdbcType=VARCHAR},#{data.createTime,jdbcType=VARCHAR},
+	   	#{data.createUser,jdbcType=VARCHAR},#{data.flowCode,jdbcType=VARCHAR},#{data.status,jdbcType=VARCHAR},#{data.flowName,jdbcType=VARCHAR}
+	     FROM DUAL
+	    </foreach> 
+	    ) a
+	</insert>
+</mapper>

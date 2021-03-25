@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.idpconfig.mqiAdbRuleHotDeploy.mapper.MqiAdbDelpoyMngMapper">
+  <select id="queryDeployInfoMqi" resultType="com.idm.app.idpconfig.mqiAdbRuleHotDeploy.model.MqiAdbDeployBaseInfo">
+	  select * from (select t1.*,rownum rnm from (
+	    select 
+		    de.adbruleid,
+	  		de.adbid,
+	  		de.deployer,
+	  		de.deployTime,
+			ve.createUser,
+			ve.createTime,
+			ve.updateUser,
+			ve.updateTime,
+			de.status,
+			ve.versionNo,
+			ve.versionDesc,
+			
+			ve.fileName,
+			de.versionState
+	    from 
+	    	MQI_ADBRULE_HOTDEPLOY de,MQI_ADBVERSION ve 
+	    where de.adbid=ve.adbid
+	    <if test="versionNo !=null and versionNo!='' ">
+	        and ve.versionNo like '%'||#{versionNo}||'%'
+	    </if>
+	    order by de.adbruleid desc
+	  )t1
+	  <if test="page!= null and size!= null">
+     	 where rownum &lt;= #{page}*#{size}
+       </if>
+     )
+	 <if test="page!= null and size!= null">
+	      where rnm &gt;= (#{page}-1)*#{size} +1 
+	 </if>
+	 order by versionState desc, deployTime desc
+  </select>
+  
+  <select id="selectCountByAllMqi" parameterType="com.idm.app.idpconfig.mqiAdbRuleHotDeploy.model.MqiAdbDeployBaseInfo"  resultType="java.lang.Integer">
+    	select count(1)
+    		from 
+	    	MQI_ADBRULE_HOTDEPLOY de,MQI_ADBVERSION ve 
+	    where de.adbid=ve.adbid
+	    <if test="versionNo !=null and versionNo!='' ">
+	        and ve.versionNo like '%'||#{versionNo}||'%'
+	    </if>
+    </select>
+  
+  <select id="queryAdbDeployServersMqi" resultType="com.idm.app.idpconfig.mqiAdbRuleHotDeploy.model.MqiServerInfo">
+	    SELECT
+			NAME,
+			IP,
+			PORT,
+			TYPE,
+			STATUS
+		FROM IDM_server_info where 1=1 and STATUS='0' and TYPE='2'
+  </select>
+  
+  <select id="queryAdbfileNameAndVerNoMqi" resultType="com.idm.app.idpconfig.mqiAdbRuleHotDeploy.model.MqiAdbDeployBaseInfo">
+	  SELECT  fileName,versionNo,adbId,versionState
+		FROM MQI_ADBVERSION where VERSIONSTATE in('2','1') and STATUS='1' order by VERSIONSTATE desc
+  </select>
+  
+  <insert id="saveAdbDeployecordMqi" parameterType="com.idm.app.idpconfig.mqiAdbRuleHotDeploy.model.MqiAdbDeployBaseInfo">
+      insert into MQI_ADBRULE_HOTDEPLOY 
+      	(adbruleid, adbId,deployer, deploytime,status,versionState)
+      values (MQI_ADBRULE_HOTDEPLOY_SEQ.NEXTVAL, #{adbId,jdbcType=VARCHAR}, #{deployer,jdbcType=VARCHAR}, 
+      	#{deployTime,jdbcType=VARCHAR},'0','1')
+  </insert>
+  
+  <update id="updateAdbVerStateMqi">
+    update MQI_ADBVERSION set VERSIONSTATE=CASE when VERSIONSTATE='2' then '1' when VERSIONSTATE='1' then '5' 
+      ELSE VERSIONSTATE END, UPDATEUSER=CASE when VERSIONSTATE='2' then #{updateUser} when VERSIONSTATE='1' then #{updateUser} ELSE UPDATEUSER END  
+      ,UPDATETIME=CASE when VERSIONSTATE='2' then #{updateTime} when VERSIONSTATE='1' then #{updateTime} ELSE UPDATETIME END 
+      WHERE VERSIONSTATE in('2','1')
+  </update>
+  
+  <update id="updateAdbVerState2Mqi">
+    update MQI_ADBVERSION set VERSIONSTATE='5',status=CASE when VERSIONSTATE='2' then '0' ELSE status END,UPDATEUSER=#{updateUser},UPDATETIME=#{updateTime} 
+    WHERE VERSIONSTATE in('2','1')
+  </update>
+  <update id="updateAdbVerState3Mqi">
+    update MQI_ADBVERSION set VERSIONSTATE='5',status='0',UPDATEUSER=#{updateUser},UPDATETIME=#{updateTime} WHERE VERSIONSTATE ='2'
+  </update>
+  <update id="updateAdbDeployecordMqi">
+    update MQI_ADBRULE_HOTDEPLOY set versionState='0' WHERE VERSIONSTATE ='1'
+  </update>
+  <insert id="saveAdbDeployecord2Mqi" parameterType="com.idm.app.idpconfig.mqiAdbRuleHotDeploy.model.MqiAdbDeployBaseInfo">
+      insert into MQI_ADBRULE_HOTDEPLOY 
+      	(adbruleid, adbId,deployer, deploytime,status,versionState)
+      values (MQI_ADBRULE_HOTDEPLOY_SEQ.NEXTVAL, #{adbId,jdbcType=VARCHAR}, #{deployer,jdbcType=VARCHAR}, 
+      	#{deployTime,jdbcType=VARCHAR},'1','0')
+  </insert>
+</mapper>

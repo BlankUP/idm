@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.idpconfig.mqiAdbVersionManage.mapper.MqiAdbApproveMapper">
+  <resultMap id="BaseResultMap" type="com.idm.app.idpconfig.mqiAdbVersionManage.model.MqiAdbApprove">
+    <result column="VERSIONNAME" jdbcType="VARCHAR" property="versionName" />
+    <result column="VERSIONNO" jdbcType="VARCHAR" property="versionNo" />
+    <result column="VERSIONDESC" jdbcType="VARCHAR" property="versionDesc" />
+    <result column="APPLICATIONTIME" jdbcType="VARCHAR" property="applicationTime" />
+    <result column="APPLICATIONUSERID" jdbcType="VARCHAR" property="APPLICATIONUSERID" />
+    <result column="STATUS" jdbcType="VARCHAR" property="status" />
+    <result column="APPROVROLEID" jdbcType="VARCHAR" property="approveRole" />
+    <result column="APPLICATIONREASON" jdbcType="VARCHAR" property="applicationReason" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    VERSIONNAME, APPROVEID, VERSIONNO, VERSIONDESC, APPLICATIONTIME, APPLICATIONUSERID, 
+    STATUS,APPLICATIONREASON
+  </sql>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+ <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+    <select id="selectAdbCountAllMqi" parameterType="java.lang.String"  resultType="java.lang.Integer">
+  select count(*) from  MQI_ADBVERSION_APPROVE where status=#{stsus} 
+  </select>
+  
+
+  <!-- <select id="selectSecondCountAll" parameterType="com.idm.app.idpconfig.mqiAdbVersionManage.model.MqiAdbApproveExample"  resultType="java.lang.Integer">
+    select count(1)
+    from IDM_ADBVERSION_APPROVE t1 
+    JOIN 
+    IDM_USER_ROLE_INFO t2 ON t1.APPROVROLEID = t2.ROLENO
+    WHERE USERID = #{approver,jdbcType=VARCHAR}
+  </select> -->
+  <select id="selectAdbApplicationMqi" parameterType="com.idm.app.idpconfig.mqiAdbVersionManage.model.MqiAdbApproveExample"  resultMap="BaseResultMap">
+    select * from (select t1.*,rownum rnm from ( select 
+    t1.*,t2.*
+    from MQI_ADBVERSION_APPROVE t1 JOIN 
+    MQI_USER_ROLE_INFO t2 ON t1.APPROVROLEID = t2.ROLENO
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by #{orderByClause}
+    </if>
+    )t1 
+    <if test="page!= null and size!= null">
+      where rownum &lt;= #{page}*#{size}
+    </if>
+    )
+    <if test="page!= null and size!= null">
+      where rnm &gt;= (#{page}-1)*#{size} +1 
+    </if>
+  </select>
+  
+  <update id="updateRejectAdbApproveMqi" parameterType="com.idm.app.idpconfig.mqiAdbVersionManage.model.MqiAdbApprove">
+    update MQI_ADBVERSION_APPROVE set  
+      STATUS='3'
+      where VERSIONNO =#{versionNo,jdbcType=VARCHAR}
+  </update>
+  <update id="updateSecondAdbApproveMqi" parameterType="com.idm.app.idpconfig.mqiAdbVersionManage.model.MqiAdbApprove">
+    update MQI_ADBVERSION_APPROVE set  
+      STATUS='2',
+      APPROVROLEID = 'second_approve'
+      where VERSIONNO =#{versionNo,jdbcType=VARCHAR}
+  </update>
+  <update id="updatePassAdbApproveMqi" parameterType="com.idm.app.idpconfig.mqiAdbVersionManage.model.MqiAdbApprove">
+    update MQI_ADBVERSION_APPROVE set  
+      STATUS='0'
+      where VERSIONNO =#{versionNo,jdbcType=VARCHAR}
+  </update>
+  
+  <insert id="saveAdbApproveApplicationMqi" parameterType="com.idm.app.idpconfig.mqiAdbVersionManage.model.MqiAdbApprove">
+    insert into MQI_ADBVERSION_APPROVE ( VERSIONNAME, VERSIONNO, VERSIONDESC, APPLICATIONTIME, APPLICATIONUSERID, 
+    STATUS,APPROVROLEID,APPLICATIONREASON
+      )
+    values (#{versionName,jdbcType=VARCHAR},#{versionNo,jdbcType=VARCHAR},#{versionDesc,jdbcType=VARCHAR},
+      #{applicationTime,jdbcType=VARCHAR}, #{applicationUserId,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},
+      #{approveRole,jdbcType=VARCHAR}, #{applicationReason,jdbcType=VARCHAR})
+  </insert>
+  
+   <select id="selectStatusMqi" parameterType="java.lang.String" resultType="java.lang.String">
+   select status from  MQI_ADBVERSION_APPROVE where VERSIONNO =#{versionNo,jdbcType=VARCHAR}
+  </select>
+  
+ 
+  <delete id="deleteAdbApproveRecordMqi" parameterType="java.lang.String">
+    delete MQI_ADBVERSION_APPROVE  
+      where VERSIONNO =#{versionNo,jdbcType=VARCHAR}
+  </delete>
+  
+   <select id="selectAdbApproveInfoMqi" resultType="com.idm.app.idpconfig.mqiAdbVersionManage.model.MqiAdbApprove" parameterType="java.lang.String" >
+  
+  select * from  MQI_ADBVERSION_APPROVE where status=#{status} 
+  
+  </select>
+    <select id="selectAdbApproveConuntAllMqi" resultType="java.lang.Integer" >
+  
+  select count(*) from  MQI_ADBVERSION_APPROVE  where 1=1
+  
+  </select>
+    <select id="selectAdbApproveConuntMqi" resultType="com.idm.app.idpconfig.mqiAdbVersionManage.model.MqiAdbApprove" parameterType="java.lang.String" >
+  
+  select * from  MQI_ADBVERSION_APPROVE where 1=1
+  
+  </select>
+</mapper>

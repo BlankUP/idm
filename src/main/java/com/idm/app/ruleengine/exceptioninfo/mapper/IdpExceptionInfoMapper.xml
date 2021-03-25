@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.ruleengine.exceptioninfo.mapper.IdpExceptionInfoMapper">
+ <select id="queryIdpExceptionInfo" parameterType="com.idm.app.ruleengine.exceptioninfo.model.IdpExceptionInfo"
+          resultType="com.idm.app.ruleengine.exceptioninfo.model.IdpExceptionInfo">
+     select * from (select t1.*,rownum rnm from ( 
+     SELECT a.SRCDATE srcDate, a.QUERYSEQNO querySeqno,a.BUSINESSNO businessNo,a.ERRORCODE errorCode, 
+    a.ERRORMSG errorMsg,a.RERUNFLAG rerunFlag,a.EXCEPTIONTIME exceptionTime,
+    a.QUERYSYSTEMCODE querySystemCode,a.QUERYSYSTEMNAME querySystemName,a.RESPSYSTEMCODE respSystemCode,
+    a.RESPSYSTEMNAME respSystemName, b.MESSAGE requestPkg,a.EXSTACKTRACE exStackTrace, 
+    a.REBUSINESSDATE reBusinessDate,a.REBUSINESSTIME reBusinessTime,
+    a.REBUSINESSNO reBusinessNo,a.REBUSINESSOPERATOR reBusinessOperator,
+    case a.REBUSINESSRESULT  when '1' then '发起成功' when '2' then '发起失败' end reBusinessResult
+    FROM IDP_EXCEPTION_INFO a, IDP_REQUEST_INFO b 
+    WHERE a.BUSINESSNO=b.BUSINESSNO
+    <if test="srcDate!=null and srcDate!='' ">
+          AND a.SRCDATE=#{srcDate}
+      </if>
+   <if test="querySeqNo!=null and querySeqNo!='' ">
+     AND a.QUERYSEQNO like '%'||#{querySeqNo}||'%'
+   </if> 
+   order by a.srcdate desc,a.rebusinessresult desc 
+   )t1
+   <if test="page!= null and size!= null">
+      where rownum &lt;= #{page}*#{size}
+    </if>
+    )
+    <if test="page!= null and size!= null">
+      where rnm &gt;= (#{page}-1)*#{size} +1 
+    </if>
+ </select>
+ <select id="selectCountByAll" parameterType="com.idm.app.ruleengine.exceptioninfo.model.IdpExceptionInfo"  resultType="java.lang.Integer">
+   SELECT count(1)
+    FROM IDP_EXCEPTION_INFO a, IDP_REQUEST_INFO b 
+    WHERE a.BUSINESSNO=b.BUSINESSNO
+    <if test="srcDate!=null and srcDate!='' ">
+          AND a.SRCDATE=#{srcDate}
+      </if>
+   <if test="querySeqNo!=null and querySeqNo!='' ">
+     AND a.QUERYSEQNO like '%'||#{querySeqNo}||'%'
+   </if> 
+  </select>
+ 
+ 
+ <select id="queryIdpExceptionInfoBySeqno" parameterType="java.lang.String"
+  resultType="com.idm.app.ruleengine.exceptioninfo.model.IdpExceptionInfo" >
+   SELECT a.SRCDATE srcDate, a.QUERYSEQNO querySeqno,a.BUSINESSNO businessNo,a.ERRORCODE errorCode, 
+    a.ERRORMSG errorMsg,a.RERUNFLAG rerunFlag,a.EXCEPTIONTIME exceptionTime,
+    a.QUERYSYSTEMCODE querySystemCode,a.QUERYSYSTEMNAME querySystemName,a.RESPSYSTEMCODE respSystemCode,
+    a.RESPSYSTEMNAME respSystemName, b.MESSAGE requestPkg,a.EXSTACKTRACE exStackTrace,a.rebusinessresult rebusinessresult 
+    FROM IDP_EXCEPTION_INFO a, IDP_REQUEST_INFO b 
+    WHERE a.BUSINESSNO=b.BUSINESSNO
+    AND a.BUSINESSNO=#{businessNo}
+ </select>
+ <select id="queryDataInvokInfo" parameterType="java.lang.String" 
+ 	resultType="com.idm.app.ruleengine.exceptioninfo.model.DataInterfaceInvokInfo">
+ 	SELECT businessNo, interfaceCode, interfaceName,
+ 	requestContext requestMsg, responseContext responseMsg,case isSuccess when '01' then '成功' when '02' then '失败' end isSuccess,
+ 	errorCode, errorMsg
+ 	FROM IDP_INTERFACEINVOK_INFO 
+ 	where 1=1
+ 	<if test="businessNo!=null and businessNo!=''">
+ 	 AND BUSINESSNO=#{businessNo}
+ 	</if>
+ </select>
+ <update id="updateBlazeData" parameterType="java.lang.String">
+ UPDATE  IDP_BLAZEMESSAGE SET REQUESTCONTEXT=#{invokeBlazeData} 
+ WHERE businessno=#{businessNo}
+ </update>
+ <update id="updateIdpExceptionInfo" parameterType="java.lang.String">
+	UPDATE IDP_EXCEPTION_INFO SET rebusinessdate=#{dateStr},
+	rebusinesstime=#{timeStr}, rebusinessoperator=#{userId},
+	rebusinessresult=#{reBusinessResult} 
+ 	WHERE 1=1 
+ 	<if test="businessNo!=null and businessNo!='' ">
+ 	AND businessno=#{businessNo}
+ </if>
+ </update>
+ <select id="queryReqBlazeData" parameterType="java.lang.String" 
+ resultType="java.lang.String">
+ SELECT REQUESTCONTEXT FROM IDP_BLAZEMESSAGE
+ WHERE BUSINESSNO = #{businessNo}
+ </select>
+ <select id="queryIdpExceptionInfoList" parameterType="com.idm.app.ruleengine.exceptioninfo.model.IdpExceptionInfo"
+          resultType="com.idm.app.ruleengine.exceptioninfo.model.IdpExceptionInfo">
+    SELECT a.SRCDATE srcDate, a.QUERYSEQNO querySeqno,a.BUSINESSNO businessNo,a.ERRORCODE errorCode, 
+    a.ERRORMSG errorMsg,a.RERUNFLAG rerunFlag,a.EXCEPTIONTIME exceptionTime,
+    a.QUERYSYSTEMCODE querySystemCode,a.QUERYSYSTEMNAME querySystemName,a.RESPSYSTEMCODE respSystemCode,
+    a.RESPSYSTEMNAME respSystemName, b.MESSAGE requestPkg,a.EXSTACKTRACE exStackTrace, 
+    a.REBUSINESSDATE reBusinessDate,a.REBUSINESSTIME reBusinessTime,
+    a.REBUSINESSNO reBusinessNo,a.REBUSINESSOPERATOR reBusinessOperator,
+    case a.REBUSINESSRESULT when '1' then '发起成功' when '2' then '发起失败' end reBusinessResult
+    FROM IDP_EXCEPTION_INFO a, IDP_REQUEST_INFO b 
+    WHERE a.BUSINESSNO=b.BUSINESSNO
+    AND (a.REBUSINESSRESULT is null or a.REBUSINESSRESULT='2') and a.errorcode like 'IDP_FW%' or (a.errorcode like 'IDP_NB%')
+ </select>
+</mapper>

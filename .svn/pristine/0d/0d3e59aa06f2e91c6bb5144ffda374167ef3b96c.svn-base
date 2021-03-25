@@ -1,0 +1,345 @@
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@taglib uri="http://idm.com/authorize" prefix="c" %>
+<style>
+	.dropdown-submenu {
+		position: relative;
+	}
+	.dropdown-submenu > .dropdown-menu {
+		top: 0;
+		left: 100%;
+		margin-top: -6px;
+		margin-left: -1px;
+		-webkit-border-radius: 0 6px 6px 6px;
+		-moz-border-radius: 0 6px 6px;
+		border-radius: 0 6px 6px 6px;
+	}
+	.dropdown-submenu:hover > .dropdown-menu {
+		display: block;
+	}
+	.dropdown-submenu > a:after {
+		display: block;
+		content: " ";
+		float: right;
+		width: 0;
+		height: 0;
+		border-color: transparent;
+		border-style: solid;
+		border-width: 5px 0 5px 5px;
+		border-left-color: #ccc;
+		margin-top: 5px;
+		margin-right: -10px;
+	}
+	.dropdown-submenu:hover > a:after {
+		border-left-color: #fff;
+	}
+	.dropdown-submenu.pull-left {
+		float: none;
+	}
+	.dropdown-submenu.pull-left > .dropdown-menu {
+		left: -100%;
+		margin-left: 10px;
+		-webkit-border-radius: 6px 0 6px 6px;
+		-moz-border-radius: 6px 0 6px 6px;
+		border-radius: 6px 0 6px 6px;
+	}
+</style>
+	
+      <div class="navbar navbar-fixed-top">
+      <div class="navbar-emp" style="padding-right: 5px;">
+        <div class="container-fluid">
+          <a class="brand" href="javascript:void(0)" style="padding-left: 5px;">中银富登智能决策管理平台</a>
+          <div class="nav-collapse collapse">
+            <p class="navbar-text pull-right">
+               	 <font color="#fff">${user.userId}！ 欢迎你！ </font>
+              <a href="#" onclick="openUpdatePassword()" class="navbar-link"> 修改密码 </a>|<a href="<%=request.getContextPath()%>/logout" class="navbar-link"> 注销 </a>
+            </p>
+            <ul id="navbar" class="nav">
+              <li><a href="<%=request.getContextPath()%>/index"><i class="fa fa-home"></i> 首页</a></li>
+              <c:authority check="upstream">
+              <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"> <i class="fa fa-cog"></i> 上游对接配置  <b class="caret"></b></a>
+              	<ul class="dropdown-menu" role="menu" aria-labelledby="sysMgrMenu">
+              	 	<c:authority check="upstream:productConfig">
+              	 	<li role="presentation">
+              	 		<a role="menuitem" tabindex="-1" href="product_Config.do"><i class="fa fa-list-alt"></i> 产品信息管理</a>
+              	 	</li>
+              	 	</c:authority>
+              	 	<c:authority check="upstream:proModelConfig">
+              	 	<li role="presentation">
+              	 		<a role="menuitem" tabindex="-1" href="proModel_Config.do"><i class="fa fa-list-alt"></i> 模型信息管理</a>
+              	 	</li>
+              	 	</c:authority>
+              	 	<c:authority check="upstream:paraInfoConfig">
+              	 	<li role="presentation">
+              	 		<a role="menuitem" tabindex="-1" href="paraInfo_Config.do"><i class="fa fa-list-alt"></i> 上游参数管理</a>
+              	 	</li>
+              	 	</c:authority>
+              	 	<c:authority check="upstream:proModelParaConfig">
+              	 	<li role="presentation">
+              	 		<a role="menuitem" tabindex="-1" href="proModelPara_Config.do"><i class="fa fa-list-alt"></i> 参数校验配置</a>
+              	 	</li>
+              	 	</c:authority>
+              	 	
+              	 </ul>
+              </li>
+			  </c:authority>
+			    <c:authority check="idpConfig">
+				<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"> <i class="fa fa-cog"></i> 决策服务配置  <b class="caret"></b></a>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="sysMgrMenu">
+					<%-- <c:authority check="idpConfig:test">
+					 <li role="presentation">
+              	 		<a role="menuitem" tabindex="-1" href="decision_test.do"><i class="fa fa-list-alt"></i> 决策服务测试</a>
+              	 	</li> 
+              	 	</c:authority> --%>
+					<c:authority check="idpConfig:eventConfig">
+					 <li role="presentation">
+              	 		<a role="menuitem" tabindex="-1" href="event_config.do"><i class="fa fa-list-alt"></i> 决策请求配置</a>
+              	 	</li> 
+              	 	</c:authority>
+              	 	<c:authority check="idpConfig:pmmlConfig">
+					 <li role="presentation">
+              	 		<a role="menuitem" tabindex="-1" href="pmml_config.do"><i class="fa fa-list-alt"></i> PMML模型配置</a>
+              	 	</li> 
+              	 	</c:authority>
+					</ul>
+				</li>
+			    </c:authority>
+
+				<c:authority check="engineManager">
+                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"> <i class="fa fa-cog"></i> 决策引擎配置  <b class="caret"></b></a>
+              	  <ul class="dropdown-menu" role="menu" aria-labelledby="sysMgrMenu">
+              		<c:authority check="engineManager:bomManage">
+              	 	<li role="presentation"> 
+              	 		<a  tabindex="-1" href="bom_info.do"><i class="fa fa-list-alt"></i> BOM版本管理</a>
+              	 	</li>
+              	 	</c:authority>
+              	 	<c:authority check="engineManager:adbVerManage">
+              	 	<li role="presentation"> 
+              	 		<a  tabindex="-1" href="adb_ver_manage.do"><i class="fa fa-list-alt"></i> adb版本管理</a>
+              	 	</li>
+              	 	</c:authority>
+              	 	<c:authority check="engineManager:adbRuleHotDeploy">
+              	 	<li role="presentation"> 
+              	 		<a  tabindex="-1" href="adb_rule_deploy.do"><i class="fa fa-list-alt"></i> adb规则热部署</a>
+              	 	</li>
+              	 	</c:authority>  
+              	 </ul>
+              </li>
+              </c:authority>
+              <c:authority check="examinationManager">
+               <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"> <i class="fa fa-cog"></i> 审批管理  <b class="caret"></b></a>
+              	<ul class="dropdown-menu" role="menu" aria-labelledby="sysMgrMenu">
+              		<c:authority check="examinationManager:adbApprove">
+					 <li>
+						 <a tabindex="-1" href="adb_approve.do"><i class="fa fa-list-alt"></i> adb文件审批</a>
+					 </li> 
+					 </c:authority>
+					 <c:authority check="examinationManager:adbApproveRecord">
+					 <li>
+						 <a tabindex="-1" href="adb_approve_record.do"><i class="fa fa-list-alt"></i> 审批记录查询</a>
+					 </li> 
+					 </c:authority>
+              	 </ul>
+              </li>
+              </c:authority>
+               <c:authority check="datasource_manage">
+               <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"> <i class="fa fa-user-md"></i> 日志管理  <b class="caret"></b></a>
+              	<ul class="dropdown-menu" role="menu" aria-labelledby="sysMgrMenu">
+              		<c:authority check="datasource_manage:logInfo">
+					 <li>
+						 <a tabindex="-1" href="logInfo.do"><i class="fa fa-list-alt"></i> 日志信息</a>
+					 </li> 
+					 </c:authority>
+					 <c:authority check="datasource_manage:idpExceptionPage">
+					 <li>
+						 <a tabindex="-1" href="idp_exception_page.do"><i class="fa fa-list-alt"></i>决策服务系统异常信息</a>
+					 </li> 
+					  </c:authority>
+					  <c:authority check="datasource_manage:idpAsyStorageExceptionPage">
+					 <li>
+						 <a tabindex="-1" href="idp_asyStorageException_page.do"><i class="fa fa-list-alt"></i>决策服务系统异步存储异常信息</a>
+					 </li>
+					 </c:authority>
+              	 </ul>
+              </li>
+              </c:authority>
+<%--                <c:authority check="exception_manage">
+                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"> <i class="fa fa-user-md"></i> 异常管理<b class="caret"></b></a>
+                	<ul class="dropdown-menu" role="menu" aria-labelledby="sysMgrMenu">
+					  <li>
+						 <a tabindex="-1" href="idp_exception_page.do"><i class="fa fa-list-alt"></i>决策服务系统异常信息</a>
+					 </li> 
+					 </ul>
+                </li>
+              </c:authority> --%>
+            
+              <c:authority check="sys_manage">
+              <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"> <i class="fa fa-globe"></i> 系统管理  <b class="caret"></b></a>
+              	 <ul class="dropdown-menu" role="menu" aria-labelledby="sysMgrMenu">
+					 <c:authority check="sys_manage:basicDataConfig">
+					 <li role="presentation">
+              	 		<a role="menuitem" tabindex="-1" href="basic_data_config.do"><i class="fa fa-list-alt"></i> 线程池参数配置</a>
+              	 	</li> 
+              	 	</c:authority>
+              	 	<%-- <c:authority check="sys_manage:fdConfigInfo">
+              	 	<li role="presentation">
+              	 		<a role="menuitem" tabindex="-1" href="fd_params_config_info.do"><i class="fa fa-calendar "></i> 批量任务参数配置</a>
+              	 	</li>
+              	 	</c:authority> --%>
+              	 	<c:authority check="sys_manage:serverInfo">
+              	 	<li role="presentation"> 
+              	 		<a role="menuitem" tabindex="-1" href="server_info.do"><i class="fa fa-cog"></i> 服务器配置</a>
+              	 	</li>
+              	 	</c:authority>
+              	 	
+              	 	<c:authority check="sys_manage:organizationInfo">
+					 <li>
+						 <a tabindex="-1" href="organization.do"><i class="fa fa-list-alt"></i> 机构管理</a>
+					 </li>
+					 </c:authority>
+					 <c:authority check="sys_manage:roleInfo">
+					 <li>
+						 <a tabindex="-1" href="role.do"><i class="fa fa-user"></i> 角色管理</a>
+					 </li>
+					 </c:authority>
+					 <c:authority check="sys_manage:userInfo">
+					 <li>
+						 <a tabindex="-1" href="user.do"><i class="fa fa-user"></i> 用户管理</a>
+					 </li> 
+					 </c:authority>
+					 <c:authority check="sys_manage:systemIpInfo">
+					 <li>
+						 <a tabindex="-1" href="systemIp.do"><i class="fa fa-list-alt"></i> 服务系统IP管理</a>
+					 </li> 
+					 </c:authority>
+              	 </ul>
+              </li>
+              </c:authority>
+              <c:authority check="systemControl">
+               <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"> <i class="fa fa-cog"></i> 系统性能监控  <b class="caret"></b></a>
+              	<ul class="dropdown-menu" role="menu" aria-labelledby="sysMgrMenu">
+              		<c:authority check="systemControl:implTransfer">
+					 <li>
+						 <a tabindex="-1" href="implTransfer.do"><i class="fa fa-list-alt"></i> 接口调用监控</a>
+					 </li> 
+					 </c:authority>
+					 <c:authority check="systemControl:implTransfer">
+					 <li>
+						 <a tabindex="-1" href="threadMonitor.do"><i class="fa fa-list-alt"></i> 线程监控</a>
+					 </li> 
+					 </c:authority>
+					 <c:authority check="systemControl:exceptionTransfer">
+					 <li>
+						 <a tabindex="-1" href="exceptionTransfer.do"><i class="fa fa-list-alt"></i> 异常信息监控</a>
+					 </li> 
+					 </c:authority>
+              	 </ul>
+              </li>
+              </c:authority>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+</div>
+
+<div id="updatePassword" class="modal hide fade" style="width:590px;" >
+	  <div class="modal-header">
+	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	    <h3><span>修改密码</span></h3>
+	  </div>	
+	  <div class="modal-body">
+		<form id="updatePasswordFrom" class="form-horizontal">
+						<table cellpadding="2px" >
+							<tr> 
+								<td style="width: 80px;">新的密码</td>
+								<td style="width: 300px;">
+									<input id="c_password" type="text"   name="password">
+								</td>
+							</tr>
+							<tr>
+								<td style="width: 80px;">重新输入</td>
+								<td style="width: 300px;">
+									<input id="d_password" type="text"  name="d_password">
+								</td>
+							</tr>
+						</table>
+					</form>
+	  </div>
+	  <div class="modal-footer">
+	    <a href="javascript:void(0)" class="btn btn-info" onclick="updatePassword()"><i class="fa fa-save"></i> 确 定</a>
+	    <a href="javascript:void(0)" class="btn btn-info" data-dismiss="modal"><i class="fa fa-close"></i> 取 消</a>
+	  </div>
+	</div>
+	
+<script type="text/javascript">
+
+var root='<%=request.getContextPath()%>';
+	 
+function openUpdatePassword() {
+	$('#updatePassword').modal('show');
+}
+
+/*
+var validator = null;
+$(document).ready(function() {
+	validator = $("#updatePasswordFrom").validate({
+		rules : {
+			password : {
+				required : true,
+				rangelength : [ 0, 20 ]
+			},
+			d_password : {
+				required : true
+			}
+		},
+		focusCleanup : true
+	});
+});
+*/
+
+/**
+ * 修改信息
+ * 
+ * @param el
+ * @param method
+ */
+function updatePassword() {
+//	if($("#updatePasswordFrom").valid()){
+		var data = $('#updatePasswordFrom').serialize();
+		var pass = $('#c_password').val();
+		var again = $('#d_password').val();
+		if (pass == null ||pass == "") {
+			alert("密码输入不可为空！");
+			return false;
+		}
+		
+		if (again == null ||again == "") {
+			alert("密码确认不可为空！");
+			return false;
+		}
+		
+		if (again != pass) {
+			alert("两次密码输入不一致！");
+			return false;
+		}
+		$.ajax({
+			type : 'post',
+			url : root + '/user_update_password.do',
+			data : data,
+			success : function(msg) {
+				if (msg.success) {
+					alert("保存成功！"); // 弹出成功msg
+					// 刷新表格数据
+					parent.$('#updatePassword').modal('hide');
+				} else {
+					alert("保存失败:" + msg); // 弹出失败msg
+				}
+			},
+			error : function(msg) {
+				alert("访问服务器出错");
+			}
+		});
+//	}
+}
+
+
+</script>

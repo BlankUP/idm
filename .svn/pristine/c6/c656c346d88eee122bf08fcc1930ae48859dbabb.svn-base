@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <contextName>logback</contextName>
+    <!--<property name="log.access" value="/home/isa/idm/log/idm.access.log" />  -->
+    <!-- <property name="log.path" value="D:/logs/idm/idm.info.log" />
+    <property name="log.error" value="D:/logs/idm/idm.error.log" /> --> 
+     <property name="log.path" value="${catalina.home}/IDMlog/idm.info.log" />
+    <property name="log.error" value="${catalina.home}/IDMlog/idm.error.log" /> 
+
+    <!-- 控制台日志 appender  --> 
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss} %contextName [%thread]  %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+   <!-- 访问日志 appender  --> 
+   <appender name="access" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        
+        <file>${log.access}</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+        <!-- 除按日志记录之外，还配置了日志文件不能超过2M，若超过2M，日志文件会以索引0开始，
+            命名日志文件，例如log-error-2013-12-21.0.log -->
+        	<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+            <maxFileSize>2MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!--日志文件输出的文件名-->
+            <FileNamePattern>${log.access}.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+            <!--日志文件保留天数-->
+            <MaxHistory>30</MaxHistory>
+            <maxFileSize>1MB</maxFileSize>
+            <totalSizeCap>10MB</totalSizeCap>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%date %level [%thread] %logger{36} [%file : %line] %msg%n
+            </pattern>
+        </encoder> 
+    </appender>
+
+    <appender name="fileInfo" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 除按日志记录之外，还配置了日志文件不能超过2M，若超过2M，日志文件会以索引0开始，
+            命名日志文件，例如log-error-2013-12-21.0.log -->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>2MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!--日志文件输出的文件名-->
+            <FileNamePattern>${log.path}.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+            <!--日志文件保留天数-->
+            <MaxHistory>30</MaxHistory>
+            <maxFileSize>1MB</maxFileSize>
+            <totalSizeCap>10MB</totalSizeCap>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%date %level [%thread] %logger{36} [%file : %line] %msg%n
+            </pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        	<level>INFO</level> 
+        	<onMatch>ACCEPT</onMatch> 
+        	<onMismatch>DENY</onMismatch> 
+        </filter>
+    </appender>
+    
+    <appender name="fileErrorLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.error}</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>2MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!--日志文件输出的文件名-->
+            <FileNamePattern>${log.error}.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+            <!--日志文件保留天数-->
+            <MaxHistory>30</MaxHistory>
+            <maxFileSize>1MB</maxFileSize>
+            <totalSizeCap>10MB</totalSizeCap>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%date %level [%thread] %logger{36} [%file : %line] %msg%n
+            </pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter"><!-- 只打印错误日志 -->
+          	<level>ERROR</level> 
+          	<onMatch>ACCEPT</onMatch> 
+          	<onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="console" />
+        <!-- <appender-ref ref="access" /> -->
+        <appender-ref ref="fileInfo" />
+        <appender-ref ref="fileErrorLog" />
+    </root>
+    <!--  
+  <logger name="org.springframework.scheduling"  level="error" />
+    <Logger name="org.apache.catalina.util.LifecycleBase" level="error" />
+    <Logger name="org.apache.coyote.http11.Http11NioProtocol" level="warn" />
+    <Logger name="org.apache.tomcat.util.net.NioSelectorPool" level="warn" />
+    <Logger name="org.springframework" level="debug" />
+    <logger name="org.mybatis" level="debug" />
+    <logger name="java.sql" level="error" />
+    <logger name="java.sql.Connection" level="error" />
+    <logger name="java.sql.Statement" level="error" />
+    <logger name="java.sql.PreparedStatement" level="error" />
+    <logger name="java.sql.ResultSet" level="error" />
+    -->
+</configuration>

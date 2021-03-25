@@ -1,0 +1,97 @@
+@charset 'utf-8';
+
+// Tabs
+// -------------------------------------------------------
+.tabs {
+	border-bottom: @tabsBorderWidth solid @tabsBorderColor;
+	list-style: none;
+	margin: 10px 0 0 0;
+	.clearfix();
+
+	li{
+		position: relative; 
+		margin: 0;
+		margin-right: -@tabsBorderWidth;
+		border: @tabsBorderWidth solid @tabsBorderColor;
+		border-bottom: none;
+		background-color: @tabsBackgroundColor;
+		float: left;
+		a {
+			margin: 0;
+			display: block;
+			outline: none;
+			text-decoration: none;
+			color: @textColor;
+			padding: @tabsPaddingY @tabsPaddingX;
+			&:hover {
+				background: @tabsHoverBackgroundColor;
+				// .border-radius(3px 3px 0px 0px);
+			}
+		}
+		
+		&:first-child {
+			.border-radius(3px 0px 0px 0px);
+			margin-left: @tabsPaddingX * 2;
+		}
+		&:last-child {
+			.border-radius(0px 3px 0px 0px);
+		}
+		&.active {
+			// .border-radius(3px 3px 0px 0px);
+			border: @tabsBorderWidth solid @tabsBorderColor;
+			border-bottom: none;
+			background: @tabsActiveBackgroundColor;
+			padding-bottom: @tabsBorderWidth;
+			margin-bottom: -@tabsBorderWidth;
+			a:hover {
+				background: @tabsActiveBackgroundColor;
+			}
+		}
+		
+	}
+
+}
+
+.tabs-vertical {
+	border-bottom: none;
+	float: left;
+	margin: 0;
+	padding: 0;
+	position: relative;
+	width: 11em;
+	z-index: 5;
+	li {
+		float: none;
+		zoom:1;	
+		*margin-bottom: -4px;	
+		border-bottom: @tabsBorderWidth solid @tabsBorderColor;
+		margin-top:-1px;
+		&:first-child {
+			margin-left: 0;
+			margin-top: @tabsPaddingX * 2;
+		}
+
+		&:last-child {
+			.border-radius(0px 0px 0px 3px);
+		}
+		&.active {
+			border: @tabsBorderWidth solid @tabsBorderColor;
+			border-right: none;
+			padding-right: @tabsBorderWidth;
+			margin-right: -@tabsBorderWidth;
+			margin-left: -0.5em;
+			*margin-bottom: -4px;
+		}
+	}
+}
+
+.tabs-pane {
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	margin-left:11em;
+	padding: 20px;
+	position: relative;
+	z-index: 1;
+ 	border: @tabsBorderWidth solid @tabsBorderColor;
+}

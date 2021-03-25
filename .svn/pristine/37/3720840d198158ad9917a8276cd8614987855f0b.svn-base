@@ -1,0 +1,251 @@
+package com.idm.app.ruleengine.exceptioninfo.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.HttpHostConnectException;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.alibaba.fastjson.JSONObject;
+import com.idm.app.ruleengine.exceptioninfo.mapper.MqiExceptionInfoMapper;
+import com.idm.app.ruleengine.exceptioninfo.model.IdpExceptionInfo;
+import com.idm.app.ruleengine.exceptioninfo.model.MqiExceptionInfo;
+import com.idm.app.system.login.model.IDMUser;
+import com.idm.app.system.loginfo.model.SysLog;
+import com.idm.common.constant.Constant;
+import com.idm.common.http.HttpClient;
+import com.idm.common.util.DateTools;
+import com.idm.common.util.DateUtil;
+import com.idm.common.util.HttpTool;
+import com.idm.common.util.JsonTool;
+import com.idm.common.util.ResByPageVo;
+import com.idm.common.util.UuidUtils;
+/**
+ * 模型质检异常处理
+ * @author: pl
+ * @Description: 
+ * @date:   2019年8月14日 下午14:06:18   
+ * @Copyright: 2019 www.sunline.cn All rights reserved. 
+ *
+ */
+@Controller
+public class MqiExceptionMngController {
+	
+	private Logger logger = Logger.getLogger(MqiExceptionMngController.class);
+	
+	@Resource
+	private MqiExceptionInfoMapper mqiExceptionInfoMapper;
+	
+	@Value("${MQI_URL}")
+	private String MQI_URL;
+	
+	@Value("${IDP_TIMEOUT}")
+	private Integer TimeOut;
+	
+	@RequestMapping("/mqi_exception_page")
+	public String IdpExceptionPage(){
+		return "exceptionManage/mqi_exception_page";
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping("/mqi_exception_info")
+	@ResponseBody
+	@SysLog(operate="异常信息查询",module="决策服务系统异常信息")
+	public Object idp_exception_info(HttpServletRequest request, String page, String rows) throws Exception {
+		int pageNum =Integer.parseInt(StringUtils.isNotBlank(page) ? page : "1");
+		/* 每页大小 */
+	    int pageSize = Integer.parseInt(StringUtils.isNotBlank(rows) ? rows : "10");
+	    /* 业务请求日期 */
+	    String srcDate=request.getParameter("srcDate");
+	    /* 业务请求流水号 */
+	    String serialNo=request.getParameter("serialNo");
+	    if(srcDate!=null && srcDate.length()==10) {
+	    	srcDate = DateUtil.formate(srcDate, DateUtil.getFormat("yyyy-MM-dd"), DateUtil.getFormat("yyyyMMdd"));
+	    }
+	    logger.info("*****业务请求日期srcDate:"+srcDate+"******");
+	    logger.info("*****请求流水号serialNo:"+serialNo+"******");
+	    ResByPageVo resByPageVo=null;
+	    MqiExceptionInfo mqiExceptionInfo = new MqiExceptionInfo();
+	    mqiExceptionInfo.setSrcDate(srcDate);
+	    mqiExceptionInfo.setSerialNo(serialNo);;
+	    mqiExceptionInfo.setPage(pageNum);
+	    mqiExceptionInfo.setSize(pageSize);
+   
+		List<MqiExceptionInfo> exceptionList = mqiExceptionInfoMapper.queryIdpExceptionInfo(mqiExceptionInfo);
+		logger.info("******IDP异常信息查询成功，总记录为["+ mqiExceptionInfoMapper.selectCountByAll(mqiExceptionInfo)+"******");
+		resByPageVo = new ResByPageVo(pageSize, pageNum,mqiExceptionInfoMapper.selectCountByAll(mqiExceptionInfo));
+		resByPageVo.setRows(exceptionList);
+		return JSONObject.toJSON(resByPageVo);
+	}
+	/**
+	 * @Description: 格式化异常信息中的请求报文
+	 * @param exceptionList   
+	 * @return: List<MqiExceptionInfo>      
+	 * @throws 
+	 * @author sjf
+	 */
+	public List<MqiExceptionInfo> formatRequestPkg( List<MqiExceptionInfo> exceptionList){
+		
+		List<MqiExceptionInfo> list= new ArrayList<MqiExceptionInfo>();
+		for(MqiExceptionInfo mqiExceptionInfo :exceptionList) {
+			String requestPkg  = JsonTool.JsonFormart(mqiExceptionInfo.getRequestPkg());
+			mqiExceptionInfo.setRequestPkg(requestPkg);
+			list.add(mqiExceptionInfo);
+		}
+		return list;
+	}
+	
+	/**
+	 * @Description: 异常业务重跑
+	 * @return: Object      
+	 * @author sjf
+	 */
+	@RequestMapping("/mqi_redobusiness")
+	@ResponseBody
+	@SysLog(operate="异常业务重跑",module="决策服务系统异常信息")
+	public JSONObject redoBusiness(HttpServletRequest request) {
+		
+		logger.info("******执行异常业务重跑******");
+		JSONObject result = new JSONObject();
+		//管理平台登录用户
+		IDMUser user = (IDMUser) request.getSession().getAttribute("user");
+		
+		//原业务发起日期
+		String srcDate = request.getParameter("srcDate");
+		
+		//原发起流水号
+		String serialNo = request.getParameter("serialNo");
+		
+		
+		MqiExceptionInfo idpExceptionInfo =  mqiExceptionInfoMapper.queryIdpExceptionInfoBySeqno(serialNo);
+		if(idpExceptionInfo==null) {
+			result.put("retCode", Constant.FAIL_CODE);
+			result.put("retMsg", "查询原交易记录失败");
+			return result;
+		}
+		
+		//检查重跑结果，如果重跑结果是“1-成功”，则拒绝重跑
+		String reBusinessResult=idpExceptionInfo.getReBusinessResult();
+		System.out.println("+++++++++++"+reBusinessResult);
+		if("1".equals(reBusinessResult)) {
+			result.put("retCode", Constant.FAIL_CODE);
+			result.put("retMsg", "业务重跑已成功完成");
+			return result;
+		}
+		//错误代码
+		String errorCode =idpExceptionInfo.getErrorCode(); 
+		
+		//错误信息
+		String errorMsg = idpExceptionInfo.getErrorMsg();
+	
+		logger.info("******usrId:"+user.getUserId()+"******");
+		logger.info("******srcDate:"+srcDate+"******");
+		logger.info("******serialNo:"+serialNo+"******");
+		logger.info("******errorCode:"+errorCode+"******");
+		logger.info("******errorMsg:"+errorMsg+"******");
+		
+		//原业务请求报文
+		String message = idpExceptionInfo.getRequestPkg();
+		JSONObject reqJson = JSONObject.parseObject(message);
+		String resp="";
+		try {
+			logger.info("******发送决策服务系统IDP的报文："+reqJson.toJSONString()+"******");
+				//1.清除数据
+				mqiExceptionInfoMapper.deleteComboInfo(serialNo);
+				mqiExceptionInfoMapper.deleteComboInfo1(serialNo);
+				mqiExceptionInfoMapper.deleteComboInfo2(serialNo);
+				mqiExceptionInfoMapper.deleteComboInfo3(serialNo);
+				mqiExceptionInfoMapper.deleteComboInfo4(serialNo);
+				mqiExceptionInfoMapper.deleteComboInfo5(serialNo);
+				mqiExceptionInfoMapper.deleteComboInfo6(serialNo);
+				mqiExceptionInfoMapper.deleteComboInfo7(serialNo);
+
+			//重新发起请求
+			resp  = HttpTool.sendIDP(MQI_URL, reqJson.toJSONString(), TimeOut);
+			logger.info("******重跑发送决策服务系统IDP的返回值："+resp+"******");
+			
+			//返回为0时，调用模型质检成功
+			if("0".equals(resp)) {
+				updateMqiExceptionInfo(serialNo,user.getUserId(),"1");
+				result.put("retCode", Constant.SUCCESS_CODE);
+				result.put("retMsg", "重跑发起成功");
+			}
+		} catch (Exception e) {
+			updateMqiExceptionInfo(serialNo, user.getUserId(),"2");
+			e.printStackTrace();
+			result.put("retCode", Constant.FAIL_CODE);
+			result.put("retMsg", "重跑发起失败，请求异常");
+			return result;
+		}
+		
+		return result;
+	}
+	/**
+	 * 
+	 * @Description: 更新决策服务平台异常信息表中的重跑操作员、重跑日期、重跑时间
+	 * @param userId 操作用户  
+	 * @return: void      
+	 * @author pl
+	 */
+	public void updateMqiExceptionInfo(String serialNo,String userId, String reBusinessResult) {
+		String dateStr=DateTools.getDate();
+		String timeStr=DateTools.getTime();
+		mqiExceptionInfoMapper.updateIdpExceptionInfo(serialNo, userId, dateStr, timeStr, reBusinessResult);
+	}
+	
+	@RequestMapping("/mqi_batchredo")
+	@ResponseBody
+	public void batchred(){
+		List<MqiExceptionInfo> list=mqiExceptionInfoMapper.queryIdpExceptionInfoList();
+		if(list!=null){
+			for (MqiExceptionInfo idpExceptionInfo : list) {
+				JSONObject reqJson = JSONObject.parseObject(idpExceptionInfo.getRequestPkg());
+				String businessNo=idpExceptionInfo.getBusinessNo();
+				//"2"-标识该笔业务为重跑业务
+				JSONObject reqJsondata=reqJson.getJSONObject("data");
+				reqJsondata.put("rerunFlag", "2");
+				reqJsondata.remove("requestType");
+				reqJsondata.put("requestType", "2");
+				//原发起日期
+				reqJson.put("OrgSrcDate", idpExceptionInfo.getSrcDate());
+				//原查询流水
+				reqJson.put("OrgSerialNo", idpExceptionInfo.getSerialNo());				
+				//原业务流水
+				reqJson.put("orgBusinessNo", businessNo);
+				 
+				logger.info("******发送决策服务系统IDP的报文："+reqJson.toJSONString()+"******");
+				String resp="";
+				try {
+					resp  = HttpTool.sendIDP(MQI_URL, reqJson.toJSONString(), TimeOut);
+					logger.info("******重跑发送决策服务系统IDP的返回报文："+resp+"******");
+					JSONObject resoJson = JSONObject.parseObject(resp);
+					if("IDP_SY_1001".equals(resoJson.getString("errorCode"))) {
+						//更新异常信息表   0-重跑过程执行中
+						updateMqiExceptionInfo(businessNo,"root","1");
+					}
+				}catch(HttpHostConnectException e) {
+					updateMqiExceptionInfo(businessNo,"root","2");
+					e.printStackTrace();
+				}catch(ConnectTimeoutException e) {
+					updateMqiExceptionInfo(businessNo,"root","2");
+					e.printStackTrace();
+				} catch (Exception e) {
+					updateMqiExceptionInfo(businessNo,"root","2");
+					e.printStackTrace();
+				}
+			}
+			
+		}
+		
+	}
+	
+}

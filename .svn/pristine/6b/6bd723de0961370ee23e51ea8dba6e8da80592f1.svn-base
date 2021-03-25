@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.idpconfig.customRequestAndResultAnalysis.mapper.ScoreRuleInfoMapper">
+
+	<select id="selectCountByAll" parameterType="com.idm.app.idpconfig.customRequestAndResultAnalysis.model.ScoreRuleTotalScoreInfo" resultType = "java.lang.Integer">
+		select count(*) from (
+		select distinct(a.businessno) businessno,a.modelcode modelcode,a.queryseqno queryseqno from idp_request_info a,idp_scorerule_details b
+ 		where a.businessno = b.businessno ) where 1=1 
+    	<if test="modelCode !=null and modelCode!='' ">
+	        and modelcode like '%'||#{modelCode}||'%'
+	    </if>
+	    <if test="queryseqNo!=null and queryseqNo!='' ">
+	        and queryseqno like '%'||#{queryseqNo}||'%'
+	    </if>
+	    <if test="businessNo!=null and businessNo!='' ">
+	        and businessno like '%'||#{businessNo}||'%'
+	    </if>
+	</select>
+	
+	<select id="getScoreRuleTotalScoreInfo" resultType="com.idm.app.idpconfig.customRequestAndResultAnalysis.model.ScoreRuleTotalScoreInfo">
+		select * from (
+		select a.queryseqno queryseqno,a.businessno businessno,a.cifname cifname,a.idtype idtype,a.idno idno,
+	    b.modelcode modelcode,b.modelname modelname,b.totalscore totalscore,a.rkdate rkdate,a.rktime rktime
+	    from (select queryseqno,businessno,cifname,idtype,idno,rkdate,rktime from idp_request_info) a, 
+	    (select businessno,modelcode,modelname,SUM(score) totalscore from idp_scorerule_details group by businessno,modelcode,modelname) b 
+	    where a.businessno = b.businessno 
+	    ) where 1=1
+	    <if test="modelCode !=null and modelCode!='' ">
+	        and modelcode like '%'||#{modelCode}||'%'
+	    </if>
+	    <if test="queryseqNo!=null and queryseqNo!='' ">
+	        and queryseqno like '%'||#{queryseqNo}||'%'
+	    </if>
+	    <if test="businessNo!=null and businessNo!='' ">
+	        and businessno like '%'||#{businessNo}||'%'
+	    </if>
+	    order by rkdate,rktime desc
+	</select>
+	
+	<select id="selectScoreDetailCountByAll" parameterType="com.idm.app.idpconfig.customRequestAndResultAnalysis.model.ScoreRuleInfo" resultType = "java.lang.Integer">
+		select count(*) from (
+		select a.businessno businessno,a.modelcode modelcode,a.queryseqno queryseqno from idp_request_info a,idp_scorerule_details b
+ 		where a.businessno = b.businessno ) ab where 1=1 
+    	<if test="modelCode !=null and modelCode!='' ">
+	        and ab.modelcode like '%'||#{modelCode}||'%'
+	    </if>
+	    <if test="queryseqNo!=null and queryseqNo!='' ">
+	        and ab.queryseqno like '%'||#{queryseqNo}||'%'
+	    </if>
+	    <if test="businessNo!=null and businessNo!='' ">
+	        and ab.businessno like '%'||#{businessNo}||'%'
+	    </if>
+	</select>
+	
+	<select  id="getScoreRuleInfos" resultType="com.idm.app.idpconfig.customRequestAndResultAnalysis.model.ScoreRuleInfo" >
+		select * from (
+		select a.queryseqno queryseqno,a.businessno businessno,a.cifname cifname,a.idtype idtype,a.idno idno,
+		b.modelcode modelcode,b.modelname modelname,b.rulecode rulecode,b.rulename rulename,b.score score,
+		b.initializationvalue initializationvalue,b.ruleseveritylevel ruleseveritylevel
+		from (select queryseqno,businessno,cifname,idtype,idno from idp_request_info) a, 
+		(select businessno,modelcode,modelname,rulecode,rulename,score,initializationvalue,ruleseveritylevel from idp_scorerule_details) b 
+		where a.businessno = b.businessno ) ab where  1=1 
+		<if test="modelCode!=null and modelCode!='' ">
+			and ab.modelcode = '${modelCode}'
+		</if>
+		<if test="businessNo!=null and businessNo!='' ">
+			and ab.businessno = '${businessNo}'
+		</if>
+	</select>
+	
+</mapper>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.idpconfig.mqiCountAnalysis.mapper.MqiIdpRequestInfoMapper">
+  
+	
+	<select  id="selectCountByAll" parameterType="com.idm.app.idpconfig.mqiCountAnalysis.model.MqiRequestReportTest"  resultType="java.lang.Integer" >
+	
+  
+      select count(1) from ( 
+      SELECT
+      
+      c.message,
+      c.serialno,
+      c.businessno,
+      c.rkdate,
+      c.rktime,
+      c.modelcode,
+      c.flowcode,
+      c.modeltype,
+      c.pmmlcode,
+      c.cifname,
+      c.cifno,
+      c.idtype,
+      c.idno,
+      c.sex,
+      c.age,
+      c.mobilephone,
+      c.deptid,
+      c.deptname,
+      c.productid,
+      c.productname,
+		c.jnlno  
+  
+         FROM MQI_REQUEST_INFO c WHERE 1=1
+        <if test=" JnlNo !=null and  JnlNo !='' ">
+            and JnlNo like '%'||#{JnlNo}||'%'
+        </if>
+        <if test=" businessNo !=null and  businessNo !='' ">
+            and businessNo like '%'||#{businessNo}||'%'
+        </if>
+        <if test="cifName!=null and cifName!='' ">
+            and cifName like '%'||#{cifName}||'%'
+        </if>
+        <if test="idNo!=null and idNo!='' ">
+            and idNo like '%'||#{idNo}||'%'
+        </if>
+   
+          ORDER BY
+          c.rkDate desc,c.serialno     
+          )t1  
+   
+	
+	</select>
+	
+	
+		
+	<select  id="queryIdpRequestInfo" parameterType="com.idm.app.idpconfig.mqiCountAnalysis.model.MqiRequestReportTest"
+        resultType="com.idm.app.idpconfig.mqiCountAnalysis.model.MqiRequestReportTest" >
+	 select * from (select t1.*,rownum rnm from ( 
+		  
+
+      SELECT
+      
+      c.message,
+      c.serialno,
+      c.businessno,
+      c.rkdate,
+      c.rktime,
+      c.modelcode,
+      c.flowcode,
+      c.modeltype,
+      c.pmmlcode,
+      c.cifname,
+      c.cifno,
+      c.idtype,
+      c.idno,
+      c.sex,
+      c.age,
+      c.mobilephone,
+      c.deptid,
+      c.deptname,
+      c.productid,
+      c.productname,
+      c.jnlno
+  
+         FROM MQI_REQUEST_INFO c WHERE 1=1
+        <if test=" JnlNo !=null and  JnlNo !='' ">
+            and JnlNo like '%'||#{JnlNo}||'%'
+        </if>
+        <if test=" businessNo !=null and  businessNo !='' ">
+            and businessNo like '%'||#{businessNo}||'%'
+        </if>
+        <if test="cifName!=null and cifName!='' ">
+            and cifName like '%'||#{cifName}||'%'
+        </if>
+        <if test="idNo!=null and idNo!='' ">
+            and idNo like '%'||#{idNo}||'%'
+        </if>
+          ORDER BY
+          c.serialno desc,c.businessno desc   
+          )t1 
+    <if test="page!= null and size!= null">
+      where rownum &lt;= #{page}*#{size}
+    </if>
+    )
+    <if test="page!= null and size!= null">
+      where rnm &gt;= (#{page}-1)*#{size} +1 
+    </if>
+	
+	
+	</select>
+	
+	
+</mapper>

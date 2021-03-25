@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.ruleengine.statisticanaly.creditdetail.mapper.QueryCreditMapper">
+<select id="queryCreditResult" resultType="com.idm.app.ruleengine.statisticanaly.creditdetail.model.CreditResult">
+  select a.productcode productCode,a.productname productname,
+  a.username custName, a.idtype paperType, a.idnumber paperNo,
+  case when b.creditmark>500 then '通过' else '拒绝' end approvalResult,
+  b.creditmark creditScore, b.creditmoney creditAmt,  b.dayrate dayRate,
+  to_char(b.inputtime,'YYYY-MM-DD') approvalDate, a.queryseqno querySeqno, a.uuid uuid
+  from ssrefsmain a,ssjueceresult b where a.uuid = b.uuid
+  and a.queryseqno=b.queryseqno and a.decisioncode='DEDJ001'
+  <if test="custName!=null and custName!='' ">
+      AND a.username=#{custName}
+  </if>
+    <if test="paperNo!=null and paperNo!='' ">
+        AND a.idnumber=#{paperNo}
+    </if>
+    <if test="queryDate!=null and queryDate!='' ">
+        AND to_char(b.inputtime,'YYYY-MM-DD')=#{queryDate}
+    </if>
+    <if test="querySeqno!=null and querySeqno!='' ">
+      AND a.queryseqno=#{querySeqno}
+    </if>
+</select>
+  <select id="queryBlackList" resultType="com.idm.app.ruleengine.statisticanaly.creditdetail.model.RuleResultDetail">
+  SELECT distinct a.idnumber paperNo, b.rulecode ruleCode,
+  b.rulename ruleName,nvl(a.fieldvalue,'无') fieldvalue,
+  case when b.ruleresult='02' then '未命中' else '命中' end ruleResult,
+  nvl(b.rulereson,' ') ruleReason,to_char(a.inputtime,'YYYY-MM-DD') queryDate
+  FROM ssfieldmessage a,  ssruleresultmessage b
+  WHERE a.queryseqno = b.queryseqno
+  AND a.uuid=b.uuid AND a.custno=b.custno
+  AND a.rulecode=b.rulecode
+  AND a.rulecode like 'HMDGZ%'
+  AND a.idnumber=#{paperNo}
+  AND a.queryseqno=#{querySeqno}
+  AND to_char(a.inputtime,'YYYY-MM-DD')=#{queryDate}
+  </select>
+
+  <select id="queryAntiFraud" resultType="com.idm.app.ruleengine.statisticanaly.creditdetail.model.RuleResultDetail">
+  SELECT distinct a.idnumber paperNo, b.rulecode ruleCode,
+  b.rulename ruleName, nvl(a.fieldvalue,'无') fieldvalue,case when b.ruleresult='02' then '未命中' else '命中' end ruleResult,
+  nvl(b.rulereson,' ') ruleReason,
+  to_char(a.inputtime,'YYYY-MM-DD') queryDate
+  FROM ssfieldmessage a,  ssruleresultmessage b
+  WHERE a.queryseqno = b.queryseqno
+  AND a.uuid=b.uuid AND a.custno=b.custno
+  AND a.rulecode=b.rulecode
+  and a.rulecode like 'FQZGZ%'
+  AND a.idnumber=#{paperNo}
+  AND a.queryseqno=#{querySeqno}
+  AND to_char(a.inputtime,'YYYY-MM-DD')=#{queryDate}
+  </select>
+
+  <select id="queryPreLoanApprove" resultType="com.idm.app.ruleengine.statisticanaly.creditdetail.model.RuleResultDetail">
+  SELECT distinct a.idnumber paperNo, b.rulecode ruleCode,
+  b.rulename ruleName, nvl(a.fieldvalue,'无') fieldvalue,case when b.ruleresult='02' then '未命中' else '命中' end ruleResult,
+  nvl(b.rulereson,' ') ruleReason,
+  to_char(a.inputtime,'YYYY-MM-DD') queryDate
+  FROM ssfieldmessage a,  ssruleresultmessage b
+  WHERE a.queryseqno = b.queryseqno
+  AND a.uuid=b.uuid AND a.custno=b.custno
+  AND a.rulecode=b.rulecode
+  and a.rulecode like 'DQSPGZ%'
+  AND a.idnumber=#{paperNo}
+  AND a.queryseqno=#{querySeqno}
+  AND to_char(a.inputtime,'YYYY-MM-DD') =#{queryDate}
+  </select>
+
+  <select id="queryBJHuoMouScore" resultType="java.lang.String">
+    SELECT nvl(fieldvalue,'0') houmouScore FROM ssfieldmessage  WHERE rulecode='FQZGZ042'
+    AND idnumber=#{paperNo}
+    AND queryseqno=#{querySeqno}
+    AND to_char(inputtime,'YYYY-MM-DD')=#{queryDate}
+  </select>
+
+  <select id="queryCreditScore" resultType="java.lang.String">
+     SELECT nvl(creditmark,'0') creditScore FROM ssjueceresult
+      WHERE rulesetcode='DEDJ001'
+      AND queryseqno=#{querySeqno}
+      AND to_char(inputtime,'YYYY-MM-DD')=#{queryDate}
+  </select>
+
+  <select id="queryCreditAmountInfo" resultType="com.idm.app.ruleengine.statisticanaly.creditdetail.model.CreditAmountInfo">
+    SELECT nvl(base_line,'0') baseAmount, nvl(amount_assets,'0') assetAmount,
+    nvl(salary_amount,'0') salaryAmount,
+    nvl(quota_coefficient,'0') amountFactory,nvl(credit_line,'0') creditAmount,
+    nvl(quota_adjustment,'0') adjustAmount,
+    case when rate_whitelist_cust>0 then '是' else '否' end whiteFlag FROM hanlinacademician
+    WHERE uuid=#{uuid}
+    AND  to_char(inputtime,'YYYY-MM-DD')=#{queryDate}
+  </select>
+</mapper>

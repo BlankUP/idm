@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.system.mqibasicdataconfig.mapper.MqiBasicDataConfigMapper">
+<select id="queryBasicDataConfig" parameterType="com.idm.app.system.mqibasicdataconfig.model.MqiParamsCfg"
+        resultType="com.idm.app.system.mqibasicdataconfig.model.MqiParamsCfg">
+    select * from (select t1.*,rownum rnm from ( select paramCode paramCode, paramName paramName,
+    paramValue paramValue, paramDesc paramDesc,type paramType,status,createUser,createTime,updateUser,updateTime
+     from mqi_params_cfg where 1=1
+    <if test="paramCode!=null and paramCode!='' ">
+        and paramcode like '%'||#{paramCode}||'%'
+    </if>
+    <if test="paramName!=null and paramName!='' ">
+        and paramname like '%'||#{paramName}||'%'
+    </if>
+     <if test="paramType!=null and paramType!='' ">
+        and type=#{paramType}
+    </if>
+      <if test="status!=null and status!='' ">
+        and status = #{status}
+    </if>
+    <if test="createUser!=null and createUser!='' ">
+        and createuser=#{createUser}
+    </if>
+    <if test="createTime!=null and createTime!='' ">
+        and createtime=#{createTime}
+    </if>
+    <if test="updateTime!=null and updateTime!='' ">
+        and updatetime=#{updateTime}
+    </if>
+    <if test="updateUser!=null and updateUser!='' ">
+        and updateUser=#{updateUser}
+    </if>
+    order by createtime desc
+	   )t1
+	   <if test="page!= null and size!= null">
+     	 where rownum &lt;= #{page}*#{size}
+       </if>
+     )
+      <if test="page!= null and size!= null">
+	      where rnm &gt;= (#{page}-1)*#{size} +1 
+	 </if>
+</select>
+
+<select id="selectCountByAll" parameterType="com.idm.app.system.mqibasicdataconfig.model.MqiParamsCfg"  resultType="java.lang.Integer">
+    select count(1) from mqi_params_cfg where 1=1
+	<if test="paramCode!=null and paramCode!='' ">
+        and paramcode like '%'||#{paramCode}||'%'
+    </if>
+    <if test="paramName!=null and paramName!='' ">
+        and paramname like '%'||#{paramName}||'%'
+    </if>
+     <if test="paramType!=null and paramType!='' ">
+        and type=#{paramType}
+    </if>
+      <if test="status!=null and status!='' ">
+        and status = #{status}
+    </if>
+    <if test="createUser!=null and createUser!='' ">
+        and createuser=#{createUser}
+    </if>
+    <if test="createTime!=null and createTime!='' ">
+        and createtime=#{createTime}
+    </if>
+    <if test="updateTime!=null and updateTime!='' ">
+        and updatetime=#{updateTime}
+    </if>
+    <if test="updateUser!=null and updateUser!='' ">
+        and updateUser=#{updateUser}
+    </if>
+ </select>
+   
+    <select id = "queryBaseInfo" resultType="java.lang.String">
+        select distinct type from mqi_params_cfg
+    </select>
+    <insert id="addBasicData" parameterType="com.idm.app.system.mqibasicdataconfig.model.MqiParamsCfg">
+        INSERT INTO mqi_params_cfg (PARAMCODE,PARAMNAME,type,PARAMVALUE,PARAMDESC,status,createUser,updateUser,
+        createTime,updateTime)
+        VALUES (#{paramCode}, #{paramName},#{paramType},#{paramValue},#{paramDesc},#{status},#{createUser},
+        #{updateUser}, #{createTime},#{updateTime} )
+    </insert>
+    <update id="updateBasicData" parameterType="com.idm.app.system.mqibasicdataconfig.model.MqiParamsCfg">
+      UPDATE mqi_params_cfg
+      <set>
+          <if test="paramName!=null and paramName!=''">
+              paramname=#{paramName},
+          </if>
+          <if test="paramDesc!=null and paramDesc!=''">
+              paramdesc=#{paramDesc},
+          </if>
+          <if test="paramValue!=null and paramValue!=''">
+              paramvalue=#{paramValue},
+          </if>
+          <if test="status!=null and status!=''">
+              status=#{status},
+          </if>
+          <if test="updateUser!=null and updateUser!=''">
+            UPDATEUSER=#{updateUser},
+          </if>
+          <if test="updateTime!=null and updateTime!=''">
+              updateTime=#{updateTime}
+          </if>
+      </set>
+      WHERE type=#{paramType} AND paramCode=#{paramCode}
+    </update>
+    <!--<select id="queryServerById" resultType="com.idm.app.system.serverconfig.model.ServerInfo">
+         SELECT server_id serverId, name,ip, port, type,monitor,
+        f5_url f5Url,server_url serverUrl, username, password,
+        server_desc serverDesc,status,create_datetime createDatetime,
+        create_date createDate
+        FROM  mng_server_info
+         WHERE server_id in
+         <foreach collection="list" open="(" close=")" separator="," item="serverId"
+          index="i">
+             #{serverId}
+         </foreach>
+    </select>-->
+</mapper>

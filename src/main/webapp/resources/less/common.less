@@ -1,0 +1,245 @@
+.hide{
+	display: none;
+}
+
+.inline{
+	display: inline;
+}
+
+.block{
+	display: block;
+}
+
+.weight{
+  font-weight: bold;
+}
+// 公共的对齐样式-------------
+// 排列
+.align{
+  &-left{text-align: left;}
+  &-right{text-align: right;}
+}
+
+// 浮动
+.float{
+  &-left{float: left;}
+  &-right{float: right;}
+}
+// 公共的边距样式 ---------------
+.margin{
+  margin:@baseGapSmall;
+  &-large {margin: @baseGapLarge;}
+  &-small {margin: @baseGapSmall;}
+  &-mini  {margin: @baseGapMini;}
+
+  &-vertical{
+    margin:@baseGapSmall auto;
+    &-large{margin:@paddingLarge auto;}
+    &-mini{margin:@paddingMini auto;}
+  }
+  
+  &-horizontal{
+    margin:auto @baseGapSmall;
+    &-large{margin:auto @paddingLarge;}
+    &-mini{margin:auto @paddingMini;}
+  }
+}
+
+.padding{
+  padding:@baseGapSmall;
+  &-large {padding: @baseGapLarge;}
+  &-small {padding: @baseGapSmall;}
+  &-mini  {padding: @baseGapMini;}
+
+  &-vertical{
+    padding-top:@baseGapSmall;
+    padding-bottom:@baseGapSmall;
+    &-large{padding-top:@baseGapLarge ;padding-bottom:@baseGapLarge ;}
+    &-mini{padding-top:@baseGapMini ;padding-bottom:@baseGapMini ;}
+  }
+
+  &-horizontal{
+    padding-left:@baseGapSmall;
+    padding-right:@baseGapSmall;
+    &-large{padding-right:@baseGapLarge;padding-left:@baseGapLarge;}
+    &-mini{padding-right:@baseGapMini;padding-left:@baseGapMini;}
+  }
+}
+
+
+// 公共的颜色样式----------------
+.background {
+  &-main{ background-color: @mainColor;}
+  &-base{ background-color: @darkBackground;}  //#f5f5f5
+}
+
+.border-color {
+  &-main{ border-color: @lightColor;}
+  &-base{ border-color: @grayLight;} // #ccc
+}
+
+.hover-color {
+  &-main{ background-color: @lighterColor;}
+  &-base{ background-color: @grayLighter;} // #e9e9e9
+}
+
+
+// 公共的边线样式
+.top-line     { border-top:1px solid @grayLight;}
+.right-line   { border-right:1px solid @grayLight;}
+.bottom-line  { border-bottom:1px solid @grayLight;}
+h2,h3,h4,h5,h6{&.bottom-line{width: 100%;}}
+.left-line    { border-left:1px solid @grayLight;}
+
+
+// 背景色
+.title-bg {.text-show();}
+
+
+// 容器背景样式 --------------------
+.panel {
+  -moz-border-colors: none;
+  -moz-box-sizing: border-box;
+  .background(@white ,@baseOpacity);
+  border: @baseBorder;
+  border-radius: @baseBorderRadius;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+  display: inline-block;
+  z-index: 1000;
+  padding: 10px;
+  width: 300px;
+}
+
+// 箭头样式
+// -------------------------------
+.expand {    // 默认向下 默认灰色
+  width: 0px;
+  height: 0px;
+  line-height: 0px;
+  .inline-block;
+  vertical-align: middle;
+  .arrow(180, 0.3em, @gray, @navBarBackground);
+}
+.top >.expand{.arrow(0, 0.3em, @gray, @navBarBackground);}
+.right >.expand{.arrow(270, 0.3em, @gray, @navBarBackground);}
+.left >.expand{.arrow(90, 0.3em, @gray, @navBarBackground);}
+
+// 白色底灰色边线 容器内显示的箭头
+.inner-arrow {
+  &:after,
+  &:before {
+      -moz-border-bottom-colors: none;
+      -moz-border-left-colors: none;
+      -moz-border-right-colors: none;
+      -moz-border-top-colors: none;
+      border-image: none;
+      border-width: 8px;
+      content: "";
+      height: 0;
+      overflow: hidden;
+      position: absolute;
+      width: 0;
+  }
+}
+
+.top .inner-arrow{ .inner-arrow;.inner-arrow(top);}
+.bottom .inner-arrow{ .inner-arrow;.inner-arrow(bottom);}
+.left .inner-arrow{ .inner-arrow;.inner-arrow(left);}
+.right .inner-arrow{ .inner-arrow;.inner-arrow(right);}
+
+.bg-arrow {     // 作为背景存在的箭头样式 ,需添加在容器上---------
+  .inner-arrow;
+   &:before { 
+      border-color: @grayLight transparent transparent;
+      border-style: solid outset outset ;
+      right: 10px;
+      top: 40%;
+      margin-left: -8px;
+      border-width: 6px;
+  }
+}
+// 容器外显示的箭头样式
+.outer-arrow {
+  border-width: 11px;
+  &:after{
+    border-width: 10px;
+    content: "";
+  }
+}
+.outer-arrow, 
+.outer-arrow:after {
+  border-color: transparent;
+  _border-color: @white; // 为ie6修改的样式
+  border-style: solid;
+  display: block;
+  height: 0;
+  position: absolute;
+  width: 0;
+}
+
+.top .outer-arrow {
+  
+  _line-height: 10px;  // 为ie6修改的样式
+  border-bottom-width: 0;
+  border-top-color: @grayLight;
+  bottom: -11px;
+  left: 50%;
+  margin-left: -11px;
+    &:after{
+    border-bottom-width: 0;
+    border-top-color: @white;
+    bottom: 1px;
+    margin-left: -10px;
+  }
+}
+
+.right .outer-arrow {  
+  
+  border-left-width: 0;
+  border-right-color: @grayLight;
+  left: -11px;
+  top: 50%;
+  margin-top: -11px;
+    &:after{
+    border-left-width: 0;
+    border-right-color: @white;
+    left: 1px;
+    margin-top: -10px;
+  }
+  _line-height: 0; // 为ie6修改的样式
+  _left:0; 
+}
+
+.bottom .outer-arrow {
+  
+  _line-height: 10px;     // 为ie6修改的样式
+  border-top-width: 0;
+  border-bottom-color: @grayLight;
+  top: -11px;
+  left: 50%;
+  margin-left: -11px;
+    &:after{
+    border-top-width: 0;
+    border-bottom-color: @white;
+    top: 1px;
+    margin-left: -10px;
+  }
+}
+
+.left .outer-arrow {
+
+  border-right-width: 0;
+  border-left-color: @grayLight;
+  right: -11px;
+  top: 50%;
+  margin-top: -11px;
+    &:after{
+    border-right-width: 0;
+    border-left-color: @white;
+    right: 1px;
+    margin-top: -10px;
+  }
+  // 为ie6修改的样式
+  _line-height: 0;
+  _right:0; 
+}

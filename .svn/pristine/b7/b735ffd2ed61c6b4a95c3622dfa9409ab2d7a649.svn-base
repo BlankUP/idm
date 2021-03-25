@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.idpconfig.bom.mapper.BomInfoMapper">
+<select id="queryBomInfo" parameterType="com.idm.app.idpconfig.bom.model.BomInfo"
+        resultType="com.idm.app.idpconfig.bom.model.BomInfo">
+         select * from (select t1.*,rownum rnm from ( 
+	select
+			BOMID,
+			BOMVERSIONNO,
+			VERSIONDEPICTION,
+			VERSIONNAME,
+			STATUS,
+			CREATETIME,
+			UPDATETIME,
+			CREATEUSER,
+			UPDATEUSER,
+			FILEID
+	from IDM_BOM_INFO where 1=1
+    <if test="bomVersionNo!=null and bomVersionNo!='' ">
+        and bomVersionNo like'%'||#{bomVersionNo}||'%' 
+    </if>
+    order by BOMID desc
+    
+          
+          )t1 
+    <if test="page!= null and size!= null">
+      where rownum &lt;= #{page}*#{size}
+    </if>
+    )
+    <if test="page!= null and size!= null">
+      where rnm &gt;= (#{page}-1)*#{size} +1 
+    </if>
+</select>
+
+  <select id="selectCountByAll" parameterType="com.idm.app.idpconfig.bom.model.BomInfo"  resultType="java.lang.Integer">
+    select count(1)
+    from IDM_BOM_INFO c  WHERE 1=1
+    <if test="bomVersionNo!=null and bomVersionNo!='' ">
+        and bomVersionNo=#{bomVersionNo}
+    </if>
+   
+  </select>
+<select id="queryModelQFieldList" parameterType="com.idm.app.idpconfig.proModelParaConfig.model.ModelQParaField"
+        resultType="com.idm.app.idpconfig.proModelParaConfig.model.ModelQParaField">
+	select
+			*
+	from idm_mqi_field_info where status='0'
+</select>
+<select id="queryFieldList" parameterType="com.idm.app.idpconfig.bom.model.Field"
+        resultType="com.idm.app.idpconfig.bom.model.Field">
+	select
+			*
+	from Idp_Interface_Field where status='0'
+</select>
+  <insert id="addBomInfo" parameterType="com.idm.app.idpconfig.bom.model.BomInfo">
+    insert into IDM_BOM_INFO (BOMID, BOMVERSIONNO, VERSIONDEPICTION,VERSIONNAME,FILEID, STATUS, CREATETIME, CREATEUSER)  
+    values (IDM_BOM_INFO_SEQ.NEXTVAL,#{bomVersionNo,jdbcType=VARCHAR},#{versionDepiction,jdbcType=VARCHAR},#{versionName,jdbcType=VARCHAR},#{fileId,jdbcType=VARCHAR},
+    #{status,jdbcType=VARCHAR},#{createTime,jdbcType=VARCHAR},#{createUser,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateBomInfo" parameterType="com.idm.app.idpconfig.bom.model.BomInfo">
+        UPDATE IDM_BOM_INFO SET  UPDATETIME=#{updateTime},UPDATEUSER=#{updateUser},VERSIONDEPICTION=#{versionDepiction,jdbcType=VARCHAR}
+        WHERE BOMID=#{bomId}
+  </update>
+    <update id="updateAllBomInfoStatus">
+        UPDATE IDM_BOM_INFO SET STATUS='1' WHERE STATUS='0'
+  </update>
+    <update id="updateBomInfoStatus" parameterType="com.idm.app.idpconfig.bom.model.BomInfo">
+        UPDATE IDM_BOM_INFO SET  STATUS=#{status},UPDATETIME=#{updateTime},UPDATEUSER=#{updateUser}
+        WHERE BOMID=#{bomId}
+  </update>
+  <select id="getParaList" resultType="com.idm.app.idpconfig.proModelParaConfig.model.ParaBaseInfo">
+    	select fieldid,parameterfields,parameternamech,parametertype,createuser,updateuser,createtime,updatetime,status from idm_field_info where status='0'
+	</select>
+	<insert id="addField" parameterType="com.idm.app.idpconfig.bom.model.Field">
+    insert into Idp_Interface_Field (FIELDID, INTERFACECODE, FIELDNAME,FIELDTEXT,FIELDTYPE, ISCHILDNODE, CREATETIME, FATHERNODE,STATUS)  
+    values (IDM_BOM_INFO_SEQ.NEXTVAL,#{interfaceCode,jdbcType=VARCHAR},#{fieldName,jdbcType=VARCHAR},#{fieldText,jdbcType=VARCHAR},#{fieldType,jdbcType=VARCHAR},
+    #{isChildNode,jdbcType=VARCHAR},#{createTime,jdbcType=VARCHAR},#{fatherNode,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR})
+  </insert>
+  
+  <insert id="addInterfaceInfo" parameterType="com.idm.app.idpconfig.eventconfig.model.InterfaceInfo">
+    insert into Idp_Interface_Info (INTERFACEID, INTERFACECODE, INTERFACENAME,SYSID,URL, PARAMETERS, CREATETIME,STATUS)  
+    values (IDM_BOM_INFO_SEQ.NEXTVAL,#{interfaceCode,jdbcType=VARCHAR},#{interfaceName,jdbcType=VARCHAR},#{sysId,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR},
+    #{parameters,jdbcType=VARCHAR},#{createTime,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR})
+  </insert>
+	<update id="updateFieldStatus">
+        update Idp_Interface_Field SET  STATUS='1' WHERE STATUS='0'
+  </update>
+  <update id="updateInterfaceInfoStatus">
+        update Idp_Interface_Info SET  STATUS='1' WHERE STATUS='0'
+  </update>
+	
+</mapper>

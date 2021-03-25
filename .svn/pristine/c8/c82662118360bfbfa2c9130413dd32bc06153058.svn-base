@@ -1,0 +1,349 @@
+package com.idm.app.system.auth.model;
+
+import java.io.Serializable;
+
+public class Organization implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
+	private String  DeptId;         //机构编码
+	private String  CREATETIME;
+	private String  DEPTNO;    // 
+	private String  DeptName ;    //机构名称
+	private String  BRANCH_SHORT;
+	private String  CHEQUE_ISSUING_BRANCH  ;
+	private String  INTERNAL_CLIENT ;
+	private String COUNTRY ;
+	private String COMPANY ;
+	private String  STATE ;
+	private String  BASE_CCY ;
+	private String LOCAL_CCY  ;
+	private String  PROFIT_SEGMENT ;
+	private Integer   HIERARCHY_CODE    ;
+	private String  ATTACHED_TO  ;
+	private String  TRAN_BR_IND;
+	private String SUB_BRANCH_CODE;
+	private String  CNY_BUSINESS_UNIT;
+	private String  HKD_BUSINESS_UNIT;
+	private String   FX_ORGAN_CODE;
+	private String  IS_CHK_SEAL;
+	private Integer  SETTLE_LEVEL;
+	private String   SETTLE_BRANCH;
+	private String  PAYMENT_BRANCH_FLAG;
+	private String   PAYMENT_BRANCH;
+	private String  SETTLE_GL_CODE;
+	private String SETTLE_GL_SEQ;
+	private String SETTLE_GL_CODE_UP;
+	private Integer  SETTLE_GL_SEQ_UP;
+	private String  PAYMENT_ACCT_GL_CODE;
+	private Integer  PAYMENT_ACCT_GL_SEQ ;
+	private String  SETTLE_ACCT_OPEN_FALG  ;
+	private String  SETTLE_ACCT_CHECK_FUND ;
+	private String  PAYMENT_ACCT_OPEN_FLAG ;
+	private String  PBOC_FUND_CHECK_FALG ;
+	private String  VB;
+	private String  VB_LEVEL;
+	private String  VB_CASH_SAVE;
+	private String  OPEN_MORE_FLAG;
+	private String  IS_FINANCIAL_ACCT ;
+	private String  FINANCIAL_ACCT_CONTROL;
+	private Integer  CB_AUTH_AMT ;
+	private Integer  AREA_AUTH_AMT;
+	private String  IS_USE_PAY_PWD;
+	private String  IS_CHK_SEAL_NEW ;
+	private String  CHECK_SEAL_SWITCH ;
+	private String  BRANCH_LEVEL;
+	private String  STRUTS;
+	
+	public String getCREATETIME() {
+		return CREATETIME;
+	}
+	public void setCREATETIME(String cREATETIME) {
+		CREATETIME = cREATETIME;
+	}
+	public String getDEPTNO() {
+		return DEPTNO;
+	}
+	public void setDEPTNO(String dEPTNO) {
+		DEPTNO = dEPTNO;
+	}
+	
+	public String getDeptId() {
+		return DeptId;
+	}
+	public void setDeptId(String deptId) {
+		DeptId = deptId;
+	}
+	public String getDeptName() {
+		return DeptName;
+	}
+	public void setDeptName(String deptName) {
+		DeptName = deptName;
+	}
+	public String getBRANCH_SHORT() {
+		return BRANCH_SHORT;
+	}
+	public void setBRANCH_SHORT(String bRANCH_SHORT) {
+		BRANCH_SHORT = bRANCH_SHORT;
+	}
+	public String getCHEQUE_ISSUING_BRANCH() {
+		return CHEQUE_ISSUING_BRANCH;
+	}
+	public void setCHEQUE_ISSUING_BRANCH(String cHEQUE_ISSUING_BRANCH) {
+		CHEQUE_ISSUING_BRANCH = cHEQUE_ISSUING_BRANCH;
+	}
+	public String getINTERNAL_CLIENT() {
+		return INTERNAL_CLIENT;
+	}
+	public void setINTERNAL_CLIENT(String iNTERNAL_CLIENT) {
+		INTERNAL_CLIENT = iNTERNAL_CLIENT;
+	}
+	public String getCOUNTRY() {
+		return COUNTRY;
+	}
+	public void setCOUNTRY(String cOUNTRY) {
+		COUNTRY = cOUNTRY;
+	}
+	public String getCOMPANY() {
+		return COMPANY;
+	}
+	public void setCOMPANY(String cOMPANY) {
+		COMPANY = cOMPANY;
+	}
+	public String getSTATE() {
+		return STATE;
+	}
+	public void setSTATE(String sTATE) {
+		STATE = sTATE;
+	}
+	public String getBASE_CCY() {
+		return BASE_CCY;
+	}
+	public void setBASE_CCY(String bASE_CCY) {
+		BASE_CCY = bASE_CCY;
+	}
+	public String getLOCAL_CCY() {
+		return LOCAL_CCY;
+	}
+	public void setLOCAL_CCY(String lOCAL_CCY) {
+		LOCAL_CCY = lOCAL_CCY;
+	}
+	public String getPROFIT_SEGMENT() {
+		return PROFIT_SEGMENT;
+	}
+	public void setPROFIT_SEGMENT(String pROFIT_SEGMENT) {
+		PROFIT_SEGMENT = pROFIT_SEGMENT;
+	}
+	public int getHIERARCHY_CODE() {
+		return HIERARCHY_CODE;
+	}
+	public void setHIERARCHY_CODE(int hIERARCHY_CODE) {
+		HIERARCHY_CODE = hIERARCHY_CODE;
+	}
+	public String getATTACHED_TO() {
+		return ATTACHED_TO;
+	}
+	public void setATTACHED_TO(String aTTACHED_TO) {
+		ATTACHED_TO = aTTACHED_TO;
+	}
+	public String getTRAN_BR_IND() {
+		return TRAN_BR_IND;
+	}
+	public void setTRAN_BR_IND(String tRAN_BR_IND) {
+		TRAN_BR_IND = tRAN_BR_IND;
+	}
+	public String getSUB_BRANCH_CODE() {
+		return SUB_BRANCH_CODE;
+	}
+	public void setSUB_BRANCH_CODE(String sUB_BRANCH_CODE) {
+		SUB_BRANCH_CODE = sUB_BRANCH_CODE;
+	}
+	public String getCNY_BUSINESS_UNIT() {
+		return CNY_BUSINESS_UNIT;
+	}
+	public void setCNY_BUSINESS_UNIT(String cNY_BUSINESS_UNIT) {
+		CNY_BUSINESS_UNIT = cNY_BUSINESS_UNIT;
+	}
+	public String getHKD_BUSINESS_UNIT() {
+		return HKD_BUSINESS_UNIT;
+	}
+	public void setHKD_BUSINESS_UNIT(String hKD_BUSINESS_UNIT) {
+		HKD_BUSINESS_UNIT = hKD_BUSINESS_UNIT;
+	}
+	public String getFX_ORGAN_CODE() {
+		return FX_ORGAN_CODE;
+	}
+	public void setFX_ORGAN_CODE(String fX_ORGAN_CODE) {
+		FX_ORGAN_CODE = fX_ORGAN_CODE;
+	}
+	public String getIS_CHK_SEAL() {
+		return IS_CHK_SEAL;
+	}
+	public void setIS_CHK_SEAL(String iS_CHK_SEAL) {
+		IS_CHK_SEAL = iS_CHK_SEAL;
+	}
+	public int getSETTLE_LEVEL() {
+		return SETTLE_LEVEL;
+	}
+	public void setSETTLE_LEVEL(int sETTLE_LEVEL) {
+		SETTLE_LEVEL = sETTLE_LEVEL;
+	}
+	public String getSETTLE_BRANCH() {
+		return SETTLE_BRANCH;
+	}
+	public void setSETTLE_BRANCH(String sETTLE_BRANCH) {
+		SETTLE_BRANCH = sETTLE_BRANCH;
+	}
+	public String getPAYMENT_BRANCH_FLAG() {
+		return PAYMENT_BRANCH_FLAG;
+	}
+	public void setPAYMENT_BRANCH_FLAG(String pAYMENT_BRANCH_FLAG) {
+		PAYMENT_BRANCH_FLAG = pAYMENT_BRANCH_FLAG;
+	}
+	public String getPAYMENT_BRANCH() {
+		return PAYMENT_BRANCH;
+	}
+	public void setPAYMENT_BRANCH(String pAYMENT_BRANCH) {
+		PAYMENT_BRANCH = pAYMENT_BRANCH;
+	}
+	public String getSETTLE_GL_CODE() {
+		return SETTLE_GL_CODE;
+	}
+	public void setSETTLE_GL_CODE(String sETTLE_GL_CODE) {
+		SETTLE_GL_CODE = sETTLE_GL_CODE;
+	}
+	public String getSETTLE_GL_SEQ() {
+		return SETTLE_GL_SEQ;
+	}
+	public void setSETTLE_GL_SEQ(String sETTLE_GL_SEQ) {
+		SETTLE_GL_SEQ = sETTLE_GL_SEQ;
+	}
+	public String getSETTLE_GL_CODE_UP() {
+		return SETTLE_GL_CODE_UP;
+	}
+	public void setSETTLE_GL_CODE_UP(String sETTLE_GL_CODE_UP) {
+		SETTLE_GL_CODE_UP = sETTLE_GL_CODE_UP;
+	}
+	public int getSETTLE_GL_SEQ_UP() {
+		return SETTLE_GL_SEQ_UP;
+	}
+	public void setSETTLE_GL_SEQ_UP(int sETTLE_GL_SEQ_UP) {
+		SETTLE_GL_SEQ_UP = sETTLE_GL_SEQ_UP;
+	}
+	public String getPAYMENT_ACCT_GL_CODE() {
+		return PAYMENT_ACCT_GL_CODE;
+	}
+	public void setPAYMENT_ACCT_GL_CODE(String pAYMENT_ACCT_GL_CODE) {
+		PAYMENT_ACCT_GL_CODE = pAYMENT_ACCT_GL_CODE;
+	}
+	public int getPAYMENT_ACCT_GL_SEQ() {
+		return PAYMENT_ACCT_GL_SEQ;
+	}
+	public void setPAYMENT_ACCT_GL_SEQ(int pAYMENT_ACCT_GL_SEQ) {
+		PAYMENT_ACCT_GL_SEQ = pAYMENT_ACCT_GL_SEQ;
+	}
+	public String getSETTLE_ACCT_OPEN_FALG() {
+		return SETTLE_ACCT_OPEN_FALG;
+	}
+	public void setSETTLE_ACCT_OPEN_FALG(String sETTLE_ACCT_OPEN_FALG) {
+		SETTLE_ACCT_OPEN_FALG = sETTLE_ACCT_OPEN_FALG;
+	}
+	public String getSETTLE_ACCT_CHECK_FUND() {
+		return SETTLE_ACCT_CHECK_FUND;
+	}
+	public void setSETTLE_ACCT_CHECK_FUND(String sETTLE_ACCT_CHECK_FUND) {
+		SETTLE_ACCT_CHECK_FUND = sETTLE_ACCT_CHECK_FUND;
+	}
+	public String getPAYMENT_ACCT_OPEN_FLAG() {
+		return PAYMENT_ACCT_OPEN_FLAG;
+	}
+	public void setPAYMENT_ACCT_OPEN_FLAG(String pAYMENT_ACCT_OPEN_FLAG) {
+		PAYMENT_ACCT_OPEN_FLAG = pAYMENT_ACCT_OPEN_FLAG;
+	}
+	public String getPBOC_FUND_CHECK_FALG() {
+		return PBOC_FUND_CHECK_FALG;
+	}
+	public void setPBOC_FUND_CHECK_FALG(String pBOC_FUND_CHECK_FALG) {
+		PBOC_FUND_CHECK_FALG = pBOC_FUND_CHECK_FALG;
+	}
+	public String getVB() {
+		return VB;
+	}
+	public void setVB(String vB) {
+		VB = vB;
+	}
+	public String getVB_LEVEL() {
+		return VB_LEVEL;
+	}
+	public void setVB_LEVEL(String vB_LEVEL) {
+		VB_LEVEL = vB_LEVEL;
+	}
+	public String getVB_CASH_SAVE() {
+		return VB_CASH_SAVE;
+	}
+	public void setVB_CASH_SAVE(String vB_CASH_SAVE) {
+		VB_CASH_SAVE = vB_CASH_SAVE;
+	}
+	public String getOPEN_MORE_FLAG() {
+		return OPEN_MORE_FLAG;
+	}
+	public void setOPEN_MORE_FLAG(String oPEN_MORE_FLAG) {
+		OPEN_MORE_FLAG = oPEN_MORE_FLAG;
+	}
+	public String getIS_FINANCIAL_ACCT() {
+		return IS_FINANCIAL_ACCT;
+	}
+	public void setIS_FINANCIAL_ACCT(String iS_FINANCIAL_ACCT) {
+		IS_FINANCIAL_ACCT = iS_FINANCIAL_ACCT;
+	}
+	public String getFINANCIAL_ACCT_CONTROL() {
+		return FINANCIAL_ACCT_CONTROL;
+	}
+	public void setFINANCIAL_ACCT_CONTROL(String fINANCIAL_ACCT_CONTROL) {
+		FINANCIAL_ACCT_CONTROL = fINANCIAL_ACCT_CONTROL;
+	}
+	public int getCB_AUTH_AMT() {
+		return CB_AUTH_AMT;
+	}
+	public void setCB_AUTH_AMT(int cB_AUTH_AMT) {
+		CB_AUTH_AMT = cB_AUTH_AMT;
+	}
+	public int getAREA_AUTH_AMT() {
+		return AREA_AUTH_AMT;
+	}
+	public void setAREA_AUTH_AMT(int aREA_AUTH_AMT) {
+		AREA_AUTH_AMT = aREA_AUTH_AMT;
+	}
+	public String getIS_USE_PAY_PWD() {
+		return IS_USE_PAY_PWD;
+	}
+	public void setIS_USE_PAY_PWD(String iS_USE_PAY_PWD) {
+		IS_USE_PAY_PWD = iS_USE_PAY_PWD;
+	}
+	public String getIS_CHK_SEAL_NEW() {
+		return IS_CHK_SEAL_NEW;
+	}
+	public void setIS_CHK_SEAL_NEW(String iS_CHK_SEAL_NEW) {
+		IS_CHK_SEAL_NEW = iS_CHK_SEAL_NEW;
+	}
+	public String getCHECK_SEAL_SWITCH() {
+		return CHECK_SEAL_SWITCH;
+	}
+	public void setCHECK_SEAL_SWITCH(String cHECK_SEAL_SWITCH) {
+		CHECK_SEAL_SWITCH = cHECK_SEAL_SWITCH;
+	}
+	public String getBRANCH_LEVEL() {
+		return BRANCH_LEVEL;
+	}
+	public void setBRANCH_LEVEL(String bRANCH_LEVEL) {
+		BRANCH_LEVEL = bRANCH_LEVEL;
+	}
+	public String getSTRUTS() {
+		return STRUTS;
+	}
+	public void setSTRUTS(String sTRUTS) {
+		STRUTS = sTRUTS;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	} 
+}

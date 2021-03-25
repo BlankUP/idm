@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.idpconfig.proModelParaConfig.mapper.ModelQParaInfoConfigMapper">
+  <select id="queryPatameteFieldsInfo" resultType="com.idm.app.idpconfig.proModelParaConfig.model.ModelQParaField">
+	select * from (select t1.*,rownum rnm from (  
+	   select fieldid,parameterfields,parameternamech,
+	   parametertype,createuser,updateuser,
+	   createtime,updatetime,status
+	    	from idm_mqi_field_info where 1=1
+	    <if test="parameterfields !=null and parameterfields!='' ">
+	        and parameterfields like '%'||#{parameterfields}||'%'
+	    </if>
+	    <if test="parameternamech!=null and parameternamech!='' ">
+	        and parameternamech like '%'||#{parameternamech}||'%'
+	    </if>
+	    order by createtime desc
+	  )t1
+	 <if test="page!= null and size!= null">
+      where rownum &lt;= #{page}*#{size}
+      </if>
+    )
+    <if test="page!= null and size!= null">
+      where rnm &gt;= (#{page}-1)*#{size} +1 
+    </if>  
+   </select>
+   
+   <select id="queryPatameteFieldsInfoY" resultType="com.idm.app.idpconfig.proModelParaConfig.model.ModelQParaField">
+	   select fieldid,parameterfields,parameternamech,
+		   parametertype,createuser,updateuser,
+		   createtime,updatetime,status
+	    	from idm_mqi_field_info where status='0'
+	       order by fieldid desc
+   </select>
+
+   <select id="selectCountByAll" parameterType="com.idm.app.idpconfig.proModelParaConfig.model.ModelQParaField"  resultType="java.lang.Integer">
+    select count(1)
+    	from idm_mqi_field_info where 1=1
+    	<if test="parameterfields !=null and parameterfields!='' ">
+	        and parameterfields like '%'||#{parameterfields}||'%'
+	    </if>
+	    <if test="parameternamech!=null and parameternamech!='' ">
+	        and parameternamech like '%'||#{parameternamech}||'%'
+	    </if>
+   </select>
+   
+    <insert id="addParameterFieldsInfo" parameterType="com.idm.app.idpconfig.proModelParaConfig.model.ModelQParaField">
+       INSERT INTO idm_mqi_field_info (fieldid,parameterfields,parameternamech,parametertype,createtime,createuser,status)
+        VALUES (idm_field_info_seq.NEXTVAL,#{parameterfields},#{parameternamech},#{parametertype},#{createtime},#{createuser},#{status})
+    </insert>
+    
+    <update id="updateParameterFieldsInfo" parameterType="com.idm.app.idpconfig.proModelParaConfig.model.ModelQParaField">
+        UPDATE idm_mqi_field_info SET parameterfields=#{parameterfields}, parameternamech=#{parameternamech},parametertype=#{parametertype}, 
+        updatetime=#{updatetime},updateuser=#{updateuser},status=#{status} WHERE fieldid=#{fieldid}
+    </update>
+    
+    <select id="getParaList" resultType="com.idm.app.idpconfig.proModelParaConfig.model.ModelQParaField">
+    	select fieldid,parameterfields,parameternamech,parametertype,createuser,updateuser,createtime,updatetime,status from idm_mqi_field_info
+	</select>
+	
+	<select id="countByName" parameterType="java.lang.String"  resultType="java.lang.Integer">
+    	select count(*) from idm_mqi_field_info where 1=1 
+    	<if test="parameterfields !=null and parameterfields!='' ">
+	        and parameterfields ='${parameterfields}'
+	    </if>
+	    <if test="parameternamech!=null and parameternamech!='' ">
+	        and parameternamech ='${parameternamech}'
+	    </if>
+	</select>
+	
+	<select id="checkIsUsed" parameterType="java.lang.String"  resultType="java.lang.Integer">
+    	select count(*) from idm_modeltofield_info where 1=1 
+	    <if test="fieldid !=null and fieldid !='' ">
+	        and fieldid ='${fieldid}'
+	    </if>
+	    and status = '0'
+	</select>
+	
+	<select id="selectByExample" parameterType="com.idm.app.idpconfig.proModelParaConfig.model.ModelQParaField" resultType="com.idm.app.idpconfig.proModelParaConfig.model.ModelQParaField">
+    select f.parameterfields,f.parameternamech,f.parametertype from idm_mqi_field_info f 
+    	where 1=1
+	    <if test="parameterfields !=null
+	     and parameterfields!='' ">
+	        and parameterfields like '%'||#{parameterfields}||'%'
+	    </if>
+	    <if test="parameternamech!=null and parameternamech!='' ">
+	        and parameternamech like '%'||#{parameternamech}||'%'
+	    </if>
+  	</select>
+	
+	<select id="getParaBaseInfosByExcel" parameterType="java.util.Map"  resultType="com.idm.app.idpconfig.proModelParaConfig.model.ModelQParaField">
+    	select fieldid,parameterfields,parameternamech,parametertype,createuser,updateuser,
+	   createtime,updatetime,status from idm_mqi_field_info where 1=1 and status = '0' 
+	   
+	   and (parameterfields in
+	   
+	   <foreach collection="parameterfieldList" item="item" index="index" open="(" close=")" separator=",">
+       	#{item}
+   	   </foreach>
+   	   
+   	   or parameternamech in
+	    <foreach collection="parameternamechList" item="item" index="index" open="(" close=")" separator=",">
+       	#{item}
+   	   </foreach>
+	   )
+	</select>
+	
+	<insert id="addParaBaseInfoList" parameterType="java.util.ArrayList" >
+	   insert into idm_mqi_field_info (fieldid, parameterfields, parameternamech, parametertype, createuser, updateuser, createtime, updatetime, status) 
+	   	   SELECT idm_field_info_seq.NEXTVAL,a.* FROM ( 
+	   <foreach collection="list" item="data" index="index" separator=" union all ">
+	    SELECT #{data.parameterfields,jdbcType=VARCHAR}, #{data.parameternamech,jdbcType=VARCHAR}, 
+	    #{data.parametertype,jdbcType=VARCHAR}, #{data.createuser,jdbcType=VARCHAR},#{data.updateuser,jdbcType=VARCHAR},
+	   	#{data.createtime,jdbcType=VARCHAR},#{data.updatetime,jdbcType=VARCHAR},#{data.status,jdbcType=VARCHAR}
+	     FROM DUAL
+	    </foreach> 
+	    ) a
+	</insert>
+	
+</mapper>

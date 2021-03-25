@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.idpconfig.proModelParaConfig.mapper.ProModelConfigMapper">
+	<select id="queryModelBaseInfo" resultType="com.idm.app.idpconfig.proModelParaConfig.model.ProModelBaseInfo">
+	   select * from (
+	    select t1.*,rownum rnm from ( 
+	    select 
+	    modelinfo.modelid modelid,
+	    modelinfo.productid productid,
+	    modelinfo.modeltype modeltype,
+	    modelinfo.modelcode modelcode,
+	    modelinfo.modelname modelname,
+	    modelinfo.createuser createuser,
+	    modelinfo.createtime createtime,
+	    modelinfo.updateuser updateuser,
+	    modelinfo.updatetime updatetime,
+	    modelinfo.status status
+	    from idm_model_info modelinfo
+	    <if test="modelcode!=null and modelcode!='' ">
+	        and modelinfo.modelcode like '%'||#{modelcode}||'%'
+	    </if>
+	    <if test="modelname!=null and modelname!='' ">
+	        and modelinfo.modelname like '%'||#{modelname}||'%'
+	    </if>
+	    order by  createtime desc
+	   )t1
+	   <if test="page!= null and size!= null">
+     	 where rownum &lt;= #{page}*#{size}
+       </if>
+     )
+	 <if test="page!= null and size!= null">
+	      where rnm &gt;= (#{page}-1)*#{size} +1 
+	 </if>  
+	</select>
+ 
+ 	<select id="selectCountByAll" parameterType="com.idm.app.idpconfig.proModelParaConfig.model.ProModelBaseInfo"  resultType="java.lang.Integer">
+    	select count(1)
+    		from idm_model_info pm where 1=1
+    		
+	    <if test="modelcode!=null and modelcode!='' ">
+	        and pm.modelcode like '%'||#{modelcode}||'%'
+	    </if>
+	    <if test="modelname!=null and modelname!='' ">
+	        and pm.modelname like '%'||#{modelname}||'%'
+	    </if>
+    </select>
+ 
+	<insert id="addProModelInfo" parameterType="com.idm.app.idpconfig.proModelParaConfig.model.ProModelBaseInfo">
+	   INSERT INTO idm_model_info (modelid,modelcode,modelname,modeltype,pmmlcode,createuser,createtime,status)
+	    VALUES (idm_model_info_SEQ.nextval,#{modelcode,jdbcType=VARCHAR},#{modelname,jdbcType=VARCHAR},#{modeltype,jdbcType=VARCHAR},#{pmmlcode,jdbcType=VARCHAR},
+	    #{createuser,jdbcType=VARCHAR},#{createtime,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR})
+	</insert>
+	
+	<insert id="addProModelInfoJc" parameterType="com.idm.app.idpconfig.proModelParaConfig.model.ProModelBaseInfo">
+	   INSERT INTO idm_model_info (modelid,modelcode,modelname,modeltype,createuser,createtime,status)
+	    VALUES (idm_model_info_SEQ.nextval,#{modelcode,jdbcType=VARCHAR},#{modelname,jdbcType=VARCHAR},#{modeltype,jdbcType=VARCHAR},
+	    #{createuser,jdbcType=VARCHAR},#{createtime,jdbcType=VARCHAR},#{status})
+	</insert>
+	
+	<update id="updateProModelInfo" parameterType="com.idm.app.idpconfig.proModelParaConfig.model.ProModelBaseInfo">
+	    UPDATE idm_model_info SET updatetime=#{updatetime,jdbcType=VARCHAR},
+		updateuser=#{updateuser,jdbcType=VARCHAR},status=#{status,jdbcType=VARCHAR} WHERE modelid= #{modelid,jdbcType=VARCHAR}  
+	</update>				
+	
+	<select id="queryProdcutInfo" parameterType="java.lang.String" resultType="com.idm.app.idpconfig.proModelParaConfig.model.ProductBaseInfo">
+		select productcode,productname from idm_product_info where status='0'
+		<if test="orgno !=null and orgno!='' ">
+	        and orgno = #{orgno}
+	    </if>
+	</select>
+	
+	<select id="getProNameByCode" resultType="java.lang.String">
+		select productname from idm_product_info where productcode = #{productcode}
+	</select>
+	
+	<select id="queryModelInfo" parameterType="com.idm.app.idpconfig.proModelParaConfig.model.ProModelBaseInfo"
+        resultType="com.idm.app.idpconfig.proModelParaConfig.model.ProModelBaseInfo">
+		select
+				modelid,
+				modelcode,
+				modelname
+		from IDM_MODEL_INFO where status ='0' and modeltype='1'
+	</select>
+	
+	<select id="countByModelCode" parameterType="java.lang.String"  resultType="java.lang.Integer">
+    	select count(*) from idm_model_info where 1=1 
+	    <if test="modelcode!=null and modelcode!='' ">
+	        and modelcode ='${modelcode}'
+	    </if>
+	</select>
+	
+	<select id="countByCodeName" parameterType="java.lang.String"  resultType="java.lang.Integer">
+    	select count(*) from idm_model_info where 1=1 
+	    <if test="modelcode!=null and modelcode!='' ">
+	        and modelcode ='${modelcode}'
+	    </if>
+	    <if test="modelname!=null and modelname!='' ">
+	        and modelname ='${modelname}'
+	    </if>
+	</select>
+	
+	<select id="getProductBaseInfo" resultType="com.idm.app.idpconfig.proModelParaConfig.model.ProductBaseInfo">
+		select productid,productcode,productname from idm_product_info where status='0' and productcode = #{productcode} 
+	</select>
+
+	<select id="queryPmmlModel" resultType="com.idm.app.idpconfig.pmmlConfig.model.PmmlConfig">
+		select pmmlCode,pmmlName from IDP_PMML_CONFIG where status='0'
+	</select>
+	
+</mapper>

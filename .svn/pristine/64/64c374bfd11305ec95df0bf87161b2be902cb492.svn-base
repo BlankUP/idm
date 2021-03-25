@@ -1,0 +1,276 @@
+package com.idm.app.idpconfig.adbRuleHotDeploy.controller;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.io.File;
+import java.io.IOException;
+import java.net.SocketException;
+import java.text.SimpleDateFormat;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.idm.app.idpconfig.adbRuleHotDeploy.model.AdbDeployBaseInfo;
+import com.idm.app.idpconfig.adbRuleHotDeploy.model.ServerInfo;
+import com.idm.app.idpconfig.adbRuleHotDeploy.service.AdbDeployMngService;
+import com.idm.app.idpconfig.adbVersionManage.model.AdbVerInfo;
+import com.idm.app.system.login.model.IDMUser;
+import com.idm.app.system.loginfo.model.SysLog;
+import com.idm.common.http.HttpClient;
+import com.idm.common.util.ResByPageVo;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+/**
+ * <p>adb规则热部署管理类<p>
+ * @author caiwenjian  
+ * @date 2019年3月11日  
+ * @version 1.0
+ */
+@Controller
+public class AdbDeployMngController {
+	static final Logger logger = Logger.getLogger(AdbDeployMngController.class);
+	static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	
+	@Autowired
+	AdbDeployMngService adbDeployMngService;
+	
+	@Value("${FTP01_LOCALPATH}")
+	private String FTP01_LOCALPATH;
+	
+	@Value("${NAS_ADB_LOCALPATH}")
+	private String NAS_ADB_LOCALPATH;
+	
+	@RequestMapping("/adb_rule_deploy")
+    public String adbVersionManage(){
+        return "idpconfig/adbRuleHotDeploy/adbRuleDeploy";
+    }
+	
+
+	/**
+	 *<p>adb规则部署记录查询</p>  
+	 *@param request
+	 *@return
+	 */
+	@RequestMapping("/adbRule_search")
+	@ResponseBody
+    public Object adbDeployInfoShow(HttpServletRequest request){
+		logger.info("******部署记录查询开始******");
+    	int pageNum =Integer.parseInt(request.getParameter("page"));
+		int pageSize = Integer.parseInt(request.getParameter("rows"));
+		String versionNo = request.getParameter("versionNo");
+        ResByPageVo resByPageVo = null;
+		try {
+			logger.info(">>部署记录查versionNo:["+versionNo+"]");
+	        AdbDeployBaseInfo deployInfo = new AdbDeployBaseInfo();
+	        deployInfo.setVersionNo(versionNo);
+	        deployInfo.setPage(pageNum);
+	        deployInfo.setSize(pageSize);
+			int count = adbDeployMngService.selectCountByAll(deployInfo);
+			//查询部署记录
+	        List<AdbDeployBaseInfo> deployInfoList = adbDeployMngService.queryDeployInfo(deployInfo);
+			resByPageVo = new ResByPageVo(pageSize, pageNum,count);
+			resByPageVo.setRows(deployInfoList);
+		} catch(Exception e) {
+			logger.error("部署记录查询异常:["+versionNo+"]"+e.getMessage());
+			e.printStackTrace();
+			return "fail";
+		}
+		logger.info("******部署记录查询结束******");
+		return JSONObject.fromObject(resByPageVo);
+    }
+	
+	/**
+     * @Desc: 获取服务器信息
+     * @param request
+     * @return
+     */
+    @RequestMapping("/query_adbDeploy_service")
+    @ResponseBody
+    public Object queryAdbDeployServers(HttpServletRequest request)
+    {
+    	logger.info("******adbDeploy获取服务器信息开始******");
+    	//获取服务器源
+		List<ServerInfo> serviceInfoList = new ArrayList<>();
+		serviceInfoList = adbDeployMngService.queryAdbDeployServers();
+		JSONArray json = null;
+		if(serviceInfoList!=null&&serviceInfoList.size()>0){
+			json = JSONArray.fromObject(serviceInfoList);
+		}
+		logger.info("******adbDeploy获取服务器信息结束******");
+		return json;
+    }
+	
+    /**
+     * @Desc:获取待部署文件名和版本号
+     * @param request
+     * @return
+     */
+    @RequestMapping("/queryAdbfileNameAndVerNo")
+    @ResponseBody
+    public Object queryAdbfileNameAndVerNo(HttpServletRequest request)
+    {
+    	logger.info("******获取待部署文件名和版本号开始******");
+    	JSONObject json=null;
+    	//查询部署记录
+	    List<AdbDeployBaseInfo> deployInfoList = adbDeployMngService.queryAdbfileNameAndVerNo();
+	    if(deployInfoList!=null&&!"".equals(deployInfoList)&&deployInfoList.size()>0){
+	    	String fileName = deployInfoList.get(0).getFileName();
+		    String versionNo = deployInfoList.get(0).getVersionNo();
+		    String adbId=deployInfoList.get(0).getAdbId();
+		    String versionState=deployInfoList.get(0).getVersionState();
+		    String fileNameBack = null;
+		    String versionNoBack = null;
+		    String adbIdBack = null;
+		    Boolean hasTwo = false;
+		    if(deployInfoList.size()==1&&versionState!=null&&versionState.equals("2")){
+				json = JSONObject.fromObject("{\'hasTwo\':"+"\'"+hasTwo+"\',\'versionState\':"+"\'"+versionState+"\',\'fileName\':"+"\'"+fileName+"\',\'versionNo\':"+"\'"+versionNo+"\',\'adbId\':"+"\'"+adbId+"\',\'fileNameBack\':"+"\'"+fileNameBack+"\',\'versionNoBack\':"+"\'"+versionNoBack+"\',\'adbIdBack\':"+"\'"+adbIdBack+"\'}");
+		    }else if(deployInfoList.size()==2){
+		    	hasTwo = true;
+		    	fileNameBack = deployInfoList.get(1).getFileName();
+			    versionNoBack = deployInfoList.get(1).getVersionNo();
+			    adbIdBack=deployInfoList.get(1).getAdbId();
+				json = JSONObject.fromObject("{\'hasTwo\':"+"\'"+hasTwo+"\',\'versionState\':"+"\'"+versionState+"\',\'fileName\':"+"\'"+fileName+"\',\'versionNo\':"+"\'"+versionNo+"\',\'adbId\':"+"\'"+adbId+"\',\'fileNameBack\':"+"\'"+fileNameBack+"\',\'versionNoBack\':"+"\'"+versionNoBack+"\',\'adbIdBack\':"+"\'"+adbIdBack+"\'}");
+		    }else{
+		    	json = JSONObject.fromObject("{\'success\':false}");
+		    }
+			logger.info(">>fileName:["+fileName+"]"+",fileNameBack=["+fileNameBack+"]");
+			logger.info(">>versionNo:["+versionNo+"]"+",versionNoBack=["+versionNoBack+"]");
+			logger.info(">>adbId:["+adbId+"]"+",adbIdBack=["+adbIdBack+"]");
+			logger.info(">>hasTwo:["+hasTwo+",versionState:["+versionState+"]");
+	    }else{
+	    	logger.info(">>fileName,versionNo,adbId信息:无,返回success=false");
+			json = JSONObject.fromObject("{\'success\':false}");
+	    }
+		logger.info("******获取待部署文件名结束******");
+		return json;
+    }
+    
+
+    /**
+     *<p>取adb上传到nas目录</p>  
+     *@param request
+     *@param adbVerInfo
+     *@return
+     * @throws IOException 
+     * @throws SocketException 
+     */
+    @SysLog(operate = "上传adb规则文件",module= "adb规则热部署")
+  	@RequestMapping("/get_adbVersion_forDeploy")
+  	@ResponseBody
+  	public Object getAdbVersionForDeploy(HttpServletRequest request, AdbVerInfo adbVerInfo) throws SocketException, IOException{
+	  		//获取文件名
+	  		String fileName = request.getParameter("fileName");
+	  		logger.info(">>fileName:["+fileName+"]");
+			//读取上传adb文件
+			Map<String, String> data  = promptAdb(fileName);
+			if(data!=null&&data.size()>0){
+				logger.info(">>promptAdb上传规则失败:["+data.get("promptMSG")+"]");
+				return JSONObject.fromObject("{\'success\':false,\'msg\':\'"+data.get("promptMSG")+"\'}");
+			}else if(data!=null&&data.size()==0){
+				logger.info(">>promptAdb上传规则成功");
+			}
+	    return JSONObject.fromObject("{\"success\":true}");
+  	}
+  	
+  	/**
+  	 * 新增adb版本部署记录
+  	 */
+    @SysLog(operate = "新增部署记录",module= "adb规则热部署")
+  	@RequestMapping("/add_adbDeploy_record")
+  	@ResponseBody
+  	public Object addAdbDeployecord(HttpServletRequest request, AdbVerInfo adbVerInfo){
+		logger.info("******新增adb版本部署记录方法开始******");
+  		IDMUser user = (IDMUser)request.getSession().getAttribute("user");
+  		String fileName = request.getParameter("fileName");
+  		String adbId = request.getParameter("adbId");
+		//获取服务器地址
+		String serversAddress = request.getParameter("serversAddress");
+		logger.info(">>fileName:["+fileName+"]");
+		logger.info(">>serversAddress:["+serversAddress+"]");
+		String fileNameBack = request.getParameter("fileNameBack");
+  		String adbIdBack = request.getParameter("adbIdBack");
+  		logger.info(">>fileNameBack:["+fileNameBack+"]");
+		logger.info(">>adbIdBack:["+adbIdBack+"]");
+		String[] addressList = serversAddress.split(",");
+		System.out.println(">>addressList:["+addressList+"]");
+		AdbDeployBaseInfo deployInfo = new AdbDeployBaseInfo();
+		deployInfo.setAdbId(adbId);
+		deployInfo.setDeployer(user.getUserId());
+		deployInfo.setDeployTime(sdf.format(new Date()));
+		JSONObject json = new JSONObject();
+		String url="";
+		try {
+  			for(int i=0;i<addressList.length;i++){
+  	        	url = addressList[i]+"/ETP_DCS_SYS/ReLoadADB";
+  	        	logger.info("待执行的服务器"+url);
+  	    		String str = HttpClient.sendPost(url,json.toString() );
+  	    		logger.info("重载接口返回结果:"+str);
+  	    			 if(str.equals("success")){
+  	    				 continue;
+  	    			 }else{
+  	    				//上传正在使用的adb文件以恢复
+  	    				Map<String, String> data  = promptAdb(fileNameBack);
+  	    				if(data!=null&&data.size()>0){
+  	    					logger.info(">>promptAdb恢复正在使用的规则失败:["+data.get("promptMSG")+"]");
+  	    					adbDeployMngService.updateAdbVerState2(user.getUserId(),sdf.format(new Date()));
+  	    					adbDeployMngService.updateAdbDeployecord();
+  	  	    	  			adbDeployMngService.saveAdbDeployecord2(deployInfo);
+  	    					return JSONObject.fromObject("{\'success\':false");
+  	    				}else if(data!=null&&data.size()==0){
+  	    					logger.info(">>promptAdb发布正在使用的规则成功");
+  	    					String ret = HttpClient.sendPost(url,json.toString());
+  	    					if("success".equals(ret)){
+  	    						adbDeployMngService.updateAdbVerState3(user.getUserId(),sdf.format(new Date()));
+  	    	    	  			adbDeployMngService.saveAdbDeployecord2(deployInfo);
+  	    	    				return JSONObject.fromObject("{\'success\':\'rest\'}");
+  	    					}else{
+  	    						adbDeployMngService.updateAdbVerState2(user.getUserId(),sdf.format(new Date()));
+  	    						adbDeployMngService.updateAdbDeployecord();
+  	    	    	  			adbDeployMngService.saveAdbDeployecord2(deployInfo);
+  	    	    				return JSONObject.fromObject("{\'success\':false}");
+  	    					}
+  	    				}
+  	    				
+  	    			 }
+  			}
+  			adbDeployMngService.updateAdbVerState(user.getUserId(),sdf.format(new Date()));
+  			adbDeployMngService.updateAdbDeployecord();
+  			adbDeployMngService.saveAdbDeployecord(deployInfo);
+  			logger.info("******新增adb版本部署记录方法结束******");
+  	  		return JSONObject.fromObject("{\"success\":true}");
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(">>adb上传成功，新增adb版本部署记录异常结束:"+e.getMessage());
+			return JSONObject.fromObject("{\"success\":false}");
+		}
+    } 
+  	/**
+  	 * 读取上传adb规则
+  	 */
+  	public HashMap<String, String> promptAdb(String fileName){
+  		HashMap<String, String> data = new HashMap<String, String>();  
+  		File source = new File(FTP01_LOCALPATH+fileName); 
+  		File dest = new File(NAS_ADB_LOCALPATH);
+		try {
+				FileUtils.copyFile(source, dest);
+		} catch (IOException e) {
+			data.put("promptMSG", "上传失败");
+			logger.error("复制文件失败");
+	  	    return data;
+		} 
+  	    return data;
+  	}
+  	
+}

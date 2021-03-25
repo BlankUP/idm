@@ -1,0 +1,164 @@
+//按钮组
+
+.btn-bar {
+	//overflow: hidden;
+	border: @btnBorderWidth solid @btnBorder;
+	border-radius: @btnGrpBorderRadius;
+	padding: @btnGrpMarginLeft*2 @btnGrpMarginLeft;
+	zoom: 1;
+	white-space: nowrap;
+	font-size: 0;//解决元素之间的空隙（IE6，IE7无效）
+	.btn,.input,.select,.link,.label,.input-append,.input-prepend ,.radio,.checkbox,.drop-wrap {
+		margin: 0 @btnGrpMarginLeft;
+	}
+	
+	.drop-wrap .btn{
+		margin: 0;
+	}
+
+	.label{
+		font-size:@baseFontSize;
+		vertical-align: middle;
+	}
+	.radio,.checkbox{
+		font-size:@baseFontSize;
+		vertical-align: middle;
+	}
+	.link{
+		vertical-align: middle;
+		display: inline-block;
+	}
+
+	.input-append,.input-prepend{
+		display: inline-block;
+		*vertical-align: top;
+		.btn{
+			margin: 0 0 0 -1px;
+		}
+		.input,.drop-wrap{
+			margin:0;
+		}
+		.btn-group{
+			margin: 0 0 0 -1px;
+			.btn{
+				&:first-child {
+					border-radius : 0;
+					//border-top-right-radius:@btnBorderRadius;
+					//border-bottom-left-radius:@btnBorderRadius;
+				}
+			}
+		}
+	}
+
+	.btn-group {
+		margin: 0 @btnGrpMarginLeft;
+		_padding-left: @btnGrpMarginLeft + 1px;
+	}
+
+	//分隔条
+	.divider {
+		display: inline-block;
+		height: @btnLineHeight;
+		vertical-align: middle;
+		margin: 0 @btnGrpMarginLeft*2;
+		border-left: @btnBorderWidth dashed @btnBorderHighlight;
+	}
+}
+
+// .align{
+// 	&-left{text-align: left;}
+// 	&-right{text-align: right;}
+// }
+
+// .float{
+// 	&-left{float: left;}
+// 	&-right{float: right;}
+// }
+
+.btn-group {
+	display: inline-block;
+	zoom: 1;
+	*display: inline;
+	vertical-align: middle;
+	position: relative;
+	font-size: 0;//解决元素之间的空隙（IE6，IE7无效）
+	.btn {
+		position: relative;
+		border-radius: 0;
+		&:first-child {
+			border-top-left-radius:@btnBorderRadius;
+			border-bottom-left-radius:@btnBorderRadius;
+		}
+		&:last-child {
+			border-top-right-radius:@btnBorderRadius;
+			border-bottom-right-radius:@btnBorderRadius;
+		}
+		float: left;
+		margin: 0 0 0 -1px;
+	}
+	.btn{
+		font-size: @baseFontSize;
+	}
+	.drop-wrap{
+		float: left;
+		margin: 0 0 0 -1px;
+		.btn{
+			border-radius: 0;
+		}
+		&:first-child .btn{
+			border-top-left-radius:@btnBorderRadius;
+			border-bottom-left-radius:@btnBorderRadius;
+		}
+		&:last-child .btn{
+			border-top-right-radius:@btnBorderRadius;
+			border-bottom-right-radius:@btnBorderRadius;
+		}
+		
+	}
+}
+
+// On hover/focus/active, bring the proper btn to front
+.btn-group .btn:hover,
+.btn-group .btn:focus,
+.btn-group .btn:active {
+  z-index: 2;
+}
+
+//  垂直按钮组 ------------------------------------------
+.btn-group.btn-group-vertical{
+	.btn,.input,.select,.link,.label,.input-append,.input-prepend ,.radio,.checkbox,.drop-wrap {
+		margin: 0;
+	}
+	.btn{ float: none;}
+}
+
+.btn-group-vertical {
+    display: inline-block;
+	.btn {
+	    border-radius: 0 0 0 0;
+	    display: block;
+	    float: none;
+	    max-width: 100%;
+	    &:first-child {
+	    	border-radius: 4px 4px 0 0;
+		}
+		&:last-child {
+		    border-radius: 0 0 4px 4px;
+		}
+	}
+	.btn-large {
+		&:first-child {
+		    border-radius: 6px 6px 0 0;
+		}
+		&:last-child {
+		    border-radius: 0 0 6px 6px;
+		}
+	}
+	.btn + .btn {
+	    margin-left: 0;
+	    margin-top: -1px;
+	}
+}
+
+
+

@@ -1,0 +1,108 @@
+package com.idm.app.system.csvprocess.util;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.List;
+import java.util.Properties;
+import java.util.Vector;
+
+import org.springframework.beans.factory.annotation.Value;
+
+import com.jcraft.jsch.Channel;
+import com.jcraft.jsch.ChannelSftp;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.Session;
+
+/**
+ * 
+ *<P>Title:sftp工具类</P>
+ *@Description:
+ *@author panling
+ *@date 2019年8月28日
+ *@version
+ */
+public class SftpUtil {
+
+	/**
+	 * 获取连接
+	 * @Description: 
+	 * @param
+	 * @return
+	 */
+	public  ChannelSftp connect(String host, int port, String username,String password) throws JSchException {
+		// 1.声明连接Sftp的通道
+		ChannelSftp nChannelSftp = null;
+		// 2.实例化JSch
+		JSch nJSch = new JSch();
+		// 3.获取session
+		Session nSShSession = nJSch.getSession(username, host, port);
+		System.out.println("Session创建成功");
+		// 4.设置密码
+		nSShSession.setPassword(password);
+		// 5.实例化Properties
+		Properties nSSHConfig = new Properties();
+		// 6.设置配置信息
+		nSSHConfig.put("StrictHostKeyChecking", "no");
+		// 7.session中设置配置信息
+		nSShSession.setConfig(nSSHConfig);
+		// 8.session连接
+		nSShSession.connect();
+		System.out.println("Session已连接");
+		// 9.打开sftp通道
+		Channel channel = nSShSession.openChannel("sftp");
+		// 10.开始连接
+		channel.connect();
+		nChannelSftp = (ChannelSftp) channel;
+		System.out.println("连接到主机" + host + ".");
+		return nChannelSftp;
+	}
+	
+	/**
+	 * 下载文件夹下面的所有文件
+	 * 
+	 * @param viDirectory 文件夹
+	 * @param viHost 主机名
+	 * @param viPort 端口号
+	 * @param viUserName 用户名
+	 * @param viPassWord 用户密码
+	 * @param viSaveDir 保存路径
+	 * @return
+	 */
+	public List<String> downloadDirFile(String viDirectory, String viHost,int viPort, String viUserName, String viPassWord, String viSaveDir) {
+		ChannelSftp nChannelSftp = null;
+		List<String> nFileNameList = null;
+		try {
+			// 1.实例化nSftpUtil工具类
+			SftpUtil nSftpUtil = new SftpUtil();
+			// 2.建立Sftp通道
+			nChannelSftp = nSftpUtil.connect(viHost, 22, viUserName, viPassWord);
+			// 3.获取目录下面所有文件
+			Vector nVector = nChannelSftp.ls(viDirectory);
+			// 4.循环遍历文件
+			for (int i = 0; i < nVector.size(); i++) {
+				// 5.进入服务器文件夹
+				nChannelSftp.cd(viDirectory);
+				// 6.实例化文件对象
+				String nFileName = nVector.get(i).toString().substring(56, nVector.get(i).toString().length());
+				if (!nFileName.contains("csv")) {
+					continue;
+				}
+				File nFile = new File(viSaveDir + File.separator + nFileName);
+				// 7.下载文件
+				nChannelSftp.get(nFileName, new FileOutputStream(nFile));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			nChannelSftp.disconnect();
+		}
+		return nFileNameList;
+	}
+
+
+	public static void main(String[] args) throws JSchException {
+		
+	}
+	
+}

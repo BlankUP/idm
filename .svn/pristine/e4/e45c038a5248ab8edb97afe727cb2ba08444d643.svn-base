@@ -1,0 +1,115 @@
+
+.datepicker-view {
+  width: 282px;
+  height: 240px;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  background: #ffffff;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 10px;
+  z-index: 100000;
+}
+.datepicker-view .datepicker-header {
+  text-align: center;
+  position: relative;
+  padding: 4px 0px 4px 0px;
+}
+.datepicker-view .datepicker-header .prev {
+  position: absolute;
+  top: 4px;
+  left: 5px;
+  -left: -100px;
+  display: block;
+  cursor: pointer;
+  _zoom: 1;
+}
+.datepicker-view .datepicker-header .next {
+  position: absolute;
+  top: 4px;
+  right: 5px;
+  display: block;
+  cursor: pointer;
+  _zoom: 1;
+}
+.datepicker-view .datepicker-header .title {
+  font-size: 1.2em;
+  cursor: pointer;
+}
+.datepicker-view .datepicker-content .datepicker-days,
+.datepicker-view .datepicker-content .datepicker-week {
+  overflow: hidden;
+}
+.datepicker-view .datepicker-content .datepicker-days li,
+.datepicker-view .datepicker-content .datepicker-week li {
+  width: 14.28%;
+  border: none !important;
+}
+.datepicker-view .datepicker-content .datepicker-years li,
+.datepicker-view .datepicker-content .datepicker-months li,
+.datepicker-view .datepicker-content .datepicker-days li {
+  color: #cccccc;
+}
+.datepicker-view .datepicker-content .datepicker-minutes {
+  padding: 20px 10px 10px 10px;
+  overflow: hidden;
+}
+.datepicker-view .datepicker-content .datepicker-minutes li {
+  width: 10%;
+  padding: 6px 0px 6px 0px;
+  border: none;
+}
+.datepicker-view .datepicker-content .datepicker-hours {
+  padding: 20px 10px 10px 10px;
+  overflow: hidden;
+}
+.datepicker-view .datepicker-content .datepicker-hours li {
+  width: 20%;
+  padding: 8px 0px 8px 0px;
+  border: none;
+}
+.datepicker-view .datepicker-content .datepicker-months {
+  padding: 20px 10px 10px 10px;
+  overflow: hidden;
+}
+.datepicker-view .datepicker-content .datepicker-months li {
+  width: 32.5%;
+  padding: 8px 0px 8px 0px;
+  border: none;
+}
+.datepicker-view .datepicker-content .datepicker-years {
+  padding: 20px 10px 10px 10px;
+  overflow: hidden;
+}
+.datepicker-view .datepicker-content .datepicker-years li {
+  width: 32.5%;
+  padding: 8px 0px 8px 0px;
+  border: none;
+}
+.datepicker-view .datepicker-content li.optional {
+  color: #333333;
+  cursor: pointer;
+}
+.datepicker-view .datepicker-content li.active,
+.datepicker-view .datepicker-content li.optional:hover {
+  color: #ffffff;
+  background-color: #ffa382;
+  font-weight: bold;
+}
+.datepicker-view .datepicker-content li.active,
+.datepicker-view .datepicker-content li.optional:visited {
+  color: #ffffff;
+  background-color: #ff6600;
+  font-weight: bold;
+}
+.datepicker-view .datepicker-content ul {
+  margin: 0px;
+  list-style: none;
+}
+.datepicker-view .datepicker-content ul li {
+  float: left;
+  list-style: none;
+  padding: 5px 0px 5px 0px;
+  text-align: center;
+}

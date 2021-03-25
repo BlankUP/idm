@@ -1,0 +1,70 @@
+// 表单内下拉箭头样式
+.drop-wrap {
+  
+}
+.drop-wrap {
+	position: relative;
+	.inline-block;
+	.clearfix;
+ //  	.inner-arrow;
+ // //  	&:before { 
+	// //     border-color: @grayLight transparent transparent;
+	// //     border-style: solid outset outset ;
+	// //     right: 10px;
+	// //     top: 40%;
+	// //     margin-left: -8px;
+	// //     border-width: 6px;
+	// // }
+	
+
+	//下拉列表
+	.submenu{
+		display:none;
+		top: 30px;
+		font-size: @baseFontSize;
+	}
+
+	// dropdown  下拉  ---
+	.dropdown{
+		position: relative;
+		ul{
+			position: absolute;
+			top: 30px;
+			li{
+				position: relative;
+				text-align: left;
+			}
+		}
+	}
+
+	//dropdown 下拉 上的箭头 
+	.expand { margin-left: @baseGapMini * 2;}
+
+	.dropbox-view{
+		position: absolute;
+		display:none;
+		// .panel();
+		// font-size: @baseFontSize;
+		// background: #fff;
+		// border: 1px solid @grayLighter;
+		// padding: 4px;
+		// .border-radius(@borderRadiusSmall);
+		// .pull-bottom;
+	}
+
+	.pull-top{
+		bottom:100%;top:auto;
+		.pull-left;
+	}
+	.pull-bottom{
+		top:100%;
+		bottom:auto;
+		.pull-left;
+	}
+	
+	.pull-right{right: 0px;left: auto;}
+	.pull-left{left: 0px;right:auto;}
+
+	.bottom  .outer-arrow,
+	.top .outer-arrow {left:10%;}
+}

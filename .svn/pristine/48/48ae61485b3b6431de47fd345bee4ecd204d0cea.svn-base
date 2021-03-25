@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.idpconfig.proModelParaConfig.mapper.ProModelParaConfigMapper">
+   <select id="queryModelParaBaseInfo" resultType="com.idm.app.idpconfig.proModelParaConfig.model.ProModelParaBaseInfo">
+	select * from (select tt.*,rownum rnm from (
+	select t1.modelid modelid,t2.modelcode modelcode,t2.modelname modelname,t1.mtfid id,t1.fieldid fieldid,t1.parameterfields parameterfields,t1.parameternamech parameternamech,
+    t1.parametertype parametertype,t1.ischeckout ischeckout,t1.checkoutmothed checkoutmothed,t1.checkoutway checkoutway,t2.createuser createuser,
+    t2.createtime createtime,t2.updateuser updateuser,t2.updatetime updatetime,t2.status status from (
+   SELECT modelid,mtfid,fieldid,parameterfields,parameternamech,parametertype,ischeckout,checkoutmothed,checkoutway,createuser,createtime,updateuser,
+   updatetime,status FROM( SELECT ROW_NUMBER () OVER ( PARTITION BY modelid ORDER BY mtfid desc ) rn, modeltofield.* FROM (
+    select modelid,
+    substr(sys_connect_by_path(nvl(mtfid,'NaN'), ','),2) as mtfid,
+    substr(sys_connect_by_path(nvl(fieldid,'NaN'), ','),2) as fieldid,
+    substr(sys_connect_by_path(nvl(parameterfields,'NaN'), ','),2) as parameterfields,
+    substr(sys_connect_by_path(nvl(parameternamech,'NaN'), ','),2) as parameternamech,
+    substr(sys_connect_by_path(nvl(parametertype,'NaN'), ','),2) as parametertype,
+    substr(sys_connect_by_path(nvl(ischeckout,'NaN'), ','),2) as ischeckout,
+    substr(sys_connect_by_path(nvl(checkoutmothed,'NaN'), ','),2) as checkoutmothed,
+    substr(sys_connect_by_path(nvl(checkoutway,'NaN'), ','),2) as checkoutway,
+    createuser,createtime,updateuser,updatetime,status from (
+    select mtfid,modelid,fieldid,parameterfields,parameternamech,parametertype,ischeckout,checkoutmothed,checkoutway,createuser,updateuser,
+    createtime,updatetime,status,rnFirst,lead(rnFirst) over(partition by modelid order by rnFirst) rnNext from (
+    select ab.*,row_number() over(order by ab.modelid desc) rnFirst from (
+    select mtfid, modelid,a.fieldid fieldid,parameterfields,parameternamech, parametertype,ischeckout, checkoutmothed,checkoutway,
+    a.createuser createuser,a.updateuser updateuser, a.createtime createtime, a.updatetime updatetime,a.status status 
+    from idm_modeltofield_info a, idm_field_info b where a.fieldid = b.fieldid and a.status = '0' and b.status = '0') ab) tmpTable1) tmpTable2  
+    start with rnNext is null connect by rnNext = prior rnFirst) modeltofield ) mf WHERE mf.rn =1 ) t1,idm_model_info  t2 
+      where t1.modelid = t2.modelid
+       
+	 <if test="modelcode !=null and modelcode!='' ">
+	 	and modelcode like '%'||#{modelcode}||'%'
+	 </if>
+	 <if test="modelname !=null and modelname!='' ">
+	 	and modelname like '%'||#{modelname}||'%'
+	 </if>
+	 order by createtime desc )tt
+	   <if test="page!= null and size!= null">
+     	 where rownum &lt;= #{page}*#{size}
+       </if>
+     )
+	 <if test="page!= null and size!= null">
+	      where rnm &gt;= (#{page}-1)*#{size} +1 
+	 </if>
+	</select>
+
+	<select id="selectCountByAll" parameterType="com.idm.app.idpconfig.proModelParaConfig.model.ProModelParaBaseInfo"  resultType="java.lang.Integer">
+    	select count(1) from (
+    	select pmp.modelid from idm_modeltofield_info pmp,idm_field_info f where pmp.fieldid = f.fieldid and pmp.status='0'
+	    <if test="id !=null and id!='' ">
+	        and pmp.mtfid= #{id}
+	    </if>
+	    <if test="modelcode !=null and modelcode!='' ">
+	        and pmp.modelid in(select pm.modelid from idm_model_info pm where pm.modelcode like '%'||#{modelcode}||'%')
+	    </if>
+	    <if test="modelname !=null and modelname!='' ">
+	        and pmp.modelid in(select pm.modelid from idm_model_info pm where pm.modelname like '%'||#{modelname}||'%')
+	    </if>
+	    <if test="modelid !=null and modelid!='' ">
+	        and pmp.modelid = #{modelid}
+	    </if>
+	   group by pmp.modelid )
+    </select>
+
+
+	<insert id="addModelParaBaseInfoList" parameterType="java.util.ArrayList">
+	   INSERT INTO idm_modeltofield_info 
+	   	(mtfid, modelid, fieldid, ischeckout, checkoutmothed, checkoutway, createuser, createtime, updateuser,updatetime, status) 
+	   	   SELECT idm_modeltofield_info_seq.NEXTVAL,a.* FROM ( 
+	   <foreach collection="list" item="data" index="index" separator=" union all ">
+	    SELECT #{data.modelid,jdbcType=VARCHAR}, #{data.fieldid,jdbcType=VARCHAR}, #{data.ischeckout,jdbcType=VARCHAR}, 
+	    #{data.checkoutmothed,jdbcType=VARCHAR}, #{data.checkoutway,jdbcType=VARCHAR},#{data.createuser,jdbcType=VARCHAR},
+	   	#{data.createtime,jdbcType=VARCHAR},#{data.updateuser,jdbcType=VARCHAR},#{data.updatetime,jdbcType=VARCHAR},#{data.status,jdbcType=VARCHAR}
+	     FROM DUAL
+	    </foreach> 
+	    ) a
+	</insert>
+	
+	<delete id="updateStatusInfoByModelIdAndField" parameterType="java.util.Map">
+		<!-- delete from idm_modeltofield_info where modelid = #{modelid} --> 
+		update idm_modeltofield_info set status ='1',updatetime=#{updatetime},updateuser=#{updateuser} where modelid = #{modelid} and status ='0'
+		<if test="list.size()!=0">
+			and fieldid in
+                 <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+        </if>	
+	</delete> 
+				
+	<select id="modelIdAndField" resultType="java.util.HashMap">
+		select m.modelid,(select count(mf.mtfid) from idm_modeltofield_info mf where mf.modelid = m.modelid and mf.status='0') FieldsNum from idm_model_info m where m.modelcode = #{modelcode}
+	</select>
+	
+	<select id="queryModelParalist" resultType="com.idm.app.idpconfig.proModelParaConfig.model.ProModelParaBaseInfo">
+    select t1.modelid modelid,t2.modelcode modelcode,t2.modelname modelname,t1.mtfid id,t1.fieldid fieldid,t1.parameterfields parameterfields,t1.parameternamech parameternamech,
+      t1.parametertype parametertype,t1.ischeckout ischeckout,t1.checkoutmothed checkoutmothed,t1.checkoutway checkoutway,t2.createuser createuser,
+      t2.createtime createtime,t2.updateuser updateuser,t2.updatetime updatetime,t2.status status from (
+    SELECT modelid,mtfid,fieldid,parameterfields,parameternamech,parametertype,ischeckout,checkoutmothed,checkoutway,createuser,createtime,updateuser,
+    updatetime,status FROM( SELECT ROW_NUMBER () OVER ( PARTITION BY modelid ORDER BY mtfid desc ) rn, modeltofield.* FROM (
+      select modelid,
+      substr(sys_connect_by_path(nvl(mtfid,'NaN'), ','),2) as mtfid,
+      substr(sys_connect_by_path(nvl(fieldid,'NaN'), ','),2) as fieldid,
+      substr(sys_connect_by_path(nvl(parameterfields,'NaN'), ','),2) as parameterfields,
+      substr(sys_connect_by_path(nvl(parameternamech,'NaN'), ','),2) as parameternamech,
+      substr(sys_connect_by_path(nvl(parametertype,'NaN'), ','),2) as parametertype,
+      substr(sys_connect_by_path(nvl(ischeckout,'NaN'), ','),2) as ischeckout,
+      substr(sys_connect_by_path(nvl(checkoutmothed,'NaN'), ','),2) as checkoutmothed,
+      substr(sys_connect_by_path(nvl(checkoutway,'NaN'), ','),2) as checkoutway,
+      createuser,createtime,updateuser,updatetime,status from (
+      select mtfid,modelid,fieldid,parameterfields,parameternamech,parametertype,ischeckout,checkoutmothed,checkoutway,createuser,updateuser,
+      createtime,updatetime,status,rnFirst,lead(rnFirst) over(partition by modelid order by rnFirst) rnNext from (
+      select ab.*,row_number() over(order by ab.modelid desc) rnFirst from (
+      select mtfid, modelid,a.fieldid fieldid,parameterfields,parameternamech, parametertype,ischeckout, checkoutmothed,checkoutway,
+      a.createuser createuser,a.updateuser updateuser, a.createtime createtime, a.updatetime updatetime,a.status status 
+      from idm_modeltofield_info a, idm_field_info b where a.fieldid = b.fieldid and a.status = '0' and b.status = '0') ab) tmpTable1) tmpTable2  
+      start with rnNext is null connect by rnNext = prior rnFirst) modeltofield ) mf WHERE mf.rn =1 ) t1,idm_model_info t2 
+        where t1.modelid = t2.modelid
+		 <if test="modelid !=null and modelid !='' ">
+			and t1.modelid = #{modelid}
+		 </if>
+	</select>
+	
+</mapper>

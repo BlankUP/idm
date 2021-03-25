@@ -1,0 +1,32 @@
+package com.idm.app.idpconfig.mqiModeRule.mapper;
+
+import com.idm.app.idpconfig.modelRule.model.ModelRuleInfo;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+
+public interface MqiModelRuleMapper {
+
+    List<ModelRuleInfo> queryPatameteFieldsInfo(ModelRuleInfo modelRuleInfo);
+
+    void addModelRuleInfo(ModelRuleInfo modelRuleInfo) throws Exception;
+    
+    void updateStatusByVersion(@Param("updateStatus") String updateStatus, @Param("version")int version);
+ 
+	List<ModelRuleInfo> queryPatameteFieldsInfo();
+	
+	List<ModelRuleInfo> selectByExample(ModelRuleInfo modelRuleInfo);
+
+	int selectCountByAll(ModelRuleInfo modelRuleInfo);
+	
+	List<ModelRuleInfo> getParaBaseInfosByExcel(Map<String,List<String>> map);
+	
+	List<ModelRuleInfo> queryPatameteFieldsInfoY();
+
+	int addModelRuleInfoList(List<ModelRuleInfo> list);
+	
+	Integer queryVersion(@Param("status")String status);
+	
+	Integer queryMaxVersion();
+}

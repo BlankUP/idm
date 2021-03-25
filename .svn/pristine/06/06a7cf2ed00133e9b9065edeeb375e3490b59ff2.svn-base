@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.system.auth.mapper.SystemIpInfoMapper">
+	<resultMap id="BaseResultMap" type="com.idm.app.system.auth.model.SystemIpInfo">
+		<result column="SYSTEMIPID" jdbcType="VARCHAR" property="systemIpID" />
+   	    <result column="IPADDRESS" jdbcType="VARCHAR" property="ipAddress" />
+   	    <result column="IPPORT" jdbcType="VARCHAR" property="ipPort" />
+    	<result column="METHOD" jdbcType="VARCHAR" property="method" />
+    	<result column="SYSTEMCODE" jdbcType="VARCHAR" property="systemCode" />
+    	<result column="SYSTEMNAME" jdbcType="VARCHAR" property="systemName" />
+    	<result column="CREATEUSER" jdbcType="VARCHAR" property="createUser" />
+		<result column="UPDATEUSER" jdbcType="VARCHAR" property="updateUser" />
+   		<result column="CREATETIME" jdbcType="VARCHAR" property="createTime" />
+   		<result column="UPDATETIME" jdbcType="VARCHAR" property="updateTime" />
+     </resultMap>
+  
+  <sql id="Base_Column_List">
+    SYSTEMIPID, IPADDRESS, IPPORT, METHOD, SYSTEMCODE, SYSTEMNAME, 
+    CREATEUSER, UPDATEUSER, CREATETIME, UPDATETIME
+  </sql>
+  
+  <select id="selectCountByAll" parameterType="com.idm.app.system.auth.model.SystemIpInfo"
+        resultType="java.lang.Integer">
+        select count(1)
+        from IDM_SYSTEMIP_INFO where 1=1 
+        <if test="systemCode!=null and systemCode!='' ">
+        and systemCode like '%'||#{systemCode}||'%'
+   	    </if>
+   	    <if test="systemName!=null and systemName!='' ">
+        and systemName like '%'||#{systemName}||'%'
+   	    </if>
+  </select>
+  
+  <select id="selectByAll" parameterType="com.idm.app.system.auth.model.SystemIpInfo"
+  		resultType="com.idm.app.system.auth.model.SystemIpInfo">
+  		select *
+  		from (
+  			select s1.* ,rownum rnm 
+  			from (
+  				select 
+  				<include refid="Base_Column_List" />
+  				from IDM_SYSTEMIP_INFO where 1=1 
+  				<if test="systemCode!=null and systemCode!='' ">
+       			and systemCode like '%'||#{systemCode}||'%'
+   	   			</if>
+   	   			<if test="systemName!=null and systemName!='' ">
+       			and systemName like '%'||#{systemName}||'%'
+   	   			</if>
+   	  			order by SYSTEMIPID) s1
+   	  		<if test="page!= null and size!= null">
+       		where rownum &lt;= #{page}*#{size}
+    		</if>
+    		)
+    	<if test="page!= null and size!= null">
+        where rnm &gt;= (#{page}-1)*#{size} +1 
+    	</if>
+  </select>
+  
+  <insert id="addSystemIp" parameterType="com.idm.app.system.auth.model.SystemIpInfo">
+       INSERT INTO IDM_SYSTEMIP_INFO (SYSTEMIPID, IPADDRESS, IPPORT, METHOD, SYSTEMCODE, SYSTEMNAME, 
+   	   CREATEUSER, CREATETIME) VALUES (IDP_EVENT_CONFIG_SEQ.NEXTVAL,#{ipAddress},#{ipPort},
+   	   #{method},#{systemCode},#{systemName},#{createUser},#{createTime})
+  </insert>
+    
+  <update id="updateSystemIp" parameterType="com.idm.app.system.auth.model.SystemIpInfo">
+        UPDATE IDM_SYSTEMIP_INFO SET IPADDRESS=#{ipAddress},IPPORT=#{ipPort}, METHOD=#{method},SYSTEMCODE=#{systemCode}, 
+        SYSTEMNAME=#{systemName},CREATEUSER=#{createUser},CREATETIME=#{createTime},UPDATEUSER=#{updateUser},UPDATETIME=#{updateTime}
+         WHERE SYSTEMIPID=#{systemIpID}
+  </update>  
+  
+  <delete id="deleteIpBySystemId" parameterType="java.lang.String">
+    delete IDM_SYSTEMIP_INFO  
+      where SYSTEMIPID=#{params.systemIpID,jdbcType=VARCHAR}
+  </delete>
+</mapper>

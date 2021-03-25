@@ -1,0 +1,958 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.ruleengine.datasourceManage.innerDatasourceManage.mapper.BankInnerDataMapper">
+  <resultMap id="BaseResultMap" type="com.idm.app.ruleengine.datasourceManage.innerDatasourceManage.model.BankInnerData">
+    <result column="UUID" jdbcType="VARCHAR" property="uuid" />
+    <result column="CUST_ID" jdbcType="VARCHAR" property="custId" />
+    <result column="CUST_NAME" jdbcType="VARCHAR" property="custName" />
+    <result column="GENDER" jdbcType="VARCHAR" property="gender" />
+    <result column="AGE" jdbcType="VARCHAR" property="age" />
+    <result column="BIRTH" jdbcType="DATE" property="birth" />
+    <result column="CERT_TYPE" jdbcType="VARCHAR" property="certType" />
+    <result column="CERT_NUM" jdbcType="VARCHAR" property="certNum" />
+    <result column="MOBILE_NUM" jdbcType="VARCHAR" property="mobileNum" />
+    <result column="SERIAL_PAYROLL_MONTHS" jdbcType="VARCHAR" property="serialPayrollMonths" />
+    <result column="CURR_PAYROLL_IND" jdbcType="DECIMAL" property="currPayrollInd" />
+    <result column="WAGES_PAY_CUST_IND" jdbcType="VARCHAR" property="wagesPayCustInd" />
+    <result column="HISTY_PAYROLL_IND" jdbcType="VARCHAR" property="histyPayrollInd" />
+    <result column="CURR_PAYROLL_AMT" jdbcType="DECIMAL" property="currPayrollAmt" />
+    <result column="LAST_SIXMON_AVG_PAYAMT" jdbcType="DECIMAL" property="lastSixmonAvgPayamt" />
+    <result column="HOUSE_MORTG_LOAN_CUST_IND" jdbcType="VARCHAR" property="houseMortgLoanCustInd" />
+    <result column="HOUSELOAN_OVDUE_IND" jdbcType="VARCHAR" property="houseloanOvdueInd" />
+    <result column="HISTY_HOUSELOAN_CUST_IND" jdbcType="VARCHAR" property="histyHouseloanCustInd" />
+    <result column="LEVELCLASSCODE" jdbcType="VARCHAR" property="levelclasscode" />
+    <result column="NON_HOUSELOAN_IND" jdbcType="VARCHAR" property="nonHouseloanInd" />
+    <result column="HISTY_NON_HOUSELOAN_IND" jdbcType="VARCHAR" property="histyNonHouseloanInd" />
+    <result column="HOUSELOAN_PRIN_BAL" jdbcType="VARCHAR" property="houseloanPrinBal" />
+    <result column="HOUSELOAN_MON_REPAYAMT" jdbcType="DECIMAL" property="houseloanMonRepayamt" />
+    <result column="HOUSELOAN_NEXTYEAR_REPAYAMT" jdbcType="DECIMAL" property="houseloanNextyearRepayamt" />
+    <result column="LAST_ONE_TM_PAYROLL_DT" jdbcType="DATE" property="lastOneTmPayrollDt" />
+    <result column="PAYROLL_DT" jdbcType="DATE" property="payrollDt" />
+    <result column="MON_AVG_PAYROLL_AMT" jdbcType="DECIMAL" property="monAvgPayrollAmt" />
+    <result column="LAST_AVG_PAYROLL_AMT" jdbcType="DECIMAL" property="lastAvgPayrollAmt" />
+    <result column="DAY_AVG_DPSIT" jdbcType="DECIMAL" property="dayAvgDpsit" />
+    <result column="DAY_AVG_FIN" jdbcType="DECIMAL" property="dayAvgFin" />
+    <result column="DAY_AVG_ASSET" jdbcType="DECIMAL" property="dayAvgAsset" />
+    <result column="STATUS_NET_LOAN_REPAYMENT" jdbcType="VARCHAR" property="statusNetLoanRepayment" />
+    <result column="THIRD_CUSTODY_SIGN_IND" jdbcType="VARCHAR" property="thirdCustodySignInd" />
+    <result column="NET_CREDIT_CREDIT_LINE" jdbcType="DECIMAL" property="netCreditCreditLine" />
+    <result column="NET_CREDIT_DATE" jdbcType="DATE" property="netCreditDate" />
+    <result column="NET_LOAN_PRINCIPAL_AMOUNT" jdbcType="DECIMAL" property="netLoanPrincipalAmount" />
+    <result column="LOAN_RELEASE_DATE" jdbcType="DATE" property="loanReleaseDate" />
+    <result column="TIME_TO_APPLICATION_TIME" jdbcType="DECIMAL" property="timeToApplicationTime" />
+    <result column="CURRENT_OVERDUE_DAYS" jdbcType="DECIMAL" property="currentOverdueDays" />
+    <result column="HISTY_OVERDUE_TIMES" jdbcType="DECIMAL" property="histyOverdueTimes" />
+    <result column="HISTY_OVERDUE_NUMBER" jdbcType="DECIMAL" property="histyOverdueNumber" />
+    <result column="TOTAL_LOAN_PERIOD" jdbcType="DECIMAL" property="totalLoanPeriod" />
+    <result column="LOAN_REPAYMENT_PERIOD" jdbcType="DECIMAL" property="loanRepaymentPeriod" />
+    <result column="LOAN_APPROVAL_MODEL_SCORE" jdbcType="DECIMAL" property="loanApprovalModelScore" />
+    <result column="DPSIT_CUST_IND" jdbcType="VARCHAR" property="dpsitCustInd" />
+    <result column="CHREM_CUST_IND" jdbcType="VARCHAR" property="chremCustInd" />
+    <result column="COLL_REPAY_IND" jdbcType="VARCHAR" property="collRepayInd" />
+    <result column="CALL_COMPL_RATE" jdbcType="DECIMAL" property="callComplRate" />
+    <result column="COLL_MAX_CALL_DURA" jdbcType="VARCHAR" property="collMaxCallDura" />
+    <result column="THEMAXTIMETOCALL_DURA" jdbcType="VARCHAR" property="themaxtimetocallDura" />
+    <result column="OVERD_DATE_TOTAL_PER" jdbcType="DECIMAL" property="overdDateTotalPer" />
+    <result column="CURDATE_PAYROLL_PROVIDE" jdbcType="VARCHAR" property="curdatePayrollProvide" />
+    <result column="LOAN_RATIO_MARCH" jdbcType="DECIMAL" property="loanRatioMarch" />
+    <result column="MONTH_SALARY_PAYOUT" jdbcType="VARCHAR" property="monthSalaryPayout" />
+    <result column="LAVG_PAY_APP_RATIO" jdbcType="DECIMAL" property="lavgPayAppRatio" />
+    <result column="BASE_LINE" jdbcType="DECIMAL" property="baseLine" />
+    <result column="AMOUNT_ASSETS" jdbcType="DECIMAL" property="amountAssets" />
+    <result column="QUOTA_ADJUSTMENT" jdbcType="DECIMAL" property="quotaAdjustment" />
+    <result column="SALARY_AMOUNT" jdbcType="DECIMAL" property="salaryAmount" />
+    <result column="QUOTA_COEFFICIENT" jdbcType="DECIMAL" property="quotaCoefficient" />
+    <result column="CREDIT_LINE" jdbcType="DECIMAL" property="creditLine" />
+    <result column="QUOTA" jdbcType="DECIMAL" property="quota" />
+    <result column="RATE_INTERNET_CUST" jdbcType="DECIMAL" property="rateInternetCust" />
+    <result column="RATE_WHITELIST_CUST" jdbcType="DECIMAL" property="rateWhitelistCust" />
+    <result column="BLACKLIST_FLAG" jdbcType="VARCHAR" property="blacklistFlag" />
+    <result column="DISAMOUNTCREDITLIMITRATIO" jdbcType="DECIMAL" property="disamountcreditlimitratio" />
+    <result column="DUBIL_NUMBER" jdbcType="VARCHAR" property="dubilNumber" />
+    <result column="INPUTTIME" jdbcType="DATE" property="inputtime" />
+    <result column="UPDATETIME" jdbcType="DATE" property="updatetime" />
+    <result column="LOAN_OVDUE_IND" jdbcType="VARCHAR" property="loanOvdueInd" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    UUID, CUST_ID, CUST_NAME, GENDER, AGE, BIRTH, CERT_TYPE, CERT_NUM, MOBILE_NUM, SERIAL_PAYROLL_MONTHS, 
+    CURR_PAYROLL_IND, WAGES_PAY_CUST_IND, HISTY_PAYROLL_IND, CURR_PAYROLL_AMT, LAST_SIXMON_AVG_PAYAMT, 
+    HOUSE_MORTG_LOAN_CUST_IND, HOUSELOAN_OVDUE_IND, HISTY_HOUSELOAN_CUST_IND, LEVELCLASSCODE, 
+    NON_HOUSELOAN_IND, HISTY_NON_HOUSELOAN_IND, HOUSELOAN_PRIN_BAL, HOUSELOAN_MON_REPAYAMT, 
+    HOUSELOAN_NEXTYEAR_REPAYAMT, LAST_ONE_TM_PAYROLL_DT, PAYROLL_DT, MON_AVG_PAYROLL_AMT, 
+    LAST_AVG_PAYROLL_AMT, DAY_AVG_DPSIT, DAY_AVG_FIN, DAY_AVG_ASSET, STATUS_NET_LOAN_REPAYMENT, 
+    THIRD_CUSTODY_SIGN_IND, NET_CREDIT_CREDIT_LINE, NET_CREDIT_DATE, NET_LOAN_PRINCIPAL_AMOUNT, 
+    LOAN_RELEASE_DATE, TIME_TO_APPLICATION_TIME, CURRENT_OVERDUE_DAYS, HISTY_OVERDUE_TIMES, 
+    HISTY_OVERDUE_NUMBER, TOTAL_LOAN_PERIOD, LOAN_REPAYMENT_PERIOD, LOAN_APPROVAL_MODEL_SCORE, 
+    DPSIT_CUST_IND, CHREM_CUST_IND, COLL_REPAY_IND, CALL_COMPL_RATE, COLL_MAX_CALL_DURA, 
+    THEMAXTIMETOCALL_DURA, OVERD_DATE_TOTAL_PER, CURDATE_PAYROLL_PROVIDE, LOAN_RATIO_MARCH, 
+    MONTH_SALARY_PAYOUT, LAVG_PAY_APP_RATIO, BASE_LINE, AMOUNT_ASSETS, QUOTA_ADJUSTMENT, 
+    SALARY_AMOUNT, QUOTA_COEFFICIENT, CREDIT_LINE, QUOTA, RATE_INTERNET_CUST, RATE_WHITELIST_CUST, 
+    BLACKLIST_FLAG, DISAMOUNTCREDITLIMITRATIO, DUBIL_NUMBER, INPUTTIME, UPDATETIME, LOAN_OVDUE_IND
+  </sql>
+  <select id="selectByExample" parameterType="com.idm.app.ruleengine.datasourceManage.innerDatasourceManage.model.BankInnerDataExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from HANLINACADEMICIAN
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.idm.app.ruleengine.datasourceManage.innerDatasourceManage.model.BankInnerDataExample">
+    delete from HANLINACADEMICIAN
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.idm.app.ruleengine.datasourceManage.innerDatasourceManage.model.BankInnerData">
+    insert into HANLINACADEMICIAN (UUID, CUST_ID, CUST_NAME, 
+      GENDER, AGE, BIRTH, CERT_TYPE, 
+      CERT_NUM, MOBILE_NUM, SERIAL_PAYROLL_MONTHS, 
+      CURR_PAYROLL_IND, WAGES_PAY_CUST_IND, HISTY_PAYROLL_IND, 
+      CURR_PAYROLL_AMT, LAST_SIXMON_AVG_PAYAMT, HOUSE_MORTG_LOAN_CUST_IND, 
+      HOUSELOAN_OVDUE_IND, HISTY_HOUSELOAN_CUST_IND, 
+      LEVELCLASSCODE, NON_HOUSELOAN_IND, HISTY_NON_HOUSELOAN_IND, 
+      HOUSELOAN_PRIN_BAL, HOUSELOAN_MON_REPAYAMT, 
+      HOUSELOAN_NEXTYEAR_REPAYAMT, LAST_ONE_TM_PAYROLL_DT, 
+      PAYROLL_DT, MON_AVG_PAYROLL_AMT, LAST_AVG_PAYROLL_AMT, 
+      DAY_AVG_DPSIT, DAY_AVG_FIN, DAY_AVG_ASSET, 
+      STATUS_NET_LOAN_REPAYMENT, THIRD_CUSTODY_SIGN_IND, 
+      NET_CREDIT_CREDIT_LINE, NET_CREDIT_DATE, NET_LOAN_PRINCIPAL_AMOUNT, 
+      LOAN_RELEASE_DATE, TIME_TO_APPLICATION_TIME, CURRENT_OVERDUE_DAYS, 
+      HISTY_OVERDUE_TIMES, HISTY_OVERDUE_NUMBER, 
+      TOTAL_LOAN_PERIOD, LOAN_REPAYMENT_PERIOD, LOAN_APPROVAL_MODEL_SCORE, 
+      DPSIT_CUST_IND, CHREM_CUST_IND, COLL_REPAY_IND, 
+      CALL_COMPL_RATE, COLL_MAX_CALL_DURA, THEMAXTIMETOCALL_DURA, 
+      OVERD_DATE_TOTAL_PER, CURDATE_PAYROLL_PROVIDE, 
+      LOAN_RATIO_MARCH, MONTH_SALARY_PAYOUT, LAVG_PAY_APP_RATIO, 
+      BASE_LINE, AMOUNT_ASSETS, QUOTA_ADJUSTMENT, 
+      SALARY_AMOUNT, QUOTA_COEFFICIENT, CREDIT_LINE, 
+      QUOTA, RATE_INTERNET_CUST, RATE_WHITELIST_CUST, 
+      BLACKLIST_FLAG, DISAMOUNTCREDITLIMITRATIO, 
+      DUBIL_NUMBER, INPUTTIME, UPDATETIME, 
+      LOAN_OVDUE_IND)
+    values (#{uuid,jdbcType=VARCHAR}, #{custId,jdbcType=VARCHAR}, #{custName,jdbcType=VARCHAR}, 
+      #{gender,jdbcType=VARCHAR}, #{age,jdbcType=VARCHAR}, #{birth,jdbcType=DATE}, #{certType,jdbcType=VARCHAR}, 
+      #{certNum,jdbcType=VARCHAR}, #{mobileNum,jdbcType=VARCHAR}, #{serialPayrollMonths,jdbcType=VARCHAR}, 
+      #{currPayrollInd,jdbcType=DECIMAL}, #{wagesPayCustInd,jdbcType=VARCHAR}, #{histyPayrollInd,jdbcType=VARCHAR}, 
+      #{currPayrollAmt,jdbcType=DECIMAL}, #{lastSixmonAvgPayamt,jdbcType=DECIMAL}, #{houseMortgLoanCustInd,jdbcType=VARCHAR}, 
+      #{houseloanOvdueInd,jdbcType=VARCHAR}, #{histyHouseloanCustInd,jdbcType=VARCHAR}, 
+      #{levelclasscode,jdbcType=VARCHAR}, #{nonHouseloanInd,jdbcType=VARCHAR}, #{histyNonHouseloanInd,jdbcType=VARCHAR}, 
+      #{houseloanPrinBal,jdbcType=VARCHAR}, #{houseloanMonRepayamt,jdbcType=DECIMAL}, 
+      #{houseloanNextyearRepayamt,jdbcType=DECIMAL}, #{lastOneTmPayrollDt,jdbcType=DATE}, 
+      #{payrollDt,jdbcType=DATE}, #{monAvgPayrollAmt,jdbcType=DECIMAL}, #{lastAvgPayrollAmt,jdbcType=DECIMAL}, 
+      #{dayAvgDpsit,jdbcType=DECIMAL}, #{dayAvgFin,jdbcType=DECIMAL}, #{dayAvgAsset,jdbcType=DECIMAL}, 
+      #{statusNetLoanRepayment,jdbcType=VARCHAR}, #{thirdCustodySignInd,jdbcType=VARCHAR}, 
+      #{netCreditCreditLine,jdbcType=DECIMAL}, #{netCreditDate,jdbcType=DATE}, #{netLoanPrincipalAmount,jdbcType=DECIMAL}, 
+      #{loanReleaseDate,jdbcType=DATE}, #{timeToApplicationTime,jdbcType=DECIMAL}, #{currentOverdueDays,jdbcType=DECIMAL}, 
+      #{histyOverdueTimes,jdbcType=DECIMAL}, #{histyOverdueNumber,jdbcType=DECIMAL}, 
+      #{totalLoanPeriod,jdbcType=DECIMAL}, #{loanRepaymentPeriod,jdbcType=DECIMAL}, #{loanApprovalModelScore,jdbcType=DECIMAL}, 
+      #{dpsitCustInd,jdbcType=VARCHAR}, #{chremCustInd,jdbcType=VARCHAR}, #{collRepayInd,jdbcType=VARCHAR}, 
+      #{callComplRate,jdbcType=DECIMAL}, #{collMaxCallDura,jdbcType=VARCHAR}, #{themaxtimetocallDura,jdbcType=VARCHAR}, 
+      #{overdDateTotalPer,jdbcType=DECIMAL}, #{curdatePayrollProvide,jdbcType=VARCHAR}, 
+      #{loanRatioMarch,jdbcType=DECIMAL}, #{monthSalaryPayout,jdbcType=VARCHAR}, #{lavgPayAppRatio,jdbcType=DECIMAL}, 
+      #{baseLine,jdbcType=DECIMAL}, #{amountAssets,jdbcType=DECIMAL}, #{quotaAdjustment,jdbcType=DECIMAL}, 
+      #{salaryAmount,jdbcType=DECIMAL}, #{quotaCoefficient,jdbcType=DECIMAL}, #{creditLine,jdbcType=DECIMAL}, 
+      #{quota,jdbcType=DECIMAL}, #{rateInternetCust,jdbcType=DECIMAL}, #{rateWhitelistCust,jdbcType=DECIMAL}, 
+      #{blacklistFlag,jdbcType=VARCHAR}, #{disamountcreditlimitratio,jdbcType=DECIMAL}, 
+      #{dubilNumber,jdbcType=VARCHAR}, #{inputtime,jdbcType=DATE}, #{updatetime,jdbcType=DATE}, 
+      #{loanOvdueInd,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.idm.app.ruleengine.datasourceManage.innerDatasourceManage.model.BankInnerData">
+    insert into HANLINACADEMICIAN
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        UUID,
+      </if>
+      <if test="custId != null">
+        CUST_ID,
+      </if>
+      <if test="custName != null">
+        CUST_NAME,
+      </if>
+      <if test="gender != null">
+        GENDER,
+      </if>
+      <if test="age != null">
+        AGE,
+      </if>
+      <if test="birth != null">
+        BIRTH,
+      </if>
+      <if test="certType != null">
+        CERT_TYPE,
+      </if>
+      <if test="certNum != null">
+        CERT_NUM,
+      </if>
+      <if test="mobileNum != null">
+        MOBILE_NUM,
+      </if>
+      <if test="serialPayrollMonths != null">
+        SERIAL_PAYROLL_MONTHS,
+      </if>
+      <if test="currPayrollInd != null">
+        CURR_PAYROLL_IND,
+      </if>
+      <if test="wagesPayCustInd != null">
+        WAGES_PAY_CUST_IND,
+      </if>
+      <if test="histyPayrollInd != null">
+        HISTY_PAYROLL_IND,
+      </if>
+      <if test="currPayrollAmt != null">
+        CURR_PAYROLL_AMT,
+      </if>
+      <if test="lastSixmonAvgPayamt != null">
+        LAST_SIXMON_AVG_PAYAMT,
+      </if>
+      <if test="houseMortgLoanCustInd != null">
+        HOUSE_MORTG_LOAN_CUST_IND,
+      </if>
+      <if test="houseloanOvdueInd != null">
+        HOUSELOAN_OVDUE_IND,
+      </if>
+      <if test="histyHouseloanCustInd != null">
+        HISTY_HOUSELOAN_CUST_IND,
+      </if>
+      <if test="levelclasscode != null">
+        LEVELCLASSCODE,
+      </if>
+      <if test="nonHouseloanInd != null">
+        NON_HOUSELOAN_IND,
+      </if>
+      <if test="histyNonHouseloanInd != null">
+        HISTY_NON_HOUSELOAN_IND,
+      </if>
+      <if test="houseloanPrinBal != null">
+        HOUSELOAN_PRIN_BAL,
+      </if>
+      <if test="houseloanMonRepayamt != null">
+        HOUSELOAN_MON_REPAYAMT,
+      </if>
+      <if test="houseloanNextyearRepayamt != null">
+        HOUSELOAN_NEXTYEAR_REPAYAMT,
+      </if>
+      <if test="lastOneTmPayrollDt != null">
+        LAST_ONE_TM_PAYROLL_DT,
+      </if>
+      <if test="payrollDt != null">
+        PAYROLL_DT,
+      </if>
+      <if test="monAvgPayrollAmt != null">
+        MON_AVG_PAYROLL_AMT,
+      </if>
+      <if test="lastAvgPayrollAmt != null">
+        LAST_AVG_PAYROLL_AMT,
+      </if>
+      <if test="dayAvgDpsit != null">
+        DAY_AVG_DPSIT,
+      </if>
+      <if test="dayAvgFin != null">
+        DAY_AVG_FIN,
+      </if>
+      <if test="dayAvgAsset != null">
+        DAY_AVG_ASSET,
+      </if>
+      <if test="statusNetLoanRepayment != null">
+        STATUS_NET_LOAN_REPAYMENT,
+      </if>
+      <if test="thirdCustodySignInd != null">
+        THIRD_CUSTODY_SIGN_IND,
+      </if>
+      <if test="netCreditCreditLine != null">
+        NET_CREDIT_CREDIT_LINE,
+      </if>
+      <if test="netCreditDate != null">
+        NET_CREDIT_DATE,
+      </if>
+      <if test="netLoanPrincipalAmount != null">
+        NET_LOAN_PRINCIPAL_AMOUNT,
+      </if>
+      <if test="loanReleaseDate != null">
+        LOAN_RELEASE_DATE,
+      </if>
+      <if test="timeToApplicationTime != null">
+        TIME_TO_APPLICATION_TIME,
+      </if>
+      <if test="currentOverdueDays != null">
+        CURRENT_OVERDUE_DAYS,
+      </if>
+      <if test="histyOverdueTimes != null">
+        HISTY_OVERDUE_TIMES,
+      </if>
+      <if test="histyOverdueNumber != null">
+        HISTY_OVERDUE_NUMBER,
+      </if>
+      <if test="totalLoanPeriod != null">
+        TOTAL_LOAN_PERIOD,
+      </if>
+      <if test="loanRepaymentPeriod != null">
+        LOAN_REPAYMENT_PERIOD,
+      </if>
+      <if test="loanApprovalModelScore != null">
+        LOAN_APPROVAL_MODEL_SCORE,
+      </if>
+      <if test="dpsitCustInd != null">
+        DPSIT_CUST_IND,
+      </if>
+      <if test="chremCustInd != null">
+        CHREM_CUST_IND,
+      </if>
+      <if test="collRepayInd != null">
+        COLL_REPAY_IND,
+      </if>
+      <if test="callComplRate != null">
+        CALL_COMPL_RATE,
+      </if>
+      <if test="collMaxCallDura != null">
+        COLL_MAX_CALL_DURA,
+      </if>
+      <if test="themaxtimetocallDura != null">
+        THEMAXTIMETOCALL_DURA,
+      </if>
+      <if test="overdDateTotalPer != null">
+        OVERD_DATE_TOTAL_PER,
+      </if>
+      <if test="curdatePayrollProvide != null">
+        CURDATE_PAYROLL_PROVIDE,
+      </if>
+      <if test="loanRatioMarch != null">
+        LOAN_RATIO_MARCH,
+      </if>
+      <if test="monthSalaryPayout != null">
+        MONTH_SALARY_PAYOUT,
+      </if>
+      <if test="lavgPayAppRatio != null">
+        LAVG_PAY_APP_RATIO,
+      </if>
+      <if test="baseLine != null">
+        BASE_LINE,
+      </if>
+      <if test="amountAssets != null">
+        AMOUNT_ASSETS,
+      </if>
+      <if test="quotaAdjustment != null">
+        QUOTA_ADJUSTMENT,
+      </if>
+      <if test="salaryAmount != null">
+        SALARY_AMOUNT,
+      </if>
+      <if test="quotaCoefficient != null">
+        QUOTA_COEFFICIENT,
+      </if>
+      <if test="creditLine != null">
+        CREDIT_LINE,
+      </if>
+      <if test="quota != null">
+        QUOTA,
+      </if>
+      <if test="rateInternetCust != null">
+        RATE_INTERNET_CUST,
+      </if>
+      <if test="rateWhitelistCust != null">
+        RATE_WHITELIST_CUST,
+      </if>
+      <if test="blacklistFlag != null">
+        BLACKLIST_FLAG,
+      </if>
+      <if test="disamountcreditlimitratio != null">
+        DISAMOUNTCREDITLIMITRATIO,
+      </if>
+      <if test="dubilNumber != null">
+        DUBIL_NUMBER,
+      </if>
+      <if test="inputtime != null">
+        INPUTTIME,
+      </if>
+      <if test="updatetime != null">
+        UPDATETIME,
+      </if>
+      <if test="loanOvdueInd != null">
+        LOAN_OVDUE_IND,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="custId != null">
+        #{custId,jdbcType=VARCHAR},
+      </if>
+      <if test="custName != null">
+        #{custName,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=VARCHAR},
+      </if>
+      <if test="birth != null">
+        #{birth,jdbcType=DATE},
+      </if>
+      <if test="certType != null">
+        #{certType,jdbcType=VARCHAR},
+      </if>
+      <if test="certNum != null">
+        #{certNum,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileNum != null">
+        #{mobileNum,jdbcType=VARCHAR},
+      </if>
+      <if test="serialPayrollMonths != null">
+        #{serialPayrollMonths,jdbcType=VARCHAR},
+      </if>
+      <if test="currPayrollInd != null">
+        #{currPayrollInd,jdbcType=DECIMAL},
+      </if>
+      <if test="wagesPayCustInd != null">
+        #{wagesPayCustInd,jdbcType=VARCHAR},
+      </if>
+      <if test="histyPayrollInd != null">
+        #{histyPayrollInd,jdbcType=VARCHAR},
+      </if>
+      <if test="currPayrollAmt != null">
+        #{currPayrollAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="lastSixmonAvgPayamt != null">
+        #{lastSixmonAvgPayamt,jdbcType=DECIMAL},
+      </if>
+      <if test="houseMortgLoanCustInd != null">
+        #{houseMortgLoanCustInd,jdbcType=VARCHAR},
+      </if>
+      <if test="houseloanOvdueInd != null">
+        #{houseloanOvdueInd,jdbcType=VARCHAR},
+      </if>
+      <if test="histyHouseloanCustInd != null">
+        #{histyHouseloanCustInd,jdbcType=VARCHAR},
+      </if>
+      <if test="levelclasscode != null">
+        #{levelclasscode,jdbcType=VARCHAR},
+      </if>
+      <if test="nonHouseloanInd != null">
+        #{nonHouseloanInd,jdbcType=VARCHAR},
+      </if>
+      <if test="histyNonHouseloanInd != null">
+        #{histyNonHouseloanInd,jdbcType=VARCHAR},
+      </if>
+      <if test="houseloanPrinBal != null">
+        #{houseloanPrinBal,jdbcType=VARCHAR},
+      </if>
+      <if test="houseloanMonRepayamt != null">
+        #{houseloanMonRepayamt,jdbcType=DECIMAL},
+      </if>
+      <if test="houseloanNextyearRepayamt != null">
+        #{houseloanNextyearRepayamt,jdbcType=DECIMAL},
+      </if>
+      <if test="lastOneTmPayrollDt != null">
+        #{lastOneTmPayrollDt,jdbcType=DATE},
+      </if>
+      <if test="payrollDt != null">
+        #{payrollDt,jdbcType=DATE},
+      </if>
+      <if test="monAvgPayrollAmt != null">
+        #{monAvgPayrollAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="lastAvgPayrollAmt != null">
+        #{lastAvgPayrollAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="dayAvgDpsit != null">
+        #{dayAvgDpsit,jdbcType=DECIMAL},
+      </if>
+      <if test="dayAvgFin != null">
+        #{dayAvgFin,jdbcType=DECIMAL},
+      </if>
+      <if test="dayAvgAsset != null">
+        #{dayAvgAsset,jdbcType=DECIMAL},
+      </if>
+      <if test="statusNetLoanRepayment != null">
+        #{statusNetLoanRepayment,jdbcType=VARCHAR},
+      </if>
+      <if test="thirdCustodySignInd != null">
+        #{thirdCustodySignInd,jdbcType=VARCHAR},
+      </if>
+      <if test="netCreditCreditLine != null">
+        #{netCreditCreditLine,jdbcType=DECIMAL},
+      </if>
+      <if test="netCreditDate != null">
+        #{netCreditDate,jdbcType=DATE},
+      </if>
+      <if test="netLoanPrincipalAmount != null">
+        #{netLoanPrincipalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="loanReleaseDate != null">
+        #{loanReleaseDate,jdbcType=DATE},
+      </if>
+      <if test="timeToApplicationTime != null">
+        #{timeToApplicationTime,jdbcType=DECIMAL},
+      </if>
+      <if test="currentOverdueDays != null">
+        #{currentOverdueDays,jdbcType=DECIMAL},
+      </if>
+      <if test="histyOverdueTimes != null">
+        #{histyOverdueTimes,jdbcType=DECIMAL},
+      </if>
+      <if test="histyOverdueNumber != null">
+        #{histyOverdueNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="totalLoanPeriod != null">
+        #{totalLoanPeriod,jdbcType=DECIMAL},
+      </if>
+      <if test="loanRepaymentPeriod != null">
+        #{loanRepaymentPeriod,jdbcType=DECIMAL},
+      </if>
+      <if test="loanApprovalModelScore != null">
+        #{loanApprovalModelScore,jdbcType=DECIMAL},
+      </if>
+      <if test="dpsitCustInd != null">
+        #{dpsitCustInd,jdbcType=VARCHAR},
+      </if>
+      <if test="chremCustInd != null">
+        #{chremCustInd,jdbcType=VARCHAR},
+      </if>
+      <if test="collRepayInd != null">
+        #{collRepayInd,jdbcType=VARCHAR},
+      </if>
+      <if test="callComplRate != null">
+        #{callComplRate,jdbcType=DECIMAL},
+      </if>
+      <if test="collMaxCallDura != null">
+        #{collMaxCallDura,jdbcType=VARCHAR},
+      </if>
+      <if test="themaxtimetocallDura != null">
+        #{themaxtimetocallDura,jdbcType=VARCHAR},
+      </if>
+      <if test="overdDateTotalPer != null">
+        #{overdDateTotalPer,jdbcType=DECIMAL},
+      </if>
+      <if test="curdatePayrollProvide != null">
+        #{curdatePayrollProvide,jdbcType=VARCHAR},
+      </if>
+      <if test="loanRatioMarch != null">
+        #{loanRatioMarch,jdbcType=DECIMAL},
+      </if>
+      <if test="monthSalaryPayout != null">
+        #{monthSalaryPayout,jdbcType=VARCHAR},
+      </if>
+      <if test="lavgPayAppRatio != null">
+        #{lavgPayAppRatio,jdbcType=DECIMAL},
+      </if>
+      <if test="baseLine != null">
+        #{baseLine,jdbcType=DECIMAL},
+      </if>
+      <if test="amountAssets != null">
+        #{amountAssets,jdbcType=DECIMAL},
+      </if>
+      <if test="quotaAdjustment != null">
+        #{quotaAdjustment,jdbcType=DECIMAL},
+      </if>
+      <if test="salaryAmount != null">
+        #{salaryAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="quotaCoefficient != null">
+        #{quotaCoefficient,jdbcType=DECIMAL},
+      </if>
+      <if test="creditLine != null">
+        #{creditLine,jdbcType=DECIMAL},
+      </if>
+      <if test="quota != null">
+        #{quota,jdbcType=DECIMAL},
+      </if>
+      <if test="rateInternetCust != null">
+        #{rateInternetCust,jdbcType=DECIMAL},
+      </if>
+      <if test="rateWhitelistCust != null">
+        #{rateWhitelistCust,jdbcType=DECIMAL},
+      </if>
+      <if test="blacklistFlag != null">
+        #{blacklistFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="disamountcreditlimitratio != null">
+        #{disamountcreditlimitratio,jdbcType=DECIMAL},
+      </if>
+      <if test="dubilNumber != null">
+        #{dubilNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="inputtime != null">
+        #{inputtime,jdbcType=DATE},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=DATE},
+      </if>
+      <if test="loanOvdueInd != null">
+        #{loanOvdueInd,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.idm.app.ruleengine.datasourceManage.innerDatasourceManage.model.BankInnerDataExample" resultType="java.lang.Long">
+    select count(*) from HANLINACADEMICIAN
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update HANLINACADEMICIAN
+    <set>
+      <if test="record.uuid != null">
+        UUID = #{record.uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.custId != null">
+        CUST_ID = #{record.custId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.custName != null">
+        CUST_NAME = #{record.custName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gender != null">
+        GENDER = #{record.gender,jdbcType=VARCHAR},
+      </if>
+      <if test="record.age != null">
+        AGE = #{record.age,jdbcType=VARCHAR},
+      </if>
+      <if test="record.birth != null">
+        BIRTH = #{record.birth,jdbcType=DATE},
+      </if>
+      <if test="record.certType != null">
+        CERT_TYPE = #{record.certType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.certNum != null">
+        CERT_NUM = #{record.certNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mobileNum != null">
+        MOBILE_NUM = #{record.mobileNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serialPayrollMonths != null">
+        SERIAL_PAYROLL_MONTHS = #{record.serialPayrollMonths,jdbcType=VARCHAR},
+      </if>
+      <if test="record.currPayrollInd != null">
+        CURR_PAYROLL_IND = #{record.currPayrollInd,jdbcType=DECIMAL},
+      </if>
+      <if test="record.wagesPayCustInd != null">
+        WAGES_PAY_CUST_IND = #{record.wagesPayCustInd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.histyPayrollInd != null">
+        HISTY_PAYROLL_IND = #{record.histyPayrollInd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.currPayrollAmt != null">
+        CURR_PAYROLL_AMT = #{record.currPayrollAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="record.lastSixmonAvgPayamt != null">
+        LAST_SIXMON_AVG_PAYAMT = #{record.lastSixmonAvgPayamt,jdbcType=DECIMAL},
+      </if>
+      <if test="record.houseMortgLoanCustInd != null">
+        HOUSE_MORTG_LOAN_CUST_IND = #{record.houseMortgLoanCustInd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.houseloanOvdueInd != null">
+        HOUSELOAN_OVDUE_IND = #{record.houseloanOvdueInd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.histyHouseloanCustInd != null">
+        HISTY_HOUSELOAN_CUST_IND = #{record.histyHouseloanCustInd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.levelclasscode != null">
+        LEVELCLASSCODE = #{record.levelclasscode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nonHouseloanInd != null">
+        NON_HOUSELOAN_IND = #{record.nonHouseloanInd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.histyNonHouseloanInd != null">
+        HISTY_NON_HOUSELOAN_IND = #{record.histyNonHouseloanInd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.houseloanPrinBal != null">
+        HOUSELOAN_PRIN_BAL = #{record.houseloanPrinBal,jdbcType=VARCHAR},
+      </if>
+      <if test="record.houseloanMonRepayamt != null">
+        HOUSELOAN_MON_REPAYAMT = #{record.houseloanMonRepayamt,jdbcType=DECIMAL},
+      </if>
+      <if test="record.houseloanNextyearRepayamt != null">
+        HOUSELOAN_NEXTYEAR_REPAYAMT = #{record.houseloanNextyearRepayamt,jdbcType=DECIMAL},
+      </if>
+      <if test="record.lastOneTmPayrollDt != null">
+        LAST_ONE_TM_PAYROLL_DT = #{record.lastOneTmPayrollDt,jdbcType=DATE},
+      </if>
+      <if test="record.payrollDt != null">
+        PAYROLL_DT = #{record.payrollDt,jdbcType=DATE},
+      </if>
+      <if test="record.monAvgPayrollAmt != null">
+        MON_AVG_PAYROLL_AMT = #{record.monAvgPayrollAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="record.lastAvgPayrollAmt != null">
+        LAST_AVG_PAYROLL_AMT = #{record.lastAvgPayrollAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="record.dayAvgDpsit != null">
+        DAY_AVG_DPSIT = #{record.dayAvgDpsit,jdbcType=DECIMAL},
+      </if>
+      <if test="record.dayAvgFin != null">
+        DAY_AVG_FIN = #{record.dayAvgFin,jdbcType=DECIMAL},
+      </if>
+      <if test="record.dayAvgAsset != null">
+        DAY_AVG_ASSET = #{record.dayAvgAsset,jdbcType=DECIMAL},
+      </if>
+      <if test="record.statusNetLoanRepayment != null">
+        STATUS_NET_LOAN_REPAYMENT = #{record.statusNetLoanRepayment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.thirdCustodySignInd != null">
+        THIRD_CUSTODY_SIGN_IND = #{record.thirdCustodySignInd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.netCreditCreditLine != null">
+        NET_CREDIT_CREDIT_LINE = #{record.netCreditCreditLine,jdbcType=DECIMAL},
+      </if>
+      <if test="record.netCreditDate != null">
+        NET_CREDIT_DATE = #{record.netCreditDate,jdbcType=DATE},
+      </if>
+      <if test="record.netLoanPrincipalAmount != null">
+        NET_LOAN_PRINCIPAL_AMOUNT = #{record.netLoanPrincipalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.loanReleaseDate != null">
+        LOAN_RELEASE_DATE = #{record.loanReleaseDate,jdbcType=DATE},
+      </if>
+      <if test="record.timeToApplicationTime != null">
+        TIME_TO_APPLICATION_TIME = #{record.timeToApplicationTime,jdbcType=DECIMAL},
+      </if>
+      <if test="record.currentOverdueDays != null">
+        CURRENT_OVERDUE_DAYS = #{record.currentOverdueDays,jdbcType=DECIMAL},
+      </if>
+      <if test="record.histyOverdueTimes != null">
+        HISTY_OVERDUE_TIMES = #{record.histyOverdueTimes,jdbcType=DECIMAL},
+      </if>
+      <if test="record.histyOverdueNumber != null">
+        HISTY_OVERDUE_NUMBER = #{record.histyOverdueNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalLoanPeriod != null">
+        TOTAL_LOAN_PERIOD = #{record.totalLoanPeriod,jdbcType=DECIMAL},
+      </if>
+      <if test="record.loanRepaymentPeriod != null">
+        LOAN_REPAYMENT_PERIOD = #{record.loanRepaymentPeriod,jdbcType=DECIMAL},
+      </if>
+      <if test="record.loanApprovalModelScore != null">
+        LOAN_APPROVAL_MODEL_SCORE = #{record.loanApprovalModelScore,jdbcType=DECIMAL},
+      </if>
+      <if test="record.dpsitCustInd != null">
+        DPSIT_CUST_IND = #{record.dpsitCustInd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.chremCustInd != null">
+        CHREM_CUST_IND = #{record.chremCustInd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.collRepayInd != null">
+        COLL_REPAY_IND = #{record.collRepayInd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.callComplRate != null">
+        CALL_COMPL_RATE = #{record.callComplRate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.collMaxCallDura != null">
+        COLL_MAX_CALL_DURA = #{record.collMaxCallDura,jdbcType=VARCHAR},
+      </if>
+      <if test="record.themaxtimetocallDura != null">
+        THEMAXTIMETOCALL_DURA = #{record.themaxtimetocallDura,jdbcType=VARCHAR},
+      </if>
+      <if test="record.overdDateTotalPer != null">
+        OVERD_DATE_TOTAL_PER = #{record.overdDateTotalPer,jdbcType=DECIMAL},
+      </if>
+      <if test="record.curdatePayrollProvide != null">
+        CURDATE_PAYROLL_PROVIDE = #{record.curdatePayrollProvide,jdbcType=VARCHAR},
+      </if>
+      <if test="record.loanRatioMarch != null">
+        LOAN_RATIO_MARCH = #{record.loanRatioMarch,jdbcType=DECIMAL},
+      </if>
+      <if test="record.monthSalaryPayout != null">
+        MONTH_SALARY_PAYOUT = #{record.monthSalaryPayout,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lavgPayAppRatio != null">
+        LAVG_PAY_APP_RATIO = #{record.lavgPayAppRatio,jdbcType=DECIMAL},
+      </if>
+      <if test="record.baseLine != null">
+        BASE_LINE = #{record.baseLine,jdbcType=DECIMAL},
+      </if>
+      <if test="record.amountAssets != null">
+        AMOUNT_ASSETS = #{record.amountAssets,jdbcType=DECIMAL},
+      </if>
+      <if test="record.quotaAdjustment != null">
+        QUOTA_ADJUSTMENT = #{record.quotaAdjustment,jdbcType=DECIMAL},
+      </if>
+      <if test="record.salaryAmount != null">
+        SALARY_AMOUNT = #{record.salaryAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.quotaCoefficient != null">
+        QUOTA_COEFFICIENT = #{record.quotaCoefficient,jdbcType=DECIMAL},
+      </if>
+      <if test="record.creditLine != null">
+        CREDIT_LINE = #{record.creditLine,jdbcType=DECIMAL},
+      </if>
+      <if test="record.quota != null">
+        QUOTA = #{record.quota,jdbcType=DECIMAL},
+      </if>
+      <if test="record.rateInternetCust != null">
+        RATE_INTERNET_CUST = #{record.rateInternetCust,jdbcType=DECIMAL},
+      </if>
+      <if test="record.rateWhitelistCust != null">
+        RATE_WHITELIST_CUST = #{record.rateWhitelistCust,jdbcType=DECIMAL},
+      </if>
+      <if test="record.blacklistFlag != null">
+        BLACKLIST_FLAG = #{record.blacklistFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="record.disamountcreditlimitratio != null">
+        DISAMOUNTCREDITLIMITRATIO = #{record.disamountcreditlimitratio,jdbcType=DECIMAL},
+      </if>
+      <if test="record.dubilNumber != null">
+        DUBIL_NUMBER = #{record.dubilNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inputtime != null">
+        INPUTTIME = #{record.inputtime,jdbcType=DATE},
+      </if>
+      <if test="record.updatetime != null">
+        UPDATETIME = #{record.updatetime,jdbcType=DATE},
+      </if>
+      <if test="record.loanOvdueInd != null">
+        LOAN_OVDUE_IND = #{record.loanOvdueInd,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update HANLINACADEMICIAN
+    set UUID = #{record.uuid,jdbcType=VARCHAR},
+      CUST_ID = #{record.custId,jdbcType=VARCHAR},
+      CUST_NAME = #{record.custName,jdbcType=VARCHAR},
+      GENDER = #{record.gender,jdbcType=VARCHAR},
+      AGE = #{record.age,jdbcType=VARCHAR},
+      BIRTH = #{record.birth,jdbcType=DATE},
+      CERT_TYPE = #{record.certType,jdbcType=VARCHAR},
+      CERT_NUM = #{record.certNum,jdbcType=VARCHAR},
+      MOBILE_NUM = #{record.mobileNum,jdbcType=VARCHAR},
+      SERIAL_PAYROLL_MONTHS = #{record.serialPayrollMonths,jdbcType=VARCHAR},
+      CURR_PAYROLL_IND = #{record.currPayrollInd,jdbcType=DECIMAL},
+      WAGES_PAY_CUST_IND = #{record.wagesPayCustInd,jdbcType=VARCHAR},
+      HISTY_PAYROLL_IND = #{record.histyPayrollInd,jdbcType=VARCHAR},
+      CURR_PAYROLL_AMT = #{record.currPayrollAmt,jdbcType=DECIMAL},
+      LAST_SIXMON_AVG_PAYAMT = #{record.lastSixmonAvgPayamt,jdbcType=DECIMAL},
+      HOUSE_MORTG_LOAN_CUST_IND = #{record.houseMortgLoanCustInd,jdbcType=VARCHAR},
+      HOUSELOAN_OVDUE_IND = #{record.houseloanOvdueInd,jdbcType=VARCHAR},
+      HISTY_HOUSELOAN_CUST_IND = #{record.histyHouseloanCustInd,jdbcType=VARCHAR},
+      LEVELCLASSCODE = #{record.levelclasscode,jdbcType=VARCHAR},
+      NON_HOUSELOAN_IND = #{record.nonHouseloanInd,jdbcType=VARCHAR},
+      HISTY_NON_HOUSELOAN_IND = #{record.histyNonHouseloanInd,jdbcType=VARCHAR},
+      HOUSELOAN_PRIN_BAL = #{record.houseloanPrinBal,jdbcType=VARCHAR},
+      HOUSELOAN_MON_REPAYAMT = #{record.houseloanMonRepayamt,jdbcType=DECIMAL},
+      HOUSELOAN_NEXTYEAR_REPAYAMT = #{record.houseloanNextyearRepayamt,jdbcType=DECIMAL},
+      LAST_ONE_TM_PAYROLL_DT = #{record.lastOneTmPayrollDt,jdbcType=DATE},
+      PAYROLL_DT = #{record.payrollDt,jdbcType=DATE},
+      MON_AVG_PAYROLL_AMT = #{record.monAvgPayrollAmt,jdbcType=DECIMAL},
+      LAST_AVG_PAYROLL_AMT = #{record.lastAvgPayrollAmt,jdbcType=DECIMAL},
+      DAY_AVG_DPSIT = #{record.dayAvgDpsit,jdbcType=DECIMAL},
+      DAY_AVG_FIN = #{record.dayAvgFin,jdbcType=DECIMAL},
+      DAY_AVG_ASSET = #{record.dayAvgAsset,jdbcType=DECIMAL},
+      STATUS_NET_LOAN_REPAYMENT = #{record.statusNetLoanRepayment,jdbcType=VARCHAR},
+      THIRD_CUSTODY_SIGN_IND = #{record.thirdCustodySignInd,jdbcType=VARCHAR},
+      NET_CREDIT_CREDIT_LINE = #{record.netCreditCreditLine,jdbcType=DECIMAL},
+      NET_CREDIT_DATE = #{record.netCreditDate,jdbcType=DATE},
+      NET_LOAN_PRINCIPAL_AMOUNT = #{record.netLoanPrincipalAmount,jdbcType=DECIMAL},
+      LOAN_RELEASE_DATE = #{record.loanReleaseDate,jdbcType=DATE},
+      TIME_TO_APPLICATION_TIME = #{record.timeToApplicationTime,jdbcType=DECIMAL},
+      CURRENT_OVERDUE_DAYS = #{record.currentOverdueDays,jdbcType=DECIMAL},
+      HISTY_OVERDUE_TIMES = #{record.histyOverdueTimes,jdbcType=DECIMAL},
+      HISTY_OVERDUE_NUMBER = #{record.histyOverdueNumber,jdbcType=DECIMAL},
+      TOTAL_LOAN_PERIOD = #{record.totalLoanPeriod,jdbcType=DECIMAL},
+      LOAN_REPAYMENT_PERIOD = #{record.loanRepaymentPeriod,jdbcType=DECIMAL},
+      LOAN_APPROVAL_MODEL_SCORE = #{record.loanApprovalModelScore,jdbcType=DECIMAL},
+      DPSIT_CUST_IND = #{record.dpsitCustInd,jdbcType=VARCHAR},
+      CHREM_CUST_IND = #{record.chremCustInd,jdbcType=VARCHAR},
+      COLL_REPAY_IND = #{record.collRepayInd,jdbcType=VARCHAR},
+      CALL_COMPL_RATE = #{record.callComplRate,jdbcType=DECIMAL},
+      COLL_MAX_CALL_DURA = #{record.collMaxCallDura,jdbcType=VARCHAR},
+      THEMAXTIMETOCALL_DURA = #{record.themaxtimetocallDura,jdbcType=VARCHAR},
+      OVERD_DATE_TOTAL_PER = #{record.overdDateTotalPer,jdbcType=DECIMAL},
+      CURDATE_PAYROLL_PROVIDE = #{record.curdatePayrollProvide,jdbcType=VARCHAR},
+      LOAN_RATIO_MARCH = #{record.loanRatioMarch,jdbcType=DECIMAL},
+      MONTH_SALARY_PAYOUT = #{record.monthSalaryPayout,jdbcType=VARCHAR},
+      LAVG_PAY_APP_RATIO = #{record.lavgPayAppRatio,jdbcType=DECIMAL},
+      BASE_LINE = #{record.baseLine,jdbcType=DECIMAL},
+      AMOUNT_ASSETS = #{record.amountAssets,jdbcType=DECIMAL},
+      QUOTA_ADJUSTMENT = #{record.quotaAdjustment,jdbcType=DECIMAL},
+      SALARY_AMOUNT = #{record.salaryAmount,jdbcType=DECIMAL},
+      QUOTA_COEFFICIENT = #{record.quotaCoefficient,jdbcType=DECIMAL},
+      CREDIT_LINE = #{record.creditLine,jdbcType=DECIMAL},
+      QUOTA = #{record.quota,jdbcType=DECIMAL},
+      RATE_INTERNET_CUST = #{record.rateInternetCust,jdbcType=DECIMAL},
+      RATE_WHITELIST_CUST = #{record.rateWhitelistCust,jdbcType=DECIMAL},
+      BLACKLIST_FLAG = #{record.blacklistFlag,jdbcType=VARCHAR},
+      DISAMOUNTCREDITLIMITRATIO = #{record.disamountcreditlimitratio,jdbcType=DECIMAL},
+      DUBIL_NUMBER = #{record.dubilNumber,jdbcType=VARCHAR},
+      INPUTTIME = #{record.inputtime,jdbcType=DATE},
+      UPDATETIME = #{record.updatetime,jdbcType=DATE},
+      LOAN_OVDUE_IND = #{record.loanOvdueInd,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <select id="selectByUUID" parameterType="java.lang.String" resultType="java.util.HashMap">
+    select
+    <include refid="Base_Column_List" />
+    from HANLINACADEMICIAN
+    where uuid= #{uuid,jdbcType=VARCHAR}
+  </select>
+</mapper>

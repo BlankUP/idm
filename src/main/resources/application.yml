@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    active: dev
+#    active: dev release
+
+mybatis:
+    configuration:
+      log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

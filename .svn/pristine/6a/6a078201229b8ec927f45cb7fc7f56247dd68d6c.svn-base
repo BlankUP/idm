@@ -1,0 +1,35 @@
+package com.idm.app.idpconfig.modelRule.mapper;
+
+import com.idm.app.idpconfig.modelRule.model.ModelRuleInfo;
+import com.idm.app.idpconfig.proModelParaConfig.model.ParaBaseInfo;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+ 
+public interface ModelRuleMapper {
+
+    List<ModelRuleInfo> queryPatameteFieldsInfo(ModelRuleInfo errBaseInfo);
+
+    void addParameterFieldsInfo(ModelRuleInfo fieldsInfo) throws Exception;
+
+    void updateParameterFieldsInfo(ModelRuleInfo fieldsInfo);
+        
+    List<ModelRuleInfo> getParaList();
+ 
+	Integer countByName(@Param("parameterfields") String parameterfields, @Param("parameternamech") String parameternamech);
+
+	List<ModelRuleInfo> queryPatameteFieldsInfo();
+	
+	Integer checkIsUsed(@Param("fieldid") String fieldid);
+
+	List<ModelRuleInfo> selectByExample(ModelRuleInfo parainfo);
+
+	int selectCountByAll(ModelRuleInfo paraInfo);
+	
+	List<ModelRuleInfo> getParaBaseInfosByExcel(Map<String,List<String>> map);
+	
+	List<ModelRuleInfo> queryPatameteFieldsInfoY();
+
+	int addParaBaseInfoList(List<ModelRuleInfo> list);
+}

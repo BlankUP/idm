@@ -1,0 +1,193 @@
+@charset 'utf-8';
+
+//
+//
+// Typography
+// --------------------------------------------------
+
+
+// Headings 标题
+// -------------------------
+
+h1, h2, h3, h4, h5, h6 {
+  margin: (@baseLineHeight / 2) 0;
+  font-family: @headingsFontFamily;
+  font-weight: @headingsFontWeight;
+  line-height: @baseLineHeight;
+  color: @grayDarker;
+  text-rendering: optimizelegibility; // Fix the character spacing for headings
+}
+
+h5, h6 {
+  color: @grayDark;
+}
+
+h5{
+  text-transform: uppercase;
+}
+
+h1,h2,h6{
+  font-weight: normal;
+}
+
+h1 { line-height: @baseLineHeight * 2; } //40
+h2 { line-height: @baseLineHeight * 1.8; } //36
+h3 { line-height: @baseLineHeight * 1.6; } //32
+
+h1 { font-size: @baseFontSize * 1.75; } // ~24px
+h2 { font-size: @baseFontSize * 1.45; } // ~20
+h3 { font-size: @baseFontSize * 1.145;} // ~16
+h4 { font-size: @baseFontSize; }        // 14px
+h5 { font-size: @baseFontSize * 0.86; } // ~12px
+h6 { font-size: @baseFontSize * 0.86; } // ~12px
+
+h1 small { font-size: @baseFontSize * 1.345; } 
+h2 small { font-size: @baseFontSize * 1.15; } 
+h3 small { font-size: @baseFontSize; }
+h4 small { font-size: @baseFontSize; }
+
+
+// Body text
+// -------------------------
+
+p {
+  margin: 0 0 @baseLineHeight / 2;
+}
+.lead {
+  margin-bottom: @baseLineHeight;
+  font-size: @baseFontSize * 1.5;
+  font-weight: 200;
+  line-height: @baseLineHeight * 1.5;
+}
+
+//-------------------- text对齐
+.text-left           { text-align: left; }
+.text-right          { text-align: right; }
+.text-center         { text-align: center; }
+
+
+// Emphasis & misc
+// -------------------------
+
+// Ex: 14px base font * 85% = about 12px
+small   { font-size: 85%; color: @gray; }
+
+strong  { font-weight: @headingsFontWeight; }
+em      { font-style: italic; }
+cite    { font-style: normal; }
+
+// Utility classes 有颜色的字体
+.muted               { color: @grayLight; }  //文本为灰色
+a.muted:hover,
+a.muted:focus        { color: darken(@grayLight, 10%); }
+
+.text-warning        { color: @warningText; }  //文本为黄色
+a.text-warning:hover,
+a.text-warning:focus { color: darken(@warningText, 10%); }
+
+.text-error          { color: @errorText; }   //文本为红色
+a.text-error:hover,
+a.text-error:focus   { color: darken(@errorText, 10%); }
+
+.text-info           { color: @infoText; }   //文本为蓝色
+a.text-info:hover,
+a.text-info:focus    { color: darken(@infoText, 10%); }
+
+.text-success        { color: @successText; }   //文本为绿色
+a.text-success:hover,
+a.text-success:focus { color: darken(@successText, 10%); }
+
+// Blockquotes  
+blockquote {
+  padding: 10px 15px;
+  margin: 0 0 @baseLineHeight;
+  border-left: 5px solid @grayLighter;
+  color: @grayDark;
+  p {
+    margin-bottom: 0;
+    font-size: @baseFontSize * 1.25;
+    font-weight: 300;
+    line-height: 1.25;
+  }
+  small {
+    display: block;
+    line-height: @baseLineHeight;
+    color: @grayLight;
+    &:before {
+      content: '\2014 \00A0';
+    }
+  }
+
+  // Float right with text-align: right
+  &.pull-right {
+    padding-right: 15px;
+    padding-left: 0;
+    border-right: 5px solid @grayLighter;
+    border-left: 0;
+
+    p,
+    small {
+      text-align: right;
+    }
+    small {
+      &:before {
+        content: '';
+      }
+      &:after {
+        content: '\00A0 \2014';
+      }
+    }
+  }
+}
+
+
+
+
+// Lists
+// --------------------------------------------------
+
+// Unordered and Ordered lists
+ul, ol {
+  padding: 0;
+  margin: 0 0 @baseLineHeight / 2 25px;
+}
+ul ul,
+ul ol,
+ol ol,
+ol ul {
+  margin-bottom: 0;
+}
+li {
+  // line-height: @baseLineHeight;
+  line-height: 1.4em;
+}
+ul.none,
+ol.none{
+  margin: 0;
+  padding: 0;
+}
+
+// Remove default list styles
+ul.unstyled,
+ol.unstyled {
+  margin-left: 0;
+  list-style: none;
+}
+
+// Single-line list items 
+ul.inline,
+ol.inline {
+  margin-left: 0;
+  list-style: none;
+  *zoom:1; //ie6-7下实现一行显示序列
+}
+
+ul.inline li,
+ol.inline li {
+  display: inline-block;
+  padding-left: 5px;
+  padding-right: 5px;
+  *float: left; //ie6-7下实现一行显示序列
+}
+ul.mark li {list-style: disc;}
+ol.mark li {list-style: decimal;}

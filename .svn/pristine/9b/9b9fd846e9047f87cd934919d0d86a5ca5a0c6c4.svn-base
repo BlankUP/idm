@@ -1,0 +1,63 @@
+package com.idm.app.system.auth.service;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.idm.app.system.auth.mapper.OrganizationMapper;
+import com.idm.app.system.auth.model.Organization;
+import com.idm.app.system.auth.model.OrganizationExample;
+import com.idm.app.system.auth.model.Role;
+
+@Service
+public class OrganizationService {
+	@Resource
+    OrganizationMapper organizationMapper;
+	
+	public Integer selectCountByAll(String orgNo, String orgName){
+		OrganizationExample example = new OrganizationExample();
+		if(orgNo!=null && !"".equals(orgNo))	example.createCriteria().andOrgNoEqualsTo(orgNo);
+		if(orgName!=null && !"".equals(orgName)) example.createCriteria().andOrgNameEqualsTo(orgName);
+//		example.createCriteria().andStatusEqualsTo("1");
+		return organizationMapper.selectCountByAll(example);
+	}
+	
+	public List<Organization> selectByAll(int size, int page,  String orgNo, String orgName){
+		OrganizationExample example = new OrganizationExample();
+		if(orgNo!=null && !"".equals(orgNo))	example.createCriteria().andOrgNoEqualsTo(orgNo);
+		if(orgName!=null && !"".equals(orgName)) example.createCriteria().andOrgNameEqualsTo(orgName);
+//		example.createCriteria().andStatusEqualsTo("1");
+		example.setPage(page);
+		example.setSize(size);
+		example.setOrderByClause("updatetime");
+		
+		return organizationMapper.selectByAll(example);
+	}
+	
+	public Integer saveOrgInfo(Organization org) {
+		return organizationMapper.saveOrgInfo(org);
+	}
+
+	public Integer updateOrgInfo(Organization org) {
+		return organizationMapper.updateOrgInfo(org);
+	}
+	
+	public Integer deleteOrgInfo(String orgNo) {
+		return organizationMapper.deleteOrgInfo(orgNo);
+	}
+	
+	public Organization selectOrgInfoByorgNo(String orgNo) {
+		return organizationMapper.selectOrgInfoByorgNo(orgNo);
+	}
+	
+	public Organization selectOrgInfoByorgName(String orgName) {
+		return organizationMapper.selectOrgInfoByorgName(orgName);
+	}
+
+	public List<Organization> selectAll() {
+		// TODO Auto-generated method stub
+		return organizationMapper.selectAll();
+	}
+}

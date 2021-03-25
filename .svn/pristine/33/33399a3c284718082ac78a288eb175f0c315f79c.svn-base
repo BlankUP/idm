@@ -1,0 +1,107 @@
+package com.idm.app.idpconfig.customRequestAndResultAnalysis.model;
+
+import java.io.Serializable;
+
+/**
+ * <p>Description:评分卡信息实体类</p>
+ * @author：jiamh
+ * @createTime：2019年8月23日
+ * @version 1.0
+ */
+public class ScoreCardTotalScoreInfo implements Serializable {
+
+	private static final long serialVersionUID = 1932497237535859148L;
+	
+	private String queryseqNo;  //交易节点流水号
+	private String businessNo;  // 业务流水号
+	private String cifName;     //姓名
+	private String idType;      //证件类型
+	private String idNo;        //身份证号
+	private String modelCode;   //模型编码
+	private String modelName;   //模型名称
+	private String totalScore;  //总分
+	private String rkDate;        //接受请求日期
+	private String rkTime;        //接受请求时间
+	private int page;
+    private int size;
+    private int rnm;
+	
+    public String getQueryseqNo() {
+		return queryseqNo;
+	}
+	public void setQueryseqNo(String queryseqNo) {
+		this.queryseqNo = queryseqNo;
+	}
+	public String getBusinessNo() {
+		return businessNo;
+	}
+	public void setBusinessNo(String businessNo) {
+		this.businessNo = businessNo;
+	}
+	public String getCifName() {
+		return cifName;
+	}
+	public void setCifName(String cifName) {
+		this.cifName = cifName;
+	}
+	public String getIdType() {
+		return idType;
+	}
+	public void setIdType(String idType) {
+		this.idType = idType;
+	}
+	public String getIdNo() {
+		return idNo;
+	}
+	public void setIdNo(String idNo) {
+		this.idNo = idNo;
+	}
+	public String getModelCode() {
+		return modelCode;
+	}
+	public void setModelCode(String modelCode) {
+		this.modelCode = modelCode;
+	}
+	public String getModelName() {
+		return modelName;
+	}
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
+	}
+	public String getScore() {
+		return totalScore;
+	}
+	public void setTotalScore(String totalScore) {
+		this.totalScore = totalScore;
+	}
+	public String getRkDate() {
+		return rkDate;
+	}
+	public void setRkDate(String rkDate) {
+		this.rkDate = rkDate;
+	}
+	public String getRkTime() {
+		return rkTime;
+	}
+	public void setRkTime(String rkTime) {
+		this.rkTime = rkTime;
+	}
+	public int getPage() {
+		return page;
+	}
+	public void setPage(int page) {
+		this.page = page;
+	}
+	public int getSize() {
+		return size;
+	}
+	public void setSize(int size) {
+		this.size = size;
+	}
+	public int getRnm() {
+		return rnm;
+	}
+	public void setRnm(int rnm) {
+		this.rnm = rnm;
+	}
+}

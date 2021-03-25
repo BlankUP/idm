@@ -1,0 +1,25 @@
+.error .container {
+  width: 780px;
+}
+.error .lost_child_box {
+  background: #fff;
+  border-radius: 0;
+  box-shadow: none;
+  border: 1px solid #ccc;
+}
+.error .lost_child_box .ft {
+  background: #f0f0f0;
+}
+.error .lost_child_box .info_person p {
+  color: #999;
+  font-size: 12px;
+}
+.error * {
+  font-weight: normal !important;
+}
+.error .img-notfound {
+  width: 431px;
+  height: 40px;
+  margin: 0 auto;
+  background-size: contain;
+}

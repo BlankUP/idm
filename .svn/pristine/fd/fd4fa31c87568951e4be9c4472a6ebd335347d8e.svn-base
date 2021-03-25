@@ -1,0 +1,170 @@
+package com.idm.app.system.auth.controller;
+
+import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import net.sf.json.JSONObject;
+
+import com.idm.app.system.auth.model.Organization;
+import com.idm.app.system.auth.model.Role;
+import com.idm.app.system.auth.service.OrganizationService;
+import com.idm.app.system.login.model.IDMUser;
+import com.idm.app.system.loginfo.model.SysLog;
+import com.idm.common.util.ResByPageVo;
+
+/**
+ * 
+ *<p>Title: OrganizationController</p>  
+ * @Description: 机构管理
+ * @author HDQ
+ * @date 2019年3月20日
+ * @version  1.0
+ *
+ */
+@Controller
+public class OrganizationController {
+	static final Logger logger = Logger.getLogger(OrganizationController.class);
+	static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	
+	@Autowired
+	public OrganizationService organizationService;
+
+	@RequestMapping("/organization")
+    public String department(){
+
+        return "organization/orgPage";
+    }
+
+    /**
+     * 
+     * @Description: 查询
+     * @param request
+     * @return
+     */
+	@RequestMapping("/org_service")
+	@ResponseBody
+	@SysLog(operate="查询",module="机构管理")
+    public Object organizationView(HttpServletRequest request){
+		ResByPageVo resByPageVo = null;
+		String orgNo = request.getParameter("orgNo");
+		String orgName = request.getParameter("orgName");
+		String init = request.getParameter("init");
+	
+		try {
+			if(orgName!=null&&!"".equals(orgName)) {
+				orgName = java.net.URLDecoder.decode(orgName, "UTF-8");
+			}
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		try {
+			if ("true".equals(init)) {
+			} else if (!"true".equals(init)) {
+				int page =Integer.parseInt(request.getParameter("page"));
+				int size = Integer.parseInt(request.getParameter("rows"));
+				resByPageVo = new ResByPageVo(size, page,organizationService.selectCountByAll(orgNo, orgName));
+				resByPageVo.setRows(organizationService.selectByAll(size, page, orgNo, orgName));
+			}
+		} catch (Exception e) {
+			logger.error("", e);
+		}
+		return JSONObject.fromObject(resByPageVo);
+    }
+	
+	
+    /**
+     * 
+     * @Description: 增加和修改
+     * @param request
+     * @return
+     */
+	@RequestMapping("/org_saveOrUpdate")
+	@ResponseBody
+	@SysLog(operate="增加或修改",module="机构管理")
+    public Object orgSaveOrUpdate(HttpServletRequest request, Organization organization){
+		IDMUser user = (IDMUser)request.getSession().getAttribute("user");
+		Integer result = 0;
+		
+		organization.setCreateUser(user.getUserId());
+		organization.setCreateTime(sdf.format(new Date()));
+		organization.setUpdateUser(user.getUserId());
+		organization.setUpdateTime(sdf.format(new Date()));
+		String option = request.getParameter("org_option");
+		if("add".equals(option)) {
+			result = organizationService.saveOrgInfo(organization);
+		}else if("modify".equals(option)) {
+			result = organizationService.updateOrgInfo(organization);
+		}
+		
+		if(result > 0){
+			return JSONObject.fromObject("{\"success\":true}");
+		}else {
+			return JSONObject.fromObject("{\"success\":false}");
+		}
+    }
+    /**
+     * 
+     * @Description: 删除
+     * @param request
+     * @return
+     */
+	@RequestMapping("/org_deleteOrgInfo")
+	@ResponseBody
+	@SysLog(operate="删除",module="机构管理")
+    public Object orgDeleteOrgInfo(HttpServletRequest request){
+		Integer result = 0;
+		
+		String orgNo = request.getParameter("orgNo");
+		result = organizationService.deleteOrgInfo(orgNo);
+		if(result > 0){
+			return JSONObject.fromObject("{\"success\":true}");
+		}else {
+			return JSONObject.fromObject("{\"success\":false}");
+		}
+    }
+	
+    /**
+     * 
+     * @Description: 机构编号重复校验
+     * @param request
+     * @return
+     */
+	@RequestMapping("/org_service_selectOrgInfoByorgNo")
+	@ResponseBody
+    public Object selectOrgInfoByorgNo(HttpServletRequest request){
+		String orgNo = request.getParameter("orgNo");
+		Organization o= organizationService.selectOrgInfoByorgNo(orgNo);
+		if(o!=null){
+			return JSONObject.fromObject("{\"success\":true}");
+		}
+		return JSONObject.fromObject("{\"success\":false}");
+    } 
+	
+    /**
+     * 
+     * @Description: 机构名称重复校验
+     * @param request
+     * @return
+     */
+	@RequestMapping("/org_service_selectOrgInfoByorgName")
+	@ResponseBody
+    public Object selectOrgInfoByorgName(HttpServletRequest request){
+		String orgName = request.getParameter("orgName");
+		Organization o= organizationService.selectOrgInfoByorgName(orgName);
+		if(o!=null){
+			return JSONObject.fromObject("{\"success\":true}");
+		}
+		return JSONObject.fromObject("{\"success\":false}");
+    } 
+}

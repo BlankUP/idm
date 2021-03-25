@@ -1,0 +1,18 @@
+package com.idm.app.idpconfig.mqiCountAnalysis.mapper;
+
+import java.util.List;
+
+import com.idm.app.idpconfig.mqiCountAnalysis.model.MqiIdpRequestInfo;
+
+
+
+
+public interface MqiIdpRequestInfoMapper {
+
+	int selectCountByAll(MqiIdpRequestInfo mqiIdpRequestInfo);
+
+	List<MqiIdpRequestInfo> queryIdpRequestInfo(MqiIdpRequestInfo mqiIdpRequestInfo);
+	
+	
+
+}

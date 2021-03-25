@@ -1,0 +1,155 @@
+package com.idm.app.system.csvprocess.controller;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.io.filefilter.OrFileFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Controller;
+
+import com.idm.app.system.auth.model.Organization;
+import com.idm.app.system.auth.service.OrganizationService;
+import com.idm.app.system.csvprocess.util.FTPUtils;
+import com.idm.common.util.DateUtil;
+import com.idm.common.util.UuidUtils;
+
+
+/**
+ *解析CSV文件,定时存入数据库
+ *<P>Title:</P>
+ *@Description:
+ *@author panling
+ *@date 2019年7月9日
+ *@version
+ */
+@Controller
+public class CSVController {
+
+	private static final Logger logger = LoggerFactory.getLogger(FTPUtils.class);
+	
+	@Value("${FTP_ADDRESS}")
+	private String server;
+    @Value("${FTP_PORT}")
+    private String port;
+    @Value("${FTP_USERNAME}")
+    private String username;
+    @Value("${FTP_PASSWORD}")
+    private String password;
+	@Value("${FTPPATH}")
+	private String ftppath;
+	@Value("${FILENAME}")
+	private String filename;
+	
+	@Autowired
+	private OrganizationService organizationService;
+	@Scheduled(cron="0 0 1 ? * ? ")
+	public void csv() {
+		
+		//先将数据库中机构状态更改
+				List<Organization> orgList = organizationService.selectAll();
+				if (orgList.size() != 0) {		
+					for (Organization organization : orgList) {
+						organization.setSTRUTS("1");
+						organizationService.saveOrgInfo(organization);
+					}
+				}
+				int port1 = Integer.parseInt(port);
+				//读文件，存库
+				FTPUtils ftpUtils = new FTPUtils();
+				InputStream in = ftpUtils.getInputStreamByName(server, port1, username, password, ftppath, filename);
+				logger.info("输入流对象"+in);
+				String str ="";
+				InputStreamReader reader = null;
+				BufferedReader br = null;
+				Organization org = null;
+//				List<Organization> orgs = null;
+//				OrganizationService organizationService = null;
+				try {
+//					organizationService = new OrganizationService();
+//					orgs = new ArrayList<>();
+					reader =  new InputStreamReader(in); // 建立一个输入流对象reader	
+					//转为字节流
+					br = new BufferedReader(reader);
+					while ((str = br.readLine())!=null) {
+						String[] str1 = str.split("\\|");
+						if (str1.length > 0) {
+							org = new Organization();
+							org.setDeptId(str1[0]);
+							org.setDeptName(str1[1]);
+							org.setBRANCH_SHORT(str1[2]);
+							org.setCHEQUE_ISSUING_BRANCH(str1[3]);
+							org.setINTERNAL_CLIENT(str1[4]);
+							org.setCOMPANY(str1[5]);
+							org.setCOUNTRY(str1[6]);
+							org.setSTATE(str1[7]);
+							org.setBASE_CCY(str1[8]);
+							org.setLOCAL_CCY(str1[9]);
+							org.setPROFIT_SEGMENT(str1[10]);
+							org.setHIERARCHY_CODE(Integer.valueOf(str1[11]));
+							org.setATTACHED_TO(str1[12]);
+							org.setTRAN_BR_IND(str1[13]);
+							org.setSUB_BRANCH_CODE(str1[14]);
+							org.setCNY_BUSINESS_UNIT(str1[15]);
+							org.setHKD_BUSINESS_UNIT(str1[16]);
+							org.setFX_ORGAN_CODE(str1[17]);
+							org.setIS_CHK_SEAL(str1[18]);
+							org.setSETTLE_LEVEL(Integer.valueOf(str1[19]));
+							org.setSETTLE_BRANCH(str1[20]);
+							org.setPAYMENT_BRANCH_FLAG(str1[21]);
+							org.setPAYMENT_BRANCH(str1[22]);
+							org.setSETTLE_GL_CODE(str1[23]);
+							org.setSETTLE_GL_SEQ(str1[24]);
+							org.setSETTLE_GL_CODE_UP(str1[25]);
+							org.setSETTLE_GL_SEQ_UP(Integer.valueOf(str1[26]));
+							org.setPAYMENT_ACCT_GL_CODE(str1[27]);
+							org.setPAYMENT_ACCT_GL_SEQ(Integer.valueOf(str1[28]));
+							org.setSETTLE_ACCT_OPEN_FALG(str1[29]);
+							org.setSETTLE_ACCT_CHECK_FUND(str1[30]);
+							org.setPAYMENT_ACCT_OPEN_FLAG(str1[31]);
+							org.setPBOC_FUND_CHECK_FALG(str1[32]);
+							org.setVB(str1[33]);
+							org.setVB_LEVEL(str1[34]);
+							org.setVB_CASH_SAVE(str1[35]);
+							org.setOPEN_MORE_FLAG(str1[36]);
+							org.setIS_FINANCIAL_ACCT(str1[37]);
+							org.setFINANCIAL_ACCT_CONTROL(str1[38]);
+							org.setCB_AUTH_AMT(Integer.valueOf(str1[39]));
+							org.setAREA_AUTH_AMT(Integer.valueOf(str1[40]));
+							org.setIS_USE_PAY_PWD(str1[41]);
+							org.setIS_CHK_SEAL_NEW(str1[42]);
+							org.setCHECK_SEAL_SWITCH(str1[43]);
+							org.setBRANCH_LEVEL(str1[44]);
+							org.setSTRUTS("0");
+							org.setCREATETIME(DateUtil.getNowDatetime());
+							org.setDEPTNO(UuidUtils.getRequestNo());
+//							orgs.add(org);
+						organizationService.saveOrgInfo(org);
+						}
+					}	
+//						organizationService.saveOrgList(orgs);
+
+					
+					br.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+	public static void main(String[] args) {
+//		CSVController csvController = new CSVController();
+//		List<Organization> csv = csvController.csv();
+//		System.out.println(csv);
+	
+		
+	
+	}
+}

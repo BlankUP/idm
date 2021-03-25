@@ -1,0 +1,20 @@
+package com.idm.app.idpconfig.mqiCountAnalysis.mapper;
+
+import java.util.List;
+
+import com.idm.app.idpconfig.mqiCountAnalysis.model.MqiResponseInfo;
+
+
+
+
+
+
+public interface MqiIdpResponseMapper {
+
+	int selectCountByAll(MqiResponseInfo mqiResponseInfo);
+
+	List<MqiResponseInfo> queryIdpResponseInfo(MqiResponseInfo mqiResponseInfo);
+	
+	
+
+}

@@ -1,0 +1,134 @@
+###################  项目启动端口  ###################
+#server:port: 8000
+
+spring:
+  datasource:
+    primary-datasource:
+      driver-class-name: oracle.jdbc.driver.OracleDriver
+      url: jdbc:oracle:thin:@10.10.86.182:1521/idpsit
+      username: zyb_user
+      password: zyb_user
+      filters: stat
+    api-datasource:
+      driver-class-name: oracle.jdbc.driver.OracleDriver
+      url: jdbc:oracle:thin:@10.10.86.182:1521/idpsit
+      username: zyb_user
+      password: zyb_user
+      filters: stat
+    rule-engine-datasource:
+      driver-class-name: oracle.jdbc.driver.OracleDriver
+      url: jdbc:oracle:thin:@10.10.86.182:1521/idpsit
+      username: zyb_user
+      password: zyb_user
+      filters: stat
+  thymeleaf:
+    cache: false
+    enabled: false
+  mvc:
+    static-path-pattern: /**
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+  http:
+    converters:
+      preferred-json-mapper: fastjson
+    multipart:
+      max-request-size: 100MB #最大请求大小
+      max-file-size: 100MB #最大文件大小
+
+#日志配置 
+logging:
+  config: classpath:log4j.properties
+
+#pagehelper分页插件配置
+pagehelper:
+  auto-runtime-dialect: true
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+  level:
+  com.idm.app.ruleengine.statisticanaly.custdimension.mapper: debug
+
+#登录权限拦截例外，默认使用英文逗号分隔开
+filter:
+  exinclude: /login*,/login/*,/public/**/*,/resources/**/*,/favicon.ico,/error*,/error/*,/api/pmp/notification*
+ 
+#决策服务系统URL
+IDP_URL: http://10.10.83.117:8080/ETP_DCS_SYS/requestModel
+#调用决策服务系统超时时间
+IDP_TIMEOUT: 120000
+#数据库连接地址
+jdbc_driver: oracle.jdbc.driver.OracleDriver
+jdbc_url: jdbc:oracle:thin:@10.10.86.182:1521/idpsit
+jdbc_username: zyb_user
+jdbc_password: zyb_user
+
+#FTP01服务器
+FTP01_IP: 10.10.86.180
+FTP01_PORT_NUMBER: 21
+VISIT01_USER_NAME: FTP
+VISIT01_PASS_WORD: abc123456.
+FTP01_PATH: D:/FTP01/download/EDM/adb/
+#adb版本管理目录
+FTP01_LOCALPATH: /home/fdprd/idm/download/adb/
+#FTP01_LOCALPATH: F:\\wls\\adb\\
+#adb热部署发布路径
+NAS_ADB_LOCALPATH: /webdatashare/adb/EDM_service_0.adb
+#NAS_ADB_LOCALPATH: F:\\wls\\EDM.adb
+
+#PMML文件路径
+PMML_FILE: /webdatashare/download/pmml
+#BOM基础文件路径
+BOM_BASE_FILE: /home/fdprd/idm/config/BOM/Application.xsd
+#BOM_BASE_FILE: resources\\Application.xsd
+#BOM生成文件路径
+BOM_FILE: /home/fdprd/idm/download/BOM
+#BOM_FILE: D:\\BOM
+#字段信息Excel模板路径
+moBanName: /home/fdprd/idm/fieldExcelMB/字段信息模板.xlsx
+#字段信息Excel模板名称
+excelFileName: 字段信息模板.xlsx
+#导入字段信息Excel文件路径
+excelFilepath: /home/fdprd/idm/fieldExcelImport
+#接口监控Excel生成路径
+implExcelPath: /home/fdprd/idm/ImplExcel/
+#异常监控Excel生成路径
+exceptionExcelPath: /home/fdprd/idm/ExceptionExcel/
+#接口平台同步数据源信息和字段信息的接口地址
+RDIP_MetaData_URL: http://10.10.94.23:7001/flow/dataflow/getMetaData
+#接口平台同步数据源信息和字段信息的用户名
+loginName: "00004"
+#测试调用决策服务URL
+TEST_URL: http://10.10.83.117:8080/ETP_DCS_SYS/requestModel
+#导入流程信息Excel文件路径
+flowExcelFilepath: /home/fdprd/idm/flowExcelImport
+#flowExcelFilepath: D:\\BOM
+#流程信息Excel模板路径
+flowMBName: /home/fdprd/idm/fieldExcelMB/流程模板.xlsx
+#flowMBName: D:\\BOM\\流程模板.xlsx
+#流程信息Excel模板名称
+excelFlowName: 流程模板.xlsx
+
+#模型接口URL
+MODEL_URL: http://10.10.86.225:8082/LoanPreSystem/jsonRequest
+
+#读取机构信息服务器信息
+FTP_ADDRESS: 10.10.86.149
+FTP_PORT: 21
+FTP_USERNAME: weblogic
+FTP_PASSWORD: weblogic
+#机构信息获取路径
+FTPPATH: /home/weblogic/forms/batchFile
+FILENAME: FM_BRANCH_TBL.CSV
+
+#热部署路径
+ETP_PROJECT_NAME: ETP_DCS_SYS
+RELOADADB_URL: ReLoadADB
+
+#线程监控路径
+THREADMONITOR_PROJECT_URL: ETP_DCS_SYS
+THREADMONITOR_REQUESTMAP_URL: ThreadMonitor
+
+#同步缓存
+DECISIONTESTJSON_PROJECT_URL: ETP_DCS_SYS
+CACHESYNCHRONIZE_REQUEST_URL: cacheSynchronize

@@ -1,0 +1,64 @@
+package com.idm.app.system.csvprocess.util;
+
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+
+import com.csvreader.CsvReader;
+import com.idm.app.idpconfig.adbVersionManage.util.AdbFileUtil;
+import com.idm.app.system.auth.model.Organization;
+
+/**
+ * 获取机构工具类
+ *<P>Title:</P>
+ *@Description:
+ *@author panling
+ *@date 2019年7月8日
+ *@version
+ */
+public class CSVUtils {
+
+	static final Logger logger = Logger.getLogger(CSVUtils.class);
+	
+	public static List<Organization> csv(String csvFilePath) {
+		Organization org = null;
+        //生成CsvReader对象，以|为分隔符，GBK编码方式
+        CsvReader r = null;
+        try {
+            List<Organization> orgs = new ArrayList<>();
+//            String csvFilePath = "C:\\Users\\86132\\Desktop\\FM_BRANCH_TBL.CSV";
+            r = new CsvReader(csvFilePath, '|', Charset.forName("UTF-8"));
+            //读取表头
+//          r.readHeaders();
+            //逐条读取记录，直至读完
+            while (r.readRecord()) {
+            	org = new Organization();
+                org.setOrgNo(r.get(0));
+                org.setOrgName(r.get(1));
+                orgs.add(org);
+            }
+            r.close();
+            return orgs;
+        } catch (Exception e) {
+            logger.info("批量导入csv异常!", e);
+            return null;
+        } finally {
+            r.close();
+        }
+    }
+ 
+    public static void main(String[] args) {
+//        List<Org> csv = csv();
+//       for (Org org : csv) {
+//		String orgNo = org.getOrgNo();
+//		String orgName = org.getOrgName();
+//		System.out.println(orgName);
+	}
+    
+
+	
+	
+}

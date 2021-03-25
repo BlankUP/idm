@@ -1,0 +1,72 @@
+package com.idm.app.system.auth.model;
+
+import java.io.Serializable;
+
+public class Organization implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
+	private String orgNo;
+	private String orgName;
+	private String orgDesc;
+	private String orgStatus;
+	private String orgAddr;
+	private String createTime;
+	private String updateTime;
+	private String createUser;
+	private String updateUser;
+
+	public String getOrgNo() {
+		return orgNo;
+	}
+	public void setOrgNo(String orgNo) {
+		this.orgNo = orgNo;
+	}
+	public String getOrgName() {
+		return orgName;
+	}
+	public void setOrgName(String orgName) {
+		this.orgName = orgName;
+	}
+	public String getOrgDesc() {
+		return orgDesc;
+	}
+	public void setOrgDesc(String orgDesc) {
+		this.orgDesc = orgDesc;
+	}
+	public String getOrgStatus() {
+		return orgStatus;
+	}
+	public void setOrgStatus(String orgStatus) {
+		this.orgStatus = orgStatus;
+	}
+	public String getOrgAddr() {
+		return orgAddr;
+	}
+	public void setOrgAddr(String orgAddr) {
+		this.orgAddr = orgAddr;
+	}
+	public String getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+	public String getUpdateTime() {
+		return updateTime;
+	}
+	public void setUpdateTime(String updateTime) {
+		this.updateTime = updateTime;
+	}
+	public String getCreateUser() {
+		return createUser;
+	}
+	public void setCreateUser(String createUser) {
+		this.createUser = createUser;
+	}
+	public String getUpdateUser() {
+		return updateUser;
+	}
+	public void setUpdateUser(String updateUser) {
+		this.updateUser = updateUser;
+	}
+}

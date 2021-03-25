@@ -1,0 +1,92 @@
+package com.idm.app.idpconfig.modelRule.service;
+
+import com.idm.app.idpconfig.modelRule.mapper.ModelRuleMapper;
+import com.idm.app.idpconfig.modelRule.model.ModelRuleInfo;
+import com.idm.app.idpconfig.proModelParaConfig.mapper.ParaInfoConfigMapper;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+* <p>Description: 模型规则信息配置类</p>  
+* <p>Company: </p>  
+* @author pl  
+* @date 2019年8月17日  
+* @version 1.0
+ */
+@Service
+public class ModelRuleService {
+
+    @Resource
+    private ModelRuleMapper modelRuleMapper;
+
+    public List<ModelRuleInfo> queryPatameteFieldsInfo(ModelRuleInfo modelRuleInfo)
+    {
+    	return modelRuleMapper.queryPatameteFieldsInfo(modelRuleInfo);
+    }
+
+    public void addParameterFieldsInfo(ModelRuleInfo fieldsInfo) throws Exception
+    {
+    	modelRuleMapper.addParameterFieldsInfo(fieldsInfo);
+    }
+
+    public void updateParameterFieldsInfo(ModelRuleInfo fieldsInfo)
+    {
+    	modelRuleMapper.updateParameterFieldsInfo(fieldsInfo);
+    }
+    
+    public List<ModelRuleInfo> getParaList()
+    {
+    	return modelRuleMapper.getParaList();
+    }
+
+	
+
+	public List<ModelRuleInfo> queryPatameteFieldsInfo(){
+		
+		return modelRuleMapper.queryPatameteFieldsInfo();
+	}
+
+	/**
+	 * @Description：根据字段名和字段中文名查询数据
+	 * @param parameterfields
+	 * @param parameternamechs
+	 * @return
+	 */
+	public List<ModelRuleInfo> queryPatameterFieldsInfoByExcel(Map<String,List<String>> map){
+		List<ModelRuleInfo>  list  = modelRuleMapper.getParaBaseInfosByExcel(map);
+		return list;
+	}
+	
+	/**
+	 * @Description：添加多笔数据
+	 * @param list
+	 * @throws Exception
+	 */
+	public int addParaBaseInfoList(List<ModelRuleInfo> list) throws Exception
+    {
+    	int number = modelRuleMapper.addParaBaseInfoList(list);
+    	return number;
+    }
+ 
+	
+
+	public int selectCountByAll(ModelRuleInfo paraInfo) {
+		
+		return modelRuleMapper.selectCountByAll(paraInfo);
+	}
+
+	
+	public List<ModelRuleInfo> queryPatameteFieldsInfoY() {
+		
+    	return modelRuleMapper.queryPatameteFieldsInfoY();
+	}
+	public List<ModelRuleInfo> queryPatameteFieldsInfoYR() {
+		
+		return modelRuleMapper.queryPatameteFieldsInfoY();
+	}
+
+}

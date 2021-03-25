@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.idpconfig.modelRule.mapper.InterfaceInvokMapper">
+  <select id="findModelToInter" resultType="com.idm.app.idpconfig.modelRule.model.InterfaceInvokInfo">
+	select * from mqi_interfaceinvok_info
+   </select>
+   
+  
+   
+</mapper>

@@ -1,0 +1,62 @@
+package com.idm.config.datasource;
+
+import com.alibaba.druid.pool.DruidDataSource;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.env.Environment;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+
+import javax.sql.DataSource;
+
+/**
+ * 主数据源(用于系统管理)
+ */
+@Configuration
+@MapperScan(basePackages = "com.idm.app.system.**.*.mapper", sqlSessionTemplateRef  = "primarySqlSessionTemplate")
+public class PrimaryDataSource {
+
+    @Autowired
+    Environment env;
+
+    @Bean(name = "primaryDatasource")
+    @ConfigurationProperties(prefix = "spring.datasource.primary-datasource") // application.yml中对应属性的前缀
+    @Primary
+    public DataSource primaryDatasource() {
+        DruidDataSource dataSource = new DruidDataSource();
+        dataSource.setUrl(env.getProperty("spring.datasource.primary-datasource.driver-class-name"));
+        dataSource.setDriverClassName(env.getProperty("spring.datasource.primary-datasource.url"));
+        dataSource.setUsername(env.getProperty("spring.datasource.primary-datasource.username"));
+        dataSource.setPassword(env.getProperty("spring.datasource.primary-datasource.password"));
+        return dataSource;
+    }
+
+    @Bean(name = "primarySqlSessionFactory")
+    @Primary
+    public SqlSessionFactory idmSqlSessionFactory(@Qualifier("primaryDatasource") DataSource dataSource) throws Exception {
+        SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
+        bean.setDataSource(dataSource);
+        //bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mybatis/mapper/idm/*.xml"));
+        return bean.getObject();
+    }
+
+    @Bean(name = "primaryTransactionManager")
+    @Primary
+    public DataSourceTransactionManager idmTransactionManager(@Qualifier("primaryDatasource") DataSource dataSource) {
+        return new DataSourceTransactionManager(dataSource);
+    }
+
+    @Bean(name = "primarySqlSessionTemplate")
+    @Primary
+    public SqlSessionTemplate idmSqlSessionTemplate(@Qualifier("primarySqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
+        return new SqlSessionTemplate(sqlSessionFactory);
+    }
+
+}

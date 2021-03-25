@@ -1,0 +1,141 @@
+body {
+	
+ 
+}
+.juecefuwu-font{
+	font-weight: 900;
+}
+ .juecefuwu{
+  float: left;
+ }
+.navbar {
+  margin-bottom: 20px;
+}
+
+.navbar-emp {
+	  background: url(../bootstrap/img/changtiao.png)no-repeat ;
+	width:120%;
+  min-height: 40px;
+  padding-right: 20px;
+  padding-left: 20px;
+  background-color: #FF4500;
+  background-image: linear-gradient(70deg,#082b68 0%, #02b7c0 100%);
+  background-repeat: repeat-x;
+  border: 1px solid #d4d4d4;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 1px 4px rgba(0,0,0,0.065);
+  -moz-box-shadow: 0 1px 4px rgba(0,0,0,0.065);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.065);
+}
+
+.navbar .nav>.active>a, .navbar .nav>.active>a:hover, .navbar .nav>.active>a:focus {
+  color: #FFF;
+  text-decoration: none;
+  background-color: #0080ff;
+  -webkit-box-shadow: inset 0 3px 8px rgba(0,0,0,0.125);
+  -moz-box-shadow: inset 0 3px 8px rgba(0,0,0,0.125);
+  box-shadow: inset 0 3px 8px rgba(0,0,0,0.125);
+}
+.navbar .brand {
+  display: block;
+  float: left;
+  padding: 10px 20px 10px;
+  margin-left: -20px;
+  font-size: 15px;
+  font-weight: 200;
+  color: #F5F5F5;
+}
+.navbar .nav>li>a {
+  float: none;
+  padding: 10px 15px 10px;
+  color: #FDFAFA;
+  text-decoration: none;
+  font-size: 10px;
+  font-weight: bold;
+  text-shadow: 0 0px 0 #000000;
+}
+.navbar .nav>li>a:hover { color:#62c3c4; }
+.navbar-link {
+  color: #FAF3F3;
+  font-weight: bold;
+}
+.navbar-text {
+margin-right:320px;
+  margin-bottom: 0;
+  line-height: 40px;
+  color: #F9F6F6;
+}
+
+
+.alert-info {
+  color: #0C0D0D;
+  background-color: #FFF;
+  border-color: #BDA49F;
+}
+
+.ui-jqgrid-view>.ui-jqgrid-titlebar {
+  height: 40px;
+  line-height: 24px;
+  color: #FFF;
+  background: rgb(41, 150, 88);
+  padding: 0;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+
+.btn-info {
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+  background: linear-gradient(0deg,rgba(13,130,255,1) 0%,rgba(97,173,255,1) 100%);
+  
+ 
+  
+  background-repeat: repeat-x;
+  
+  
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff5bc0de',endColorstr='#ff2f96b4',GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
+
+
+.hero-unit {
+	padding: 60px;
+	margin-bottom: 30px;
+	font-size: 16px;
+	font-weight: 200;
+	line-height: 30px;
+	color: inherit;
+	background-color: #ffffff;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+}
+
+input, textarea, .uneditable-input {
+width: 78%;
+}
+
+.alert {
+    padding: 8px 35px 20px 14px;
+    height: 29px;
+text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+background-color: #ffffff;
+border: 1px solid #ffffff;
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+border-radius: 4px;
+}
+
+/** *  @DO 校验的样式文件 *  @DATE 2010-11-25 *  @AUTHOR Frylan */ /*错误样式*/
+input.error {  border: 1px solid red; background-color: pink;}
+select.error {  border: 1px solid red; background-color: pink; }
+textarea.error {  border: 1px solid red; background-color: pink; }
+.error {color:red; }
+/*验证通过样式*/
+input.valid{  border:#09F solid 1px; }
+select.valid{  border:#09F solid 1px; }
+textarea.valid { border:#09F solid 1px;  }
+.valid {color:black; } 

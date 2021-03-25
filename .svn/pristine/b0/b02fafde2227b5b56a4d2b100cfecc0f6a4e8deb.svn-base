@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.idpconfig.countAnalysis.mapper.ScoreCardInfoMapper">
+
+	<select id="selectTotalScoreCountByAll" parameterType="com.idm.app.idpconfig.countAnalysis.model.ScoreCardTotalScoreInfo" resultType = "java.lang.Integer">
+		select count(*) from (
+		select distinct(a.businessno) businessno,a.serialno serialno,a.modelcode modelcode,a.cifname cifname,a.idno idno,a.queryseqno queryseqno from idp_request_info a,IDP_CREDITSCORE_DETAILS b
+ 		where a.businessno = b.businessno ) where 1=1 
+    	<if test="modelCode !=null and modelCode!='' ">
+	        and modelcode like '%'||#{modelCode}||'%'
+	    </if>
+	    <if test="serialNo!=null and serialNo!='' ">
+	        and serialno like '%'||#{serialNo}||'%'
+	    </if>
+	    <if test="businessNo!=null and businessNo!='' ">
+	        and businessno like '%'||#{businessNo}||'%'
+	    </if>
+	    <if test="cifName!=null and cifName!='' ">
+	        and cifname like '%'||#{cifName}||'%'
+	    </if>
+	   <if test="idNo!=null and idNo!='' ">
+	        and idno like '%'||#{idNo}||'%'
+	    </if>
+	</select>
+	
+	<select id="getScoreCardTotalScoreInfo" resultType="com.idm.app.idpconfig.countAnalysis.model.ScoreCardTotalScoreInfo">
+	select * from (select t1.*,rownum rnm from (
+	 select * from (
+   		 select a.serialno serialno, a.queryseqno queryseqno,a.businessno businessno,a.cifname cifname,a.idtype idtype,a.idno idno,a.deptid deptid,a.deptname deptname,
+    	a.productid productid,a.productname productname,b.modelcode modelcode,b.modelname modelname,b.totalscore totalscore,a.rkdate rkdate,a.rktime rktime
+     	 from (select serialno,queryseqno,businessno,cifname,idtype,idno,deptid,deptname,productid,productname,rkdate,rktime from idp_request_info) a, 
+      	(select businessno,modelcode,modelname,SUM(score) totalscore from IDP_CREDITSCORE_DETAILS group by businessno,modelcode,modelname) b 
+     	 where a.businessno = b.businessno 
+      	) where 1=1
+	    <if test="modelCode !=null and modelCode!='' ">
+	        and modelcode like '%'||#{modelCode}||'%'
+	    </if>
+	    <if test="serialNo !=null and serialNo !='' ">
+	        and serialno like '%'||#{serialNo}||'%'
+	    </if>
+	    <if test="businessNo!=null and businessNo!='' ">
+	        and businessno like '%'||#{businessNo}||'%'
+	    </if>
+	    <if test="cifName!=null and cifName!='' ">
+	        and cifname like '%'||#{cifName}||'%'
+	    </if>
+	    <if test="idNo!=null and idNo!='' ">
+	        and idno like '%'||#{idNo}||'%'
+	    </if>
+	    order by rkdate,rktime desc)t1
+	    
+	    <if test="page!= null and size!= null">
+		      where rownum &lt;= #{page}*#{size}
+		  </if>)
+	     <if test="page!= null and size!= null">
+     		 where rnm &gt;= (#{page}-1)*#{size} +1 
+    	 </if>
+	</select>
+	
+	<select id="selectCountByAll" parameterType="com.idm.app.idpconfig.countAnalysis.model.ScoreCardInfo" resultType = "java.lang.Integer">
+		select count(*) from (
+		select a.businessno businessno,a.modelcode modelcode,a.queryseqno queryseqno from idp_request_info a,IDP_CREDITSCORE_DETAILS b
+ 		where a.businessno = b.businessno ) where 1=1 
+    	<if test="modelCode !=null and modelCode!='' ">
+	        and modelcode like '%'||#{modelCode}||'%'
+	    </if>
+	    <if test="queryseqNo!=null and queryseqNo!='' ">
+	        and queryseqno like '%'||#{queryseqNo}||'%'
+	    </if>
+	    <if test="businessNo!=null and businessNo!='' ">
+	        and businessno like '%'||#{businessNo}||'%'
+	    </if>
+	</select>
+	
+	<select id="getScoreCardInfo" resultType="com.idm.app.idpconfig.countAnalysis.model.ScoreCardInfo">
+		select * from (
+		select a.queryseqno queryseqno,a.businessno businessno,a.cifname cifname,a.idtype idtype,a.idno idno,a.deptid deptid,
+		a.deptname deptname,a.productid productid,a.productname productname,b.modelcode modelcode,b.modelname modelname,b.score score,
+		b.filed filed,b.filedname filedname,b.filedvalue filedvalue,b.hitrange hitrange,a.rkdate rkdate,a.rktime rktime 
+ 		from (select queryseqno,businessno,cifname,idtype,idno,deptid,deptname,productid,productname,rkdate,rktime from idp_request_info) a, 
+   		(select businessno,modelcode,modelname,score,filed,filedname,filedvalue,hitrange from IDP_CREDITSCORE_DETAILS ) b 
+    	where a.businessno = b.businessno ) where 1=1
+	    <if test="modelCode !=null and modelCode!='' ">
+	        and modelcode like '%'||#{modelCode}||'%'
+	    </if>
+	    <if test="queryseqNo!=null and queryseqNo!='' ">
+	        and queryseqno like '%'||#{queryseqNo}||'%'
+	    </if>
+	    <if test="businessNo!=null and businessNo!='' ">
+	        and businessno like '%'||#{businessNo}||'%'
+	    </if>
+	    order by rkdate,rktime desc
+	</select>
+	
+</mapper>

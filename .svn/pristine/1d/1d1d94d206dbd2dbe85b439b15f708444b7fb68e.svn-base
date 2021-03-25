@@ -1,0 +1,27 @@
+.fli{
+	list-style-type: none;
+	size:20px;
+	height: 60px;
+	line-height: 60px;
+	font-size: 25px;
+	text-indent:2em;
+}
+.datalist{
+	height:60px;
+	line-height: 60px;
+	font-size: 30px;
+	background: #3CB371;
+	text-indent:2em;
+}
+.fli-a{
+	color: black;
+	
+}
+.fli-a:VISITED{
+	color: black;
+	text-decoration: none;
+}
+.fli-a:HOVER {
+		color: orange;
+	text-decoration: none;
+}

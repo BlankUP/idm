@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.system.serverconfig.mapper.ServerConfigMapper">
+    <select id="queryServerInfo" parameterType="com.idm.app.system.serverconfig.model.ServerInfo"
+    resultType="com.idm.app.system.serverconfig.model.ServerInfo">
+		select * from (select t1.*,rownum rnm from ( 
+		SELECT
+		serverid,NAME,IP,PORT,TYPE,F5URL,SERVERURL,REMARK,
+		STATUS,CREATETIME,CREATEUSER,UPDATETIME,UPDATEUSER
+		FROM idm_server_info where 1=1
+	        <if test="ip!=null and ip!='' ">
+	            AND ip = #{ip,jdbcType=VARCHAR}
+	        </if>
+	        <if test="name!=null and name!='' ">
+	            AND name like '%'||#{name}||'%'
+	        </if>
+	        <if test="status!=null and status!='' ">
+	            AND status = #{status}
+	        </if>
+		     order by createtime desc
+		   )t1
+		   <if test="page!= null and size!= null">
+	     	 where rownum &lt;= #{page}*#{size}
+	       </if>
+	     )
+		 <if test="page!= null and size!= null">
+		      where rnm &gt;= (#{page}-1)*#{size} +1 
+		 </if>
+    </select>
+    
+    <select id="queryServerConfig" parameterType="com.idm.app.system.serverconfig.model.ServerInfo"
+    resultType="com.idm.app.system.serverconfig.model.ServerInfo">
+		SELECT
+		serverid,NAME,IP,PORT,TYPE,F5URL,SERVERURL,REMARK,
+		STATUS,CREATETIME,CREATEUSER,UPDATETIME,UPDATEUSER
+		FROM idm_server_info where 1=1
+	        <if test="status!=null and status!='' ">
+	            AND status = #{status}
+	        </if>
+		   
+    </select>
+    
+    <select id="selectCountByAll" parameterType="com.idm.app.system.serverconfig.model.ServerInfo" resultType="java.lang.Integer">
+    	
+    	SELECT count(*) FROM idm_server_info where 1=1
+	        <if test="ip!=null and ip!='' ">
+	            AND ip = #{ip,jdbcType=VARCHAR}
+	        </if>
+	        <if test="name!=null and name!='' ">
+	            AND name like '%'||#{name}||'%'
+	        </if>
+	        <if test="status!=null and status!='' ">
+	            AND status = #{status}
+	        </if>
+    </select>
+    
+    <insert id="addServer" parameterType="com.idm.app.system.serverconfig.model.ServerInfo">
+        INSERT INTO idm_server_info(serverid,name,ip,port,type,f5url,serverurl,
+        	remark,status,createtime,createuser) 
+		VALUES (IDP_EVENT_CONFIG_SEQ.NEXTVAL, #{name,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, #{port,jdbcType=VARCHAR}
+		,#{type,jdbcType=VARCHAR},#{f5Url,jdbcType=VARCHAR}, #{serverUrl,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR}, 
+		#{status,jdbcType=VARCHAR},#{createTime,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR})
+    </insert>
+
+    <update id="updateServer" parameterType="com.idm.app.system.serverconfig.model.ServerInfo">
+        UPDATE idm_server_info SET NAME=#{name,jdbcType=VARCHAR},IP=#{ip,jdbcType=VARCHAR}, PORT=#{port,jdbcType=VARCHAR},TYPE=#{type,jdbcType=VARCHAR},
+        F5URL=#{f5Url,jdbcType=VARCHAR}, SERVERURL =#{serverUrl,jdbcType=VARCHAR},REMARK=#{remark,jdbcType=VARCHAR},STATUS=#{status,jdbcType=VARCHAR}
+        ,UPDATEUSER=#{updateUser,jdbcType=VARCHAR},UPDATETIME=#{updateTime,jdbcType=VARCHAR}
+        WHERE serverId=#{serverId,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="deleteServer">
+        DELETE FROM idm_server_info
+        WHERE serverId in
+        <foreach collection="list" open="(" close=")" separator="," item="serverId"
+                 index="i">
+            #{serverId}
+        </foreach>
+    </delete>
+    
+</mapper>

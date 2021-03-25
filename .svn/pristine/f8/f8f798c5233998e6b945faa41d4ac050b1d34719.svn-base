@@ -1,0 +1,219 @@
+var myChartCpu = echarts.init(document.getElementById('cpu'));
+var myChartMemory = echarts.init(document.getElementById('memory'));
+var cpuOption = {
+	title : {
+		text : "CPU监控走势图",
+		subtext : "",
+		x : "center",
+		textStyle : {
+			color : '#FA8B3A',
+			fontSize : 15
+		}
+	},
+	tooltip : {
+		trigger : "axis",
+		formatter : '{b}\n{c}%'
+	},
+	legend : {
+		data : [ "节点机" ],
+		y : "center",
+		x : "left",
+		orient : "vertical"
+	},
+	toolbox : {
+		show : true,
+		feature : {
+			dataView : {
+				readOnly : true
+			},
+			magicType : {
+				show : false,
+				type : [ "line" ]
+			},
+			saveAsImage : {
+				show : true
+			}
+		}
+	},
+	calculable : true,
+	xAxis : [ {
+		type : "category",
+		boundaryGap : false,
+		data : [ "00:00:00", "00:00:00", "00:00:00", "00:00:00", "00:00:00",
+				"00:00:00", "00:00:00" ],
+		nameTextStyle : {
+			fontSize : 12
+		}
+	} ],
+	yAxis : [ {
+		type : "value",
+		max : 100,
+        axisLabel : {
+            formatter: '{value}%'
+        }
+	} ],
+	series : [ {
+		name : "节点机",
+		type : "line",
+		smooth : true,
+		itemStyle : {
+			normal : {
+				lineStyle : {
+					width : 2
+				},
+				areaStyle : {
+					type : "default"
+				},
+                label: {
+                    show: true,
+                    formatter: '{b}\n{c}%'
+                }
+			}
+		},
+		data : [ 0, 0, 0, 0, 0, 0, 0 ],
+		smooth : true
+	} ],
+	grid : {
+		x : 127,
+		y : 65
+	},
+	backgroundColor : "rgb(248, 248, 248)"
+};
+var memoryOption = {
+	title : {
+		text : "节点机内存使用情况监测",
+		subtext : "",
+		x : "center",
+		textStyle : {
+			color : '#FA8B3A',
+			fontSize : 15
+		}
+	},
+	tooltip : {
+		formatter : "{a} <br/>{b} : {c}%"
+	},
+	toolbox : {
+		show : true,
+		feature : {
+			mark : {
+				show : false
+			},
+			restore : {
+				show : false
+			},
+			saveAsImage : {
+				show : true
+			}
+		}
+	},
+	series : [ {
+		name : '内存使用率',
+		center : [ '50%', '60%' ],
+		type : 'gauge',
+		splitNumber : 10, // 分割段数，默认为5
+		axisLine : { // 坐标轴线
+			lineStyle : { // 属性lineStyle控制线条样式
+				color : [ [ 0.2, '#228b22' ], [ 0.8, '#48b' ], [ 1, '#ff4500' ] ],
+				width : 8
+			}
+		},
+		axisTick : { // 坐标轴小标记
+			splitNumber : 10, // 每份split细分多少段
+			length : 12, // 属性length控制线长
+			lineStyle : { // 属性lineStyle控制线条样式
+				color : 'auto'
+			}
+		},
+		axisLabel : { // 坐标轴文本标签，详见axis.axisLabel
+			textStyle : { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+				color : 'auto'
+			}
+		},
+		splitLine : { // 分隔线
+			show : true, // 默认显示，属性show控制显示与否
+			length : 30, // 属性length控制线长
+			lineStyle : { // 属性lineStyle（详见lineStyle）控制线条样式
+				color : 'auto'
+			}
+		},
+		pointer : {
+			width : 5
+		},
+		title : {
+			show : true,
+			offsetCenter : [ 0, '25%' ], // x, y，单位px
+			textStyle : { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+				fontWeight : 'bolder'
+			}
+		},
+		detail : {
+			formatter : '{value}%',
+			textStyle : { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+				color : 'auto'
+			//fontWeight: 'bolder'
+			}
+		},
+		data : [ {
+			value : 0,
+			name : "节点机"
+		} ]
+	} ],
+	backgroundColor : "rgb(248, 248, 248)"
+};
+
+/*function cpuMemroyCallback(obj) {
+	var data = obj.data;
+	if (data.msg != undefined && data.msg != "") {
+		clearInterval(timeTicket);
+		return false;
+	}
+	//内存	
+	memoryOption.series[0].data[0].value = data.memory;
+	myChartMemory.setOption(memoryOption, true);
+	//cpu
+	var axisData = 15;//RTAUtil.format2HHMMSS(new Date());
+
+	// 动态数据接口 addData
+	myChartCpu.addData([ [ 0, // 系列索引
+	12, // 新增数据
+	false, // 新增数据是否从队列头部插入
+	false, // 是否增加队列长度，false则自定删除原有数据，队头插入删队尾，队尾插入删队头
+	axisData // 坐标轴标签
+	] ]);
+
+}*/
+
+$(function(){
+    myChartCpu.setOption(cpuOption);
+    loadData();
+    var monitor = self.setInterval("loadData()",5000);
+});
+
+function loadData(){
+    var cpuUsing1 = 0;
+    var cputiming1 = 0;
+    var memorytiming1 = 0;
+    $.ajax({
+        url : root + "/rta_service.do",
+        type : 'post',
+        dataType : 'json',
+        async : false,
+        error : function() {
+            console.log("get error!!!")
+        },
+        success : function(data) {
+            cpuUsing1 = data.cpuUsing;
+            cputiming1 = data.cputime;
+            memorytiming1 = data.memoryUsing;
+        }
+    });
+    memoryOption.series[0].data[0].value = memorytiming1;
+    myChartMemory.setOption(memoryOption, true);
+    myChartCpu.addData([ [ 0, // 系列索引
+        cpuUsing1, // 新增数据
+        false, // 新增数据是否从队列头部插入
+        false, // 是否增加队列长度，false则自定删除原有数据，队头插入删队尾，队尾插入删队头
+        cputiming1 // 坐标轴标签
+    ] ]);
+}
+

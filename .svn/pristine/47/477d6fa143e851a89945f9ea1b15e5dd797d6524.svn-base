@@ -1,0 +1,38 @@
+#log4j.rootLogger=DEBUG, console, errFile, logFile
+log4j.rootLogger=INFO, console, errFile, logFile
+#				CONSOLE				#
+log4j.appender.console=org.apache.log4j.ConsoleAppender
+log4j.appender.console.Target=System.out
+log4j.appender.console.layout=org.apache.log4j.PatternLayout
+log4j.appender.console.layout.ConversionPattern=%n%d %5p [%t] %-20c (%M\:%L) %m%n
+
+#				logFile				#
+log4j.appender.logFile=org.apache.log4j.RollingFileAppender
+log4j.appender.logFile.File=${catalina.home}/IDMlog/idm.log
+#log4j.appender.logFile.File=D:/logs/idm/idm.log
+log4j.appender.Append=true
+log4j.appender.logFile.MaxFileSize=100MB
+log4j.appender.logFile.MaxBackupIndex=10
+log4j.appender.logFile.Append = true
+log4j.appender.logFile.Threshold=INFO
+log4j.appender.logFile.layout=org.apache.log4j.PatternLayout
+log4j.appender.logFile.layout.ConversionPattern=%n%d %5p [%t] %-20c (%M\:%L) %m%n
+
+#				errFile				#
+log4j.appender.errFile=org.apache.log4j.RollingFileAppender
+log4j.appender.errFile.File=${catalina.home}/IDMlog/idm.error.log
+#log4j.appender.errFile.File=D:/logs/idm/idm.error.log
+log4j.appender.errFile.MaxFileSize=100MB
+log4j.appender.errFile.MaxBackupIndex=10
+log4j.appender.errFile.Append = true
+log4j.appender.errFile.Threshold=ERROR
+log4j.appender.errFile.layout=org.apache.log4j.PatternLayout
+log4j.appender.errFile.layout.ConversionPattern=%n%d %5p [%t] %-20c (%M\:%L) %n%m%n
+
+#				Druid				#
+log4j.logger.druid.sql=DEBUG
+log4j.logger.druid.sql.DataSource=debug
+log4j.logger.druid.sql.Connection=debug
+log4j.logger.druid.sql.Statement=debug
+log4j.logger.druid.sql.ResultSet=DEBUG
+log4j.logger.druid.sql.File=${catalina.home}/IDMlog/idm.error.log

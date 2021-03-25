@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.system.login.mapper.IDMUserMapper">
+  <resultMap id="BaseResultMap" type="com.idm.app.system.login.model.IDMUser">
+    <result column="USERID" jdbcType="VARCHAR" property="userId" />
+    <result column="USERNAME" jdbcType="VARCHAR" property="userName" />
+    <result column="USERPWD" jdbcType="VARCHAR" property="userPwd" />
+    <result column="PWDINITFLAG" jdbcType="VARCHAR" property="pwdInitFlag" />
+    <result column="USERSTATUS" jdbcType="VARCHAR" property="userStatus" />
+    <result column="LOGINTOKEN" jdbcType="VARCHAR" property="loginToken" />
+    <result column="TOKENFAILURETIME" jdbcType="DATE" property="tokenFailureTime" />
+    <result column="CREATETIME" jdbcType="VARCHAR" property="createTime" />
+    <result column="UPDATETIME" jdbcType="VARCHAR" property="updateTime" />
+    <result column="CREATEUSER" jdbcType="VARCHAR" property="createUser" />
+    <result column="UPDATEUSER" jdbcType="VARCHAR" property="updateUser" />
+    <result column="PWDUPDATETIME" jdbcType="DATE" property="pwdUpdateTime" />
+    <result column="ORGNO" jdbcType="VARCHAR" property="orgNo" />
+    <result column="LOGINNUM" jdbcType="INTEGER" property="loginNum" />
+    
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    USERID, USERNAME, USERPWD, PWDINITFLAG, USERSTATUS, LOGINTOKEN, TOKENFAILURETIME, 
+    CREATETIME, UPDATETIME, CREATEUSER, UPDATEUSER, PWDUPDATETIME, DEPNO,LOGINNUM
+  </sql>
+  <select id="selectByExample" parameterType="com.idm.app.system.login.model.IDMUserExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from IDM_USER_INFO
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.idm.app.system.login.model.IDMUserExample">
+    delete from IDM_USER_INFO
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.idm.app.system.login.model.IDMUser">
+    insert into IDM_USER_INFO (USERID, USERNAME, USERPWD, 
+      PWDINITFLAG, USERSTATUS, LOGINTOKEN, 
+      TOKENFAILURETIME, CREATETIME, UPDATETIME, 
+      CREATEUSER, UPDATEUSER, PWDUPDATETIME, 
+      DEPNO
+      )
+    values (#{userId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{userPwd,jdbcType=VARCHAR}, 
+      #{pwdInitFlag,jdbcType=VARCHAR}, #{userStatus,jdbcType=VARCHAR}, #{loginToken,jdbcType=VARCHAR}, 
+      #{tokenFailureTime,jdbcType=DATE}, #{createTime,jdbcType=DATE}, #{updateTime,jdbcType=DATE}, 
+      #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR}, #{pwdUpdateTime,jdbcType=DATE}, 
+      #{depNo,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.idm.app.system.login.model.IDMUser">
+    insert into IDM_USER_INFO
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        USERID,
+      </if>
+      <if test="userName != null">
+        USERNAME,
+      </if>
+      <if test="userPwd != null">
+        USERPWD,
+      </if>
+      <if test="pwdInitFlag != null">
+        PWDINITFLAG,
+      </if>
+      <if test="userStatus != null">
+        USERSTATUS,
+      </if>
+      <if test="loginToken != null">
+        LOGINTOKEN,
+      </if>
+      <if test="tokenFailureTime != null">
+        TOKENFAILURETIME,
+      </if>
+      <if test="createTime != null">
+        CREATETIME,
+      </if>
+      <if test="updateTime != null">
+        UPDATETIME,
+      </if>
+      <if test="createUser != null">
+        CREATEUSER,
+      </if>
+      <if test="updateUser != null">
+        UPDATEUSER,
+      </if>
+      <if test="pwdUpdateTime != null">
+        PWDUPDATETIME,
+      </if>
+      <if test="orgNo != null">
+        DEPNO,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPwd != null">
+        #{userPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="pwdInitFlag != null">
+        #{pwdInitFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="userStatus != null">
+        #{userStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="loginToken != null">
+        #{loginToken,jdbcType=VARCHAR},
+      </if>
+      <if test="tokenFailureTime != null">
+        #{tokenFailureTime,jdbcType=DATE},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=DATE},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=DATE},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="pwdUpdateTime != null">
+        #{pwdUpdateTime,jdbcType=DATE},
+      </if>
+      <if test="orgNo != null">
+        #{depNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.idm.app.system.login.model.IDMUserExample" resultType="java.lang.Long">
+    select count(*) from IDM_USER_INFO
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update IDM_USER_INFO
+    <set>
+      <if test="record.userId != null">
+        USERID = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userName != null">
+        USERNAME = #{record.userName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userPwd != null">
+        USERPWD = #{record.userPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pwdInitFlag != null">
+        PWDINITFLAG = #{record.pwdInitFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userStatus != null">
+        USERSTATUS = #{record.userStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.loginToken != null">
+        LOGINTOKEN = #{record.loginToken,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tokenFailureTime != null">
+        TOKENFAILURETIME = #{record.tokenFailureTime,jdbcType=DATE},
+      </if>
+      <if test="record.createTime != null">
+        CREATETIME = #{record.createTime,jdbcType=DATE},
+      </if>
+      <if test="record.updateTime != null">
+        UPDATETIME = #{record.updateTime,jdbcType=DATE},
+      </if>
+      <if test="record.createUser != null">
+        CREATEUSER = #{record.createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateUser != null">
+        UPDATEUSER = #{record.updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pwdUpdateTime != null">
+        PWDUPDATETIME = #{record.pwdUpdateTime,jdbcType=DATE},
+      </if>
+      <if test="record.orgNo != null">
+        DEPNO = #{record.depNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update IDM_USER_INFO
+    set USERID = #{record.userId,jdbcType=VARCHAR},
+      USERNAME = #{record.userName,jdbcType=VARCHAR},
+      USERPWD = #{record.userPwd,jdbcType=VARCHAR},
+      PWDINITFLAG = #{record.pwdInitFlag,jdbcType=VARCHAR},
+      USERSTATUS = #{record.userStatus,jdbcType=VARCHAR},
+      LOGINTOKEN = #{record.loginToken,jdbcType=VARCHAR},
+      TOKENFAILURETIME = #{record.tokenFailureTime,jdbcType=DATE},
+      CREATETIME = #{record.createTime,jdbcType=DATE},
+      UPDATETIME = #{record.updateTime,jdbcType=DATE},
+      CREATEUSER = #{record.createUser,jdbcType=VARCHAR},
+      UPDATEUSER = #{record.updateUser,jdbcType=VARCHAR},
+      PWDUPDATETIME = #{record.pwdUpdateTime,jdbcType=DATE},
+      DEPNO = #{record.depNo,jdbcType=VARCHAR},
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <!--selectLoginNum  -->
+  <select id="selectLoginNum" parameterType="java.lang.String" resultType="java.lang.Integer">
+  </select>
+  <!--updateUserStatus  -->
+  <update id="updateUserStatus" parameterType="com.idm.app.system.login.model.IDMUser">
+    update IDM_USER_INFO
+    set 
+      USERNAME = #{userName,jdbcType=VARCHAR},
+      USERPWD = #{userPwd,jdbcType=VARCHAR},
+      PWDINITFLAG = #{pwdInitFlag,jdbcType=VARCHAR},
+      USERSTATUS = #{userStatus,jdbcType=VARCHAR},
+      LOGINTOKEN = #{loginToken,jdbcType=VARCHAR},
+      TOKENFAILURETIME = #{tokenFailureTime,jdbcType=DATE},
+      CREATETIME = #{createTime,jdbcType=DATE},
+      UPDATETIME = #{updateTime,jdbcType=DATE},
+      CREATEUSER = #{createUser,jdbcType=VARCHAR},
+      UPDATEUSER = #{updateUser,jdbcType=VARCHAR},
+      PWDUPDATETIME = #{pwdUpdateTime,jdbcType=DATE},
+      DEPNO = #{depNo,jdbcType=VARCHAR},
+      LOGINNUM = #{loginNum,jdbcType=INTEGER}
+     where 
+      USERID = #{userId,jdbcType=VARCHAR}
+    
+  </update>
+</mapper>

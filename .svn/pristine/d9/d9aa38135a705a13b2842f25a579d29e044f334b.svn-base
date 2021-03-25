@@ -1,0 +1,43 @@
+package com.idm.common.http;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+
+/**  
+* <p>Title: HttpServer</p>  
+* @Description: http服务端
+* @author wangke  
+* @date 2019年2月19日
+* @version  1.0
+*/ 
+@Controller
+@RequestMapping("/api/pmp/notification")
+public class HttpServer {
+
+	 static Logger logger =Logger.getLogger(HttpServer.class);
+	@RequestMapping(method=RequestMethod.POST ,produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public Map<String,String> service (@RequestBody String jsonStr) {
+		logger.info("******接收到的请求数据:"+jsonStr);
+				      	JSONObject	object = new JSONObject();
+				      //已实际返回结果为准
+						Map<String,String> returnMap = new HashMap<String,String>();
+						returnMap.put("uuid", "888888888888");//以实际的传输uuid数据为准
+						returnMap.put("returnMsg", "SUCCESS");//值：SUCCESS、ERROR
+						return returnMap;
+		}
+	
+	
+}

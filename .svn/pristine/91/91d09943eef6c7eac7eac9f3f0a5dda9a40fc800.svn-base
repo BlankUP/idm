@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.system.exceptioninfo.mapper.ExceptionInfoMapper">
+<select id="queryErrBaseInfo" resultType="com.idm.app.system.exceptioninfo.model.ErrBaseInfo">
+    SELECT err_code errCode, reason_msg reasonMsg,solution_msg solutionMsg, err_msg errMsg
+    FROM mng_err_base_info WHERE 1=1
+    <if test="errCode!=null and errCode!='' ">
+        AND err_code=#{errCode}
+    </if>
+    <if test="reasonMsg!=null and reasonMsg!='' ">
+        AND reason_msg like '%'||#{reasonMsg}||'%'
+    </if>
+    <if test="solutionMsg!=null and solutionMsg!='' ">
+       AND  solution_msg like '%'||#{solutionMsg}||'%'
+    </if>
+    <if test="errMsg!=null and errMsg!='' ">
+        AND err_msg like '%'||#{errMsg}||'%'
+    </if>
+</select>
+    <insert id="addErrBaseInfo" parameterType="com.idm.app.system.exceptioninfo.model.ErrBaseInfo">
+      INSERT INTO mng_err_base_info (err_code, reason_msg, solution_msg, err_msg)
+      VALUES (#{errCode}, #{reasonMsg}, #{solutionMsg}, #{errMsg})
+    </insert>
+    <update id="updateErrBaseInfo" parameterType="com.idm.app.system.exceptioninfo.model.ErrBaseInfo">
+        UPDATE mng_err_base_info SET reason_msg=#{reasonMsg}, solution_msg=#{solutionMsg},
+        err_msg=#{errMsg} WHERE err_code=#{errCode}
+    </update>
+</mapper>

@@ -1,0 +1,26 @@
+package com.idm.app.system.index.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+/**
+ * 首页
+ */
+@Controller
+public class IndexController {
+
+    @RequestMapping("/index")
+    public String index(){
+
+        return "index";
+    }
+
+    @ResponseBody
+    @RequestMapping("/test")
+    public Object test(){
+
+        return "success";
+    }
+
+}

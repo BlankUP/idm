@@ -1,0 +1,234 @@
+//
+// Glyphicons for Bootstrap
+//
+// Since icons are fonts, they can be placed anywhere text is placed and are
+// thus automatically sized to match the surrounding child. To use, create an
+// inline element with the appropriate classes, like so:
+//
+// <a href="#"><span class="fonticon fonticon-star"></span> Star</a>
+
+// Import the fonts
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('@{icon-font-path}@{icon-font-name}.eot');
+  src: url('@{icon-font-path}@{icon-font-name}.eot?#iefix') format('embedded-opentype'),
+       url('@{icon-font-path}@{icon-font-name}.woff') format('woff'),
+       url('@{icon-font-path}@{icon-font-name}.ttf') format('truetype'),
+       url('@{icon-font-path}@{icon-font-name}.svg#@{icon-font-svg-id}') format('svg');
+}
+
+// Catchall baseclass
+.fonticon {
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Individual icons
+.fonticon-asterisk               { &:before { content: "\2a"; } }
+.fonticon-plus                   { &:before { content: "\2b"; } }
+.fonticon-euro,
+.fonticon-eur                    { &:before { content: "\20ac"; } }
+.fonticon-minus                  { &:before { content: "\2212"; } }
+.fonticon-cloud                  { &:before { content: "\2601"; } }
+.fonticon-envelope               { &:before { content: "\2709"; } }
+.fonticon-pencil                 { &:before { content: "\270f"; } }
+.fonticon-glass                  { &:before { content: "\e001"; } }
+.fonticon-music                  { &:before { content: "\e002"; } }
+.fonticon-search                 { &:before { content: "\e003"; } }
+.fonticon-heart                  { &:before { content: "\e005"; } }
+.fonticon-star                   { &:before { content: "\e006"; } }
+.fonticon-star-empty             { &:before { content: "\e007"; } }
+.fonticon-user                   { &:before { content: "\e008"; } }
+.fonticon-film                   { &:before { content: "\e009"; } }
+.fonticon-th-large               { &:before { content: "\e010"; } }
+.fonticon-th                     { &:before { content: "\e011"; } }
+.fonticon-th-list                { &:before { content: "\e012"; } }
+.fonticon-ok                     { &:before { content: "\e013"; } }
+.fonticon-remove                 { &:before { content: "\e014"; } }
+.fonticon-zoom-in                { &:before { content: "\e015"; } }
+.fonticon-zoom-out               { &:before { content: "\e016"; } }
+.fonticon-off                    { &:before { content: "\e017"; } }
+.fonticon-signal                 { &:before { content: "\e018"; } }
+.fonticon-cog                    { &:before { content: "\e019"; } }
+.fonticon-trash                  { &:before { content: "\e020"; } }
+.fonticon-home                   { &:before { content: "\e021"; } }
+.fonticon-file                   { &:before { content: "\e022"; } }
+.fonticon-time                   { &:before { content: "\e023"; } }
+.fonticon-road                   { &:before { content: "\e024"; } }
+.fonticon-download-alt           { &:before { content: "\e025"; } }
+.fonticon-download               { &:before { content: "\e026"; } }
+.fonticon-upload                 { &:before { content: "\e027"; } }
+.fonticon-inbox                  { &:before { content: "\e028"; } }
+.fonticon-play-circle            { &:before { content: "\e029"; } }
+.fonticon-repeat                 { &:before { content: "\e030"; } }
+.fonticon-refresh                { &:before { content: "\e031"; } }
+.fonticon-list-alt               { &:before { content: "\e032"; } }
+.fonticon-lock                   { &:before { content: "\e033"; } }
+.fonticon-flag                   { &:before { content: "\e034"; } }
+.fonticon-headphones             { &:before { content: "\e035"; } }
+.fonticon-volume-off             { &:before { content: "\e036"; } }
+.fonticon-volume-down            { &:before { content: "\e037"; } }
+.fonticon-volume-up              { &:before { content: "\e038"; } }
+.fonticon-qrcode                 { &:before { content: "\e039"; } }
+.fonticon-barcode                { &:before { content: "\e040"; } }
+.fonticon-tag                    { &:before { content: "\e041"; } }
+.fonticon-tags                   { &:before { content: "\e042"; } }
+.fonticon-book                   { &:before { content: "\e043"; } }
+.fonticon-bookmark               { &:before { content: "\e044"; } }
+.fonticon-print                  { &:before { content: "\e045"; } }
+.fonticon-camera                 { &:before { content: "\e046"; } }
+.fonticon-font                   { &:before { content: "\e047"; } }
+.fonticon-bold                   { &:before { content: "\e048"; } }
+.fonticon-italic                 { &:before { content: "\e049"; } }
+.fonticon-text-height            { &:before { content: "\e050"; } }
+.fonticon-text-width             { &:before { content: "\e051"; } }
+.fonticon-align-left             { &:before { content: "\e052"; } }
+.fonticon-align-center           { &:before { content: "\e053"; } }
+.fonticon-align-right            { &:before { content: "\e054"; } }
+.fonticon-align-justify          { &:before { content: "\e055"; } }
+.fonticon-list                   { &:before { content: "\e056"; } }
+.fonticon-indent-left            { &:before { content: "\e057"; } }
+.fonticon-indent-right           { &:before { content: "\e058"; } }
+.fonticon-facetime-video         { &:before { content: "\e059"; } }
+.fonticon-picture                { &:before { content: "\e060"; } }
+.fonticon-map-marker             { &:before { content: "\e062"; } }
+.fonticon-adjust                 { &:before { content: "\e063"; } }
+.fonticon-tint                   { &:before { content: "\e064"; } }
+.fonticon-edit                   { &:before { content: "\e065"; } }
+.fonticon-share                  { &:before { content: "\e066"; } }
+.fonticon-check                  { &:before { content: "\e067"; } }
+.fonticon-move                   { &:before { content: "\e068"; } }
+.fonticon-step-backward          { &:before { content: "\e069"; } }
+.fonticon-fast-backward          { &:before { content: "\e070"; } }
+.fonticon-backward               { &:before { content: "\e071"; } }
+.fonticon-play                   { &:before { content: "\e072"; } }
+.fonticon-pause                  { &:before { content: "\e073"; } }
+.fonticon-stop                   { &:before { content: "\e074"; } }
+.fonticon-forward                { &:before { content: "\e075"; } }
+.fonticon-fast-forward           { &:before { content: "\e076"; } }
+.fonticon-step-forward           { &:before { content: "\e077"; } }
+.fonticon-eject                  { &:before { content: "\e078"; } }
+.fonticon-chevron-left           { &:before { content: "\e079"; } }
+.fonticon-chevron-right          { &:before { content: "\e080"; } }
+.fonticon-plus-sign              { &:before { content: "\e081"; } }
+.fonticon-minus-sign             { &:before { content: "\e082"; } }
+.fonticon-remove-sign            { &:before { content: "\e083"; } }
+.fonticon-ok-sign                { &:before { content: "\e084"; } }
+.fonticon-question-sign          { &:before { content: "\e085"; } }
+.fonticon-info-sign              { &:before { content: "\e086"; } }
+.fonticon-screenshot             { &:before { content: "\e087"; } }
+.fonticon-remove-circle          { &:before { content: "\e088"; } }
+.fonticon-ok-circle              { &:before { content: "\e089"; } }
+.fonticon-ban-circle             { &:before { content: "\e090"; } }
+.fonticon-arrow-left             { &:before { content: "\e091"; } }
+.fonticon-arrow-right            { &:before { content: "\e092"; } }
+.fonticon-arrow-up               { &:before { content: "\e093"; } }
+.fonticon-arrow-down             { &:before { content: "\e094"; } }
+.fonticon-share-alt              { &:before { content: "\e095"; } }
+.fonticon-resize-full            { &:before { content: "\e096"; } }
+.fonticon-resize-small           { &:before { content: "\e097"; } }
+.fonticon-exclamation-sign       { &:before { content: "\e101"; } }
+.fonticon-gift                   { &:before { content: "\e102"; } }
+.fonticon-leaf                   { &:before { content: "\e103"; } }
+.fonticon-fire                   { &:before { content: "\e104"; } }
+.fonticon-eye-open               { &:before { content: "\e105"; } }
+.fonticon-eye-close              { &:before { content: "\e106"; } }
+.fonticon-warning-sign           { &:before { content: "\e107"; } }
+.fonticon-plane                  { &:before { content: "\e108"; } }
+.fonticon-calendar               { &:before { content: "\e109"; } }
+.fonticon-random                 { &:before { content: "\e110"; } }
+.fonticon-comment                { &:before { content: "\e111"; } }
+.fonticon-magnet                 { &:before { content: "\e112"; } }
+.fonticon-chevron-up             { &:before { content: "\e113"; } }
+.fonticon-chevron-down           { &:before { content: "\e114"; } }
+.fonticon-retweet                { &:before { content: "\e115"; } }
+.fonticon-shopping-cart          { &:before { content: "\e116"; } }
+.fonticon-folder-close           { &:before { content: "\e117"; } }
+.fonticon-folder-open            { &:before { content: "\e118"; } }
+.fonticon-resize-vertical        { &:before { content: "\e119"; } }
+.fonticon-resize-horizontal      { &:before { content: "\e120"; } }
+.fonticon-hdd                    { &:before { content: "\e121"; } }
+.fonticon-bullhorn               { &:before { content: "\e122"; } }
+.fonticon-bell                   { &:before { content: "\e123"; } }
+.fonticon-certificate            { &:before { content: "\e124"; } }
+.fonticon-thumbs-up              { &:before { content: "\e125"; } }
+.fonticon-thumbs-down            { &:before { content: "\e126"; } }
+.fonticon-hand-right             { &:before { content: "\e127"; } }
+.fonticon-hand-left              { &:before { content: "\e128"; } }
+.fonticon-hand-up                { &:before { content: "\e129"; } }
+.fonticon-hand-down              { &:before { content: "\e130"; } }
+.fonticon-circle-arrow-right     { &:before { content: "\e131"; } }
+.fonticon-circle-arrow-left      { &:before { content: "\e132"; } }
+.fonticon-circle-arrow-up        { &:before { content: "\e133"; } }
+.fonticon-circle-arrow-down      { &:before { content: "\e134"; } }
+.fonticon-globe                  { &:before { content: "\e135"; } }
+.fonticon-wrench                 { &:before { content: "\e136"; } }
+.fonticon-tasks                  { &:before { content: "\e137"; } }
+.fonticon-filter                 { &:before { content: "\e138"; } }
+.fonticon-briefcase              { &:before { content: "\e139"; } }
+.fonticon-fullscreen             { &:before { content: "\e140"; } }
+.fonticon-dashboard              { &:before { content: "\e141"; } }
+.fonticon-paperclip              { &:before { content: "\e142"; } }
+.fonticon-heart-empty            { &:before { content: "\e143"; } }
+.fonticon-link                   { &:before { content: "\e144"; } }
+.fonticon-phone                  { &:before { content: "\e145"; } }
+.fonticon-pushpin                { &:before { content: "\e146"; } }
+.fonticon-usd                    { &:before { content: "\e148"; } }
+.fonticon-gbp                    { &:before { content: "\e149"; } }
+.fonticon-sort                   { &:before { content: "\e150"; } }
+.fonticon-sort-by-alphabet       { &:before { content: "\e151"; } }
+.fonticon-sort-by-alphabet-alt   { &:before { content: "\e152"; } }
+.fonticon-sort-by-order          { &:before { content: "\e153"; } }
+.fonticon-sort-by-order-alt      { &:before { content: "\e154"; } }
+.fonticon-sort-by-attributes     { &:before { content: "\e155"; } }
+.fonticon-sort-by-attributes-alt { &:before { content: "\e156"; } }
+.fonticon-unchecked              { &:before { content: "\e157"; } }
+.fonticon-expand                 { &:before { content: "\e158"; } }
+.fonticon-collapse-down          { &:before { content: "\e159"; } }
+.fonticon-collapse-up            { &:before { content: "\e160"; } }
+.fonticon-log-in                 { &:before { content: "\e161"; } }
+.fonticon-flash                  { &:before { content: "\e162"; } }
+.fonticon-log-out                { &:before { content: "\e163"; } }
+.fonticon-new-window             { &:before { content: "\e164"; } }
+.fonticon-record                 { &:before { content: "\e165"; } }
+.fonticon-save                   { &:before { content: "\e166"; } }
+.fonticon-open                   { &:before { content: "\e167"; } }
+.fonticon-saved                  { &:before { content: "\e168"; } }
+.fonticon-import                 { &:before { content: "\e169"; } }
+.fonticon-export                 { &:before { content: "\e170"; } }
+.fonticon-send                   { &:before { content: "\e171"; } }
+.fonticon-floppy-disk            { &:before { content: "\e172"; } }
+.fonticon-floppy-saved           { &:before { content: "\e173"; } }
+.fonticon-floppy-remove          { &:before { content: "\e174"; } }
+.fonticon-floppy-save            { &:before { content: "\e175"; } }
+.fonticon-floppy-open            { &:before { content: "\e176"; } }
+.fonticon-credit-card            { &:before { content: "\e177"; } }
+.fonticon-transfer               { &:before { content: "\e178"; } }
+.fonticon-cutlery                { &:before { content: "\e179"; } }
+.fonticon-header                 { &:before { content: "\e180"; } }
+.fonticon-compressed             { &:before { content: "\e181"; } }
+.fonticon-earphone               { &:before { content: "\e182"; } }
+.fonticon-phone-alt              { &:before { content: "\e183"; } }
+.fonticon-tower                  { &:before { content: "\e184"; } }
+.fonticon-stats                  { &:before { content: "\e185"; } }
+.fonticon-sd-video               { &:before { content: "\e186"; } }
+.fonticon-hd-video               { &:before { content: "\e187"; } }
+.fonticon-subtitles              { &:before { content: "\e188"; } }
+.fonticon-sound-stereo           { &:before { content: "\e189"; } }
+.fonticon-sound-dolby            { &:before { content: "\e190"; } }
+.fonticon-sound-5-1              { &:before { content: "\e191"; } }
+.fonticon-sound-6-1              { &:before { content: "\e192"; } }
+.fonticon-sound-7-1              { &:before { content: "\e193"; } }
+.fonticon-copyright-mark         { &:before { content: "\e194"; } }
+.fonticon-registration-mark      { &:before { content: "\e195"; } }
+.fonticon-cloud-download         { &:before { content: "\e197"; } }
+.fonticon-cloud-upload           { &:before { content: "\e198"; } }
+.fonticon-tree-conifer           { &:before { content: "\e199"; } }
+.fonticon-tree-deciduous         { &:before { content: "\e200"; } }

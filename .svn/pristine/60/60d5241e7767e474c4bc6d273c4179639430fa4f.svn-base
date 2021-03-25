@@ -1,0 +1,66 @@
+package com.idm.config.datasource;
+
+import com.alibaba.druid.pool.DruidDataSource;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.log4j.Logger;
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.env.Environment;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+
+import javax.sql.DataSource;
+
+/**
+ * 规则引擎数据源
+ */
+@Configuration
+@MapperScan(basePackages = "com.idm.app.ruleengine.**.*.mapper", sqlSessionTemplateRef  = "ruleEngineSqlSessionTemplate")
+public class RuleEngineDataSource {
+
+    private static Logger logger = Logger.getLogger(RuleEngineDataSource.class);
+
+    @Autowired
+    Environment env;
+
+    @Bean(name = "ruleEngineDatasource")
+    @ConfigurationProperties(prefix = "spring.datasource.rule-engine-datasource") // application.yml中对应属性的前缀
+    public DataSource ruleEngineDatasource() {
+        DruidDataSource dataSource = new DruidDataSource();
+        dataSource.setUrl(env.getProperty("spring.datasource.rule-engine-datasource.driver-class-name"));
+        dataSource.setDriverClassName(env.getProperty("spring.datasource.rule-engine-datasource.url"));
+        dataSource.setUsername(env.getProperty("spring.datasource.rule-engine-datasource.username"));
+        dataSource.setPassword(env.getProperty("spring.datasource.rule-engine-datasource.password"));
+        try{
+            dataSource.setFilters(env.getProperty("spring.datasource.rule-engine-datasource.filters"));
+        }catch (Exception e){
+            logger.error(e);
+        }
+        return dataSource;
+    }
+
+    @Bean(name = "ruleEngineSqlSessionFactory")
+    public SqlSessionFactory idmSqlSessionFactory(@Qualifier("ruleEngineDatasource") DataSource dataSource) throws Exception {
+        SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
+        bean.setDataSource(dataSource);
+        //bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mybatis/mapper/idm/*.xml"));
+        return bean.getObject();
+    }
+
+    @Bean(name = "ruleEngineTransactionManager")
+    public DataSourceTransactionManager idmTransactionManager(@Qualifier("ruleEngineDatasource") DataSource dataSource) {
+        return new DataSourceTransactionManager(dataSource);
+    }
+
+    @Bean(name = "ruleEngineSqlSessionTemplate")
+    public SqlSessionTemplate idmSqlSessionTemplate(@Qualifier("ruleEngineSqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
+        return new SqlSessionTemplate(sqlSessionFactory);
+    }
+
+}

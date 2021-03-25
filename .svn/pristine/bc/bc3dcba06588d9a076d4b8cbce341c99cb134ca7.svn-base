@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.system.control.mapper.ImplTransferMapper">
+	<resultMap id="BaseResultMap" type="com.idm.app.system.control.model.InterfaceInvok">
+		<result column="INVOKID" jdbcType="VARCHAR" property="invokID" />
+   	    <result column="BUSINESSNO" jdbcType="VARCHAR" property="businessNO" />
+   	    <result column="INTERFACECODE" jdbcType="VARCHAR" property="interfaceCode" />
+    	<result column="INTERFACENAME" jdbcType="VARCHAR" property="interfaceName" />
+    	<result column="ISSUCCESS" jdbcType="VARCHAR" property="isSuccess" />
+    	<result column="STARTTIME" jdbcType="VARCHAR" property="startTime" />
+    	<result column="ENDTIME" jdbcType="VARCHAR" property="endTime" />
+		<result column="ELAPSEDTIME" jdbcType="VARCHAR" property="elapsedTime" />
+		<result column="ERRORCODE" jdbcType="VARCHAR" property="errorCode" />
+		<result column="ERRORMSG" jdbcType="VARCHAR" property="errorMsg" />
+     </resultMap>
+     
+     <sql id ="searchStatus">
+     	<if test="searchStatus == '0'.toString() ">
+  		 	SUBSTR(STARTTIME, 1, 8)  
+	    </if>
+	    <if test="searchStatus == '1'.toString() ">
+		    SUBSTR(STARTTIME, 1, 6) 
+ 	 	</if>
+ 	 	<if test="searchStatus == '2'.toString() ">
+  		 	SUBSTR(STARTTIME, 1, 4) 
+ 	 	</if>
+ 	 	<if test="searchStatus == null ">
+  		 	SUBSTR(STARTTIME, 1, 8) 
+ 	 	</if>
+     </sql>
+     
+     <select id="selectByAll" parameterType="com.idm.app.system.control.model.InterfaceInvok"
+  		resultType="com.idm.app.system.control.model.InterfaceInvok">
+  		select *
+  		from (
+  			select s1.* ,rownum rnm 
+  			  from (
+  				select ROWNUM as implID, t1.* 
+  		 		  from (select <include refid="searchStatus"/> as implTime, INTERFACENAME as implName, count(i.INVOKID) as allUse, sum(i.ISSUCCESS) as sucUse, ROUND(sum(i.ISSUCCESS)/count(i.INVOKID)*100,2)||'%' as sucRate, max(ELAPSEDTIME) as maxTime, ROUND(avg(ELAPSEDTIME),2) as avgTime
+		 		 		  from IDP_INTERFACEINVOK_INFO i where 1=1
+		 				 <if test="interfaceName!=null and interfaceName!='' ">
+		  					and INTERFACENAME like '%'||#{interfaceName}||'%'
+		 				 </if>
+		 				 <if test="startTime!=null and startTime!='' ">
+		 				 	and SUBSTR(STARTTIME, 1, 8) &gt;= #{startTime}
+		 				 </if>
+		 				 <if test="endTime!=null and endTime!='' ">
+		 				 	and SUBSTR(ENDTIME, 1, 8) &lt;= #{endTime}
+		 				 </if>
+		 				 group by <include refid="searchStatus"/>, INTERFACENAME
+		 				 order by <include refid="searchStatus"/> ) t1) s1 
+		 			 <if test="page!= null and size!= null">
+       				where rownum &lt;= #{page}*#{size}
+    				</if>
+    		)
+    		<if test="page!= null and size!= null">
+       		 where rnm &gt;= (#{page}-1)*#{size} +1 
+    		</if>
+  	 </select>
+  	 
+  	  <select id="selectCountByAll" parameterType="com.idm.app.system.control.model.InterfaceInvok"
+  	  	resultType="java.lang.Integer">
+  	  		select count(t.INTERFACENAME)
+  	  	  	  from (select <include refid="searchStatus"/>, i.INTERFACENAME
+  	  				  from IDP_INTERFACEINVOK_INFO i where 1=1
+  	  					<if test="interfaceName!=null and interfaceName!='' ">
+		  				and INTERFACENAME like '%'||#{interfaceName}||'%'
+		 				</if>
+		 				<if test="startTime!=null and startTime!='' ">
+		 				and SUBSTR(STARTTIME, 1, 8) &gt;= #{startTime}
+						</if>
+						<if test="endTime!=null and endTime!='' ">
+		 			 	and SUBSTR(ENDTIME, 1, 8) &lt;= #{endTime}
+		 				</if>
+		 				group by <include refid="searchStatus"/>, INTERFACENAME) t
+  	  </select>
+  	  
+  	  <select id="selectImplInfo" parameterType="com.idm.app.system.control.model.InterfaceInvok" 
+  	  	resultType="com.idm.app.system.control.model.InterfaceInvok">
+  	  	select *
+  		from (
+  	  		select s1.* ,rownum rnm 
+  		 	 from (
+  	  			select INTERFACENAME as interfaceName, case ISSUCCESS WHEN '1' then '成功' when '0' then '失败' end as isSuccess, 
+  	  			STARTTIME as startTime, ENDTIME as endTime, ELAPSEDTIME as elapsedTime, ERRORCODE as errorCode, ERRORMSG as errormsg
+  	  			  from IDP_INTERFACEINVOK_INFO 
+  	  			 where 1=1
+  	  			 <if test="implName!=null and implName!='' ">
+  	  			   and INTERFACENAME = #{implName}
+  	  			 </if>
+  	  			 <if test="implTime!=null and implTime!='' ">
+  	  			   and STARTTIME like #{implTime}||'%'
+  	  		     </if>
+  	  			 order by STARTTIME) s1 
+			 <if test="page!= null and size!= null">
+     		 where rownum &lt;= #{page}*#{size}
+    		</if>
+    		)
+    	<if test="page!= null and size!= null">
+       	where rnm &gt;= (#{page}-1)*#{size} +1 
+    	</if>
+  	  </select>
+  	  
+  	  <select id="selectCountImplInfo" parameterType="com.idm.app.system.control.model.InterfaceInvok"
+  	  	resultType="java.lang.Integer">
+  	  	select count(s1.INTERFACENAME) 
+  		 	 from (
+  	  			select INTERFACENAME, ISSUCCESS, STARTTIME, ENDTIME, ELAPSEDTIME
+  	  			  from IDP_INTERFACEINVOK_INFO 
+  	  			 where 1=1
+  	  			 <if test="implName!=null and implName!='' ">
+  	  			   and INTERFACENAME = #{implName}
+  	  			 </if>
+  	  			 <if test="implTime!=null and implTime!='' ">
+  	  			   and STARTTIME like #{implTime}||'%'
+  	  		     </if>
+  	  			 order by STARTTIME) s1 
+  	  </select>
+  	  
+  	  <select id="selectForExcel" parameterType="com.idm.app.system.control.model.InterfaceInvok"
+  	  	resultType="com.idm.app.system.control.model.InterfaceInvok">
+  	  	select ROWNUM as implID, t1.* 
+  		 		  from (select <include refid="searchStatus"/> as implTime, INTERFACENAME as implName, count(i.INVOKID) as allUse, sum(i.ISSUCCESS) as sucUse, ROUND(sum(i.ISSUCCESS)/count(i.INVOKID)*100,2)||'%' as sucRate, max(ELAPSEDTIME) as maxTime, ROUND(avg(ELAPSEDTIME),2) as avgTime
+		 		 		  from IDP_INTERFACEINVOK_INFO i where 1=1
+		 				 <if test="interfaceName!=null and interfaceName!='' ">
+		  					and INTERFACENAME like '%'||#{interfaceName}||'%'
+		 				 </if>
+		 				 <if test="startTime!=null and startTime!='' ">
+		 				 	and SUBSTR(STARTTIME, 1, 8) &gt;= #{startTime}
+		 				 </if>
+		 				 <if test="endTime!=null and endTime!='' ">
+		 				 	and SUBSTR(ENDTIME, 1, 8) &lt;= #{endTime}
+		 				 </if>
+		 				 group by <include refid="searchStatus"/>, INTERFACENAME
+		 				 order by <include refid="searchStatus"/> ) t1
+  	  </select>
+</mapper>

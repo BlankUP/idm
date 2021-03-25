@@ -1,0 +1,32 @@
+.error{
+    .container{
+        width: 780px;
+    }
+//    text-align: center;
+    .lost_child_box{
+        background: #fff;
+        border-radius: 0;
+        box-shadow: none;
+        border: 1px solid #ccc;
+        .ft{
+            background: #f0f0f0;
+        }
+        .info_person p{
+            color: #999;
+            font-size: 12px;
+        }
+    }
+
+    *{
+        font-weight: normal !important;
+    }
+
+    .img-notfound{
+//        background: url('../images/404.jpg') no-repeat;
+        width: 431px;
+        height: 40px;
+        margin: 0 auto;
+        background-size: contain;
+    }
+
+}

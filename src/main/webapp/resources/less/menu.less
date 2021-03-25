@@ -1,0 +1,273 @@
+
+// Nav menu
+// --------------------------------------------
+
+.navbar {
+	.background(@navBarBackground ,@navOpacity);
+	border-radius: 5px;
+	border: @navBarBorder;
+	//box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+	color: @menuFontColor;
+	font-family: @menuFontFanily;
+	// position: relative; // 解决子菜单层级
+	z-index: 1000;
+	.clearfix();
+}
+
+
+//吸附
+.navbar-adsorb{
+	border-radius: 0px !important;
+	width: 100%;
+	border-left: none !important;
+	border-right: none !important;
+}
+//吸附在上方
+.navbar-adsorb-top{
+	.navbar-adsorb;
+	border-top: none !important;
+}
+//吸附在下方
+.navbar-adsorb-bottom{
+	.navbar-adsorb;
+	border-bottom: none !important;
+}
+
+//顶部固定
+.navbar-fixed-top{
+	.navbar-adsorb-top;
+	position: fixed;
+	top:0px;
+	left:0px;
+}
+
+.navprepend{
+	float: left;
+}
+.navappend{
+	float: right;
+	.submenu { left: 50px;}
+}
+
+.menu,.submenu{
+	padding: 0px;
+	margin: 0px;
+	.user-select(none);
+}
+.menu {
+	float: left;
+	.background(@menuBcakground ,@menuOpacity);
+	border: @menuBorder;
+	display:table;
+	font-family: @menuFontFanily;
+	font-size: @menuFontSize;
+	.header-input,
+	.menuitem {
+		float: left;
+		vertical-align: top;
+		padding: @menuitemPaddingTop @menuitemPaddingRight @menuitemPaddingBottom @menuitemPaddingLeft ;
+		// _padding:@menuitemPaddingTop+0.2 @menuitemPaddingRight @menuitemPaddingBottom+0.19 @menuitemPaddingLeft;
+		margin-right: 0;
+		border-right: @menuitemSplitBorder;
+		cursor: pointer;
+		position: relative;
+		width:auto;
+	}
+}
+
+.menu li{
+	list-style: none;
+}
+
+.menu .menuitem a {
+	color: @menuFontColor;
+	.inline-block;
+	margin: 0 0 0 2px;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.menu a,.menu a:hover{
+	text-decoration: none;
+	font-size: @menuFontSize;
+	color: @menuFontColor;
+}
+
+
+// 菜单中的箭头 ------------------------------
+.menuitem .expand {
+	margin-left: @baseGapMini * 2;
+	// #arrow > 
+	.arrow(180, 0.3em,@menuFontColor,@navBarBackground)
+
+}
+
+li.submenuitem .expand {
+	display: block !important;
+	position: absolute;
+	top: 0.7em;
+	right:5px;
+	// #arrow >
+	 .arrow(90, 0.3em, @submenuFontColor, @submenuBackground);
+}
+
+li.submenuitem .expand,li.submenu-active .submenuitem .expand,li.submenu-active .submenu-active .submenuitem .expand,li.submenu-active .submenu-active .submenu-active .submenuitem .expand{
+	_border-top-color: @submenuBackground;
+	_border-left-color: @submenuFontColor;
+	_border-right-color: @submenuBackground;
+	_border-bottom-color: @submenuBackground;
+}
+
+li.submenu-active .expand,li.submenu-active .submenu-active .expand,li.submenu-active .submenu-active .submenu-active .expand,li.submenu-active .submenu-active .submenu-active .submenu-active .expand,li.submenu-active .submenu-active .submenu-active .submenu-active .expand{
+
+	_border-top-color: @submenuActiveBackground;
+	_border-right-color: @submenuActiveBackground;
+	_border-bottom-color: @submenuActiveBackground;
+}
+
+/*
+* 激活时的样式
+*/
+.menu-active,.menu .menuitem:hover{
+	background: @menuActiveBackground;
+}
+
+.menu-active .expand{
+	_border-left-color: @menuActiveBackground;
+	_border-right-color: @menuActiveBackground;
+	_border-bottom-color: @menuActiveBackground;	
+}
+
+/*
+* 子菜单激活时的样式 第一层
+*/
+.submenu-active,li.submenuitem:hover{
+	background: @submenuActiveBackground !important;
+	&> a {
+		color: @submenuActiveFontColor;
+		display: block;
+	}
+	&> i.icon {
+		.icon-white;
+	}
+	&> b.expand {
+		border-left-color: @submenuActiveFontColor;
+		_border-right-color: @submenuActiveBackground;
+		_border-bottom-color: @submenuActiveBackground;
+		_border-top-color: @submenuActiveBackground;
+		
+	}
+}
+
+// navbar title ---------
+.text-logo {
+	font-family: @sansFontFamily;
+	font-size: 1.6692em; //~24px	
+	color: @white;
+	letter-spacing: -3px;
+	line-height: 1.6692em;
+	padding: 0 20px;
+	user-select:none;
+	-moz-user-select:none;
+	_padding-top: 5px;
+}
+
+// 系统图标
+.navbar { 
+	.logo {
+		height: 32px;
+		width: 32px;
+		margin-top: -8px;
+	}
+}
+//* 菜单图标  */
+.navbar .menu .icon {
+	line-height: 0px;
+	letter-spacing: 0px;
+	position: relative;
+	margin-right: -0.3em;
+	.icon-white;
+}
+
+.navbar .submenuitem .icon {
+	position: absolute;
+	left: @submenuitemPaddingLeft - 16;
+	top: 50%;
+	margin-top: -7px;
+
+	.icon-black;
+}
+
+.submenu a {
+	font-size: @submenuFontSize;
+	color: @submenuFontColor;
+	display: block;
+	&:hover {
+		color: @submenuActiveFontColor;
+	}
+}
+.menu-arrow-icon {
+	position: absolute;
+	right: 5px;
+	*right: 5px;
+	top: @menuitemPaddingTop;
+	*top: @menuitemPaddingTop + 2;
+}
+
+
+/* 子菜单，默认情况下隐藏 */
+.submenu {
+	display: none;
+	border: @submenuBorder;
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
+	.background(@submenuBackground,@menuOpacity);
+	position: absolute;
+	font-family: @submenuFontFanily;
+	font-size: @submenuFontSize;
+	left: 0px;
+	top: 100%;
+	box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+	z-index: 1000;
+}
+
+.submenu.pull-right {
+	left: auto;
+	right: 0px;
+}
+
+.submenu .submenuitem {
+	float: none;
+	padding: @submenuitemPaddingTop @submenuitemPaddingRight  @submenuitemPaddingBottom @submenuitemPaddingLeft;
+	position: relative;
+	display:block;
+	.background(@submenuBackground,@menuOpacity);
+	white-space: nowrap;
+	min-width: 90px;
+	width:auto;
+
+	a {
+		color: @submenuFontColor;
+		float: none;
+		text-decoration: none;
+		&:hover {
+		color: @submenuActiveFontColor;
+		}
+		
+	}
+
+}
+
+.submenu .divider{
+	background: #e5e5e5;
+	border-bottom: 1px solid #FFF;
+	height: 1px;
+	line-height: 1px;
+	margin: 0px;
+	margin: 2px 4px 2px 4px;
+	overflow: hidden;
+	padding: 0px !important;
+	list-style-position: outside;
+	list-style-type: none;
+	*margin-bottom: -10px;
+}

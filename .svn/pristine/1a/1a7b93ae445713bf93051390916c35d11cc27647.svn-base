@@ -1,0 +1,106 @@
+@main-color:            #EE6600;
+@brand-primary:         #428bca;
+@brand-success:         #5cb85c;
+@brand-info:            #5bc0de;
+@brand-warning:         #f0ad4e;
+@brand-danger:          #d9534f;
+
+
+@active-color:#e60;
+
+@link-color:#005ECC;
+
+//暗的边框色
+@dark-border-color:#d8d8d8;
+
+//一般的边框色
+@border-color:#eee;
+
+//亮一点的边框色
+@light-border-color:#f8f8f8;
+
+//主背景色
+@main-background:#f8f8f8;
+//@main-background:#fff1e0;
+//亮一点的背景色
+@light-background:#fafafa;
+//@light-background:rgb(255, 248, 242);
+//@light-background: #fff8f0;
+
+//内容的背景色（通常指页面上的主内容区域）
+@content-background:#fff;
+//@content-background:rgba(255,255,255,0.6);
+
+
+//后台管理背景
+@bp-background:#fff;
+
+
+//前景色
+@foreground-1:#e79a52;
+
+@foreground-2:#e79a52;
+
+@foreground-3:#58c5f0;
+
+//评级时显示的星形评分图标的颜色
+@rating-color:@active-color;
+
+//迷你字体大小
+@mini-font-size:12px;
+
+
+//默认字体大小
+@font-size:14px;
+
+//一般字体颜色
+
+@font-color: #333;
+
+@light-font-color:#888;
+
+
+//主页面宽度
+@i-page-width: 1020px;
+
+//横向内容的padding
+@i-content-padding-h: @padding-xlarge;
+//纵向内容的padding
+@i-content-padding-v: @padding-large;
+
+@padding-xxxlarge: 80px;
+@padding-xxlarge: 50px;
+@padding-xlarge: 30px;
+@padding-large: 20px;
+@padding-medium: 10px;
+@padding-small: 5px;
+@padding-mini: 2px;
+
+//
+@company-mini-logo-size:60px;
+//公司LOGO大小
+@company-logo-size: 100px;
+
+
+@icon-font-path:          "../fonts/";
+//** File name for all font files.
+@icon-font-name:          "glyphicons-halflings-regular";
+//** Element ID within SVG icon file.
+@icon-font-svg-id:        "glyphicons_halflingsregular";
+
+//页宽
+@page-width: 960px;
+
+//窄页宽
+@narrow-page-width: 790px;
+
+
+@dark-border-line:1px solid #d8d8d8;
+@border-line:1px solid #eee;
+@light-border-line:1px solid #f0f0f0;
+
+
+
+@input-radius: 5px;
+@btn-radius:5px;
+

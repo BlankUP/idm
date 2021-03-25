@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.idpconfig.mqiCountAnalysis.mapper.MqiRejectRuleModelMapper">
+  
+	
+	<select  id="selectCountByAll" parameterType="com.idm.app.idpconfig.mqiCountAnalysis.model.MqiIdpRuleResult"  resultType="java.lang.Integer" >
+
+	select count(1) from (
+      select
+        t3.serialno,
+        t3.cifname,
+        t3.cifno,
+        t3.idno,
+        t3.modelname,
+        t3.modelcode,
+        t3.idtype,
+        t3.rkDate,
+        t3.businessno,
+        t3.rule,
+         t3.refusalrulecode,
+       t3.initializationvalue,
+       t3.refusalrulecontent,
+       t3.jnlno,
+        ( select r.rulename from MQI_rule_result r where r.businessno =t3.businessNo and  r. ruledecisionresult is not null  ) rulename
+        from (
+          select
+          t1.initializationvalue,
+          t1.refusalrulecontent,
+          t1.refusalrulecode,
+          t2.jnlno,
+          t2.serialno,
+          t2.cifname,
+          t2.cifno,
+          t2.idno,
+          t1.modelname,
+          t1.modelcode,
+          t2.idtype,
+          t1.businessno,
+          sum(case when t1.ruledecisionresult is null then '0' else '1' end ) rule ,
+          t1.rkDate
+          from MQI_RULE_RESULT t1
+          left join MQI_Request_Info t2
+          on t1.businessno = t2.businessno where 1=1
+
+                
+      <if test="jnlNo !=null and jnlNo !='' ">
+	        and jnlNo like '%'||#{jnlNo}||'%'
+	    </if>
+	    
+	    <if test="businessNo !=null and businessNo !='' ">
+	        and t1.businessNo like '%'||#{businessNo}||'%'
+	    </if>
+        <if test="modelCode !=null and modelCode !='' ">
+	        and t1.modelCode like '%'||#{modelCode}||'%'
+	    </if>
+	    <if test="cifName !=null and cifName !='' ">
+	        and t2.cifName like '%'||#{cifName}||'%'
+	    </if>
+          group by
+            t1.refusalrulecode,
+          t1.refusalrulecontent,
+          t1.initializationvalue,
+          t2.jnlno,
+          t2.serialno,
+          t2.cifname,
+          t2.cifno,
+          t2.idno,
+          t1.modelname,
+          t1.modelcode,
+          t2.idtype,
+          t1.businessno,
+          t1.rkDate
+     
+          order by 
+          t1.rkDate desc
+        ) t3
+ 
+          )t1  
+	
+	</select>
+	
+		<select  id="queyRejectRuleModel" parameterType="com.idm.app.idpconfig.mqiCountAnalysis.model.MqiIdpRuleResult"
+        resultType="com.idm.app.idpconfig.mqiCountAnalysis.model.MqiIdpRuleResult" >
+ 	 select * from (select t6.*,rownum rnm from ( 
+ select
+        t3.serialno,
+        t3.cifname,
+        t3.cifno,
+        t3.idno,
+        t3.modelname,
+        t3.modelcode,
+        t3.idtype,
+        t3.rkDate,
+        t3.businessno,
+        t3.rule,
+         t3.refusalrulecode,
+       t3.initializationvalue,
+       t3.refusalrulecontent,
+       t3.jnlno,
+        ( select r.rulename from MQI_rule_result r where r.businessno =t3.businessNo and  r. ruledecisionresult is not null  ) rulename
+        from (
+          select
+          t1.initializationvalue,
+          t1.refusalrulecontent,
+          t1.refusalrulecode,
+          t2.jnlno,
+          t2.serialno,
+          t2.cifname,
+          t2.cifno,
+          t2.idno,
+          t1.modelname,
+          t1.modelcode,
+          t2.idtype,
+          t1.businessno,
+          sum(case when t1.ruledecisionresult is null then '0' else '1' end ) rule ,
+          t1.rkDate
+          from MQI_RULE_RESULT t1
+          left join MQI_Request_Info t2
+          on t1.businessno = t2.businessno where 1=1
+
+                
+     <if test="jnlNo !=null and jnlNo !='' ">
+	        and jnlNo like '%'||#{jnlNo}||'%'
+	    </if>
+	    
+	    <if test="businessNo !=null and businessNo !='' ">
+	        and t1.businessNo like '%'||#{businessNo}||'%'
+	    </if>
+        <if test="modelCode !=null and modelCode !='' ">
+	        and t1.modelCode like '%'||#{modelCode}||'%'
+	    </if>
+	    <if test="cifName !=null and cifName !='' ">
+	        and t2.cifName like '%'||#{cifName}||'%'
+	    </if>
+          group by
+            t1.refusalrulecode,
+          t1.refusalrulecontent,
+          t1.initializationvalue,
+          t2.jnlno,
+          t2.serialno,
+          t2.cifname,
+          t2.cifno,
+          t2.idno,
+          t1.modelname,
+          t1.modelcode,
+          t2.idtype,
+          t1.businessno,
+          t1.rkDate
+     
+          order by 
+          t1.rkDate desc
+        ) t3
+       
+        )t6 
+    <if test="page!= null and size!= null">
+      where rownum &lt;= #{page}*#{size}
+    </if>
+    
+     order by  t6.serialno desc,t6.businessno desc
+    )
+    <if test="page!= null and size!= null">
+      where rnm &gt;= (#{page}-1)*#{size} +1 
+    </if>
+      
+      
+
+	
+	
+	</select>
+		
+	<select  id="queyRuleResult" parameterType="com.idm.app.idpconfig.mqiCountAnalysis.model.MqiIdpRuleResult"
+        resultType="com.idm.app.idpconfig.mqiCountAnalysis.model.MqiIdpRuleResult" >
+	 select * from (select t1.*,rownum rnm from ( 
+    select  t.rulename, t.rulecode ,t.initializationvalue , t.ruleresult,t.rkDate from MQI_RULE_RESULT t where t.businessno=#{businessNo}
+        <if test="queryseqNo !=null and queryseqNo!='' ">
+	        and ve.queryseqNo like '%'||#{queryseqNo}||'%'
+	    </if>
+	    <if test="rkDate !=null and rkDate!='' ">
+	        and ve.rkDate like '%'||#{rkDate}||'%'
+	    </if>
+    
+     order by t.rulecode asc
+          )t1 
+    <if test="page!= null and size!= null">
+      where rownum &lt;= #{page}*#{size}
+    </if>
+    )
+    <if test="page!= null and size!= null">
+      where rnm &gt;= (#{page}-1)*#{size} +1 
+    </if>
+	
+	
+	</select>
+
+		<select  id="selectRuleResultCountByAll" parameterType="com.idm.app.idpconfig.mqiCountAnalysis.model.MqiIdpRuleResult"  resultType="java.lang.Integer" >
+	
+	    select count(1) from ( 
+         select  t.rulename, t.rulecode ,t.initializationvalue , t.ruleresult,t.rkDate, t.ruleresult from MQI_RULE_RESULT t where t.businessno=#{businessNo}
+         <if test="queryseqNo !=null and queryseqNo!='' ">
+	        and ve.queryseqNo like '%'||#{queryseqNo}||'%'
+	    </if>
+	    <if test="rkDate !=null and rkDate!='' ">
+	        and ve.rkDate like '%'||#{rkDate}||'%'
+	    </if>
+          )t1   
+	
+	</select> 
+			<select  id="doRuleResultquery" parameterType="com.idm.app.idpconfig.mqiCountAnalysis.model.MqiIdpRuleResult"  resultType="com.idm.app.idpconfig.mqiCountAnalysis.model.MqiIdpRuleResult" >
+	
+	select t.rulename from MQI_rule_result t where t.businessno =#{businessNo} and  t. ruledecisionresult is not null 
+	
+	</select> 
+	
+</mapper>

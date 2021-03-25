@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.idpconfig.countAnalysis.mapper.RejectRuleModelMapper">
+  
+	
+	<select  id="selectCountByAll" parameterType="com.idm.app.idpconfig.countAnalysis.model.IdpRuleResult"  resultType="java.lang.Integer" >
+
+	select count(1) from (
+      select
+      t2.serialno,
+      t2.queryseqNo,
+      t2.cifname,
+      t2.cifno,
+      t2.idno,
+      t1.modelname,
+      t1.modelcode,
+      t2.idtype,
+      t1.businessno,
+      sum(
+      case when
+      t1.ruledecisionresult is null then '0' else '1' end ) rule ,
+      t2.srcdate
+      from IDP_RULE_RESULT t1
+      left join Idp_Request_Info t2
+      on t1.businessno = t2.businessno where 1=1
+      
+      <if test="modelName !=null and modelName!='' ">
+	        and modelname like '%'||#{modelName}||'%'
+	    </if>
+	    
+	    <if test="srcDate !=null and srcDate!='' ">
+	        and srcdate like '%'||#{srcDate}||'%'
+	    </if>
+        <if test="serialNo !=null and serialNo !='' ">
+	        and serialno like '%'||#{serialNo}||'%'
+	    </if>
+	    <if test="cifName !=null and cifName !='' ">
+	        and cifname like '%'||#{cifName}||'%'
+	    </if>
+      
+      group by
+       t2.serialno,
+      t2.queryseqNo,
+      t2.cifname,
+      t2.cifno,
+      t2.idno,
+      t1.modelname,
+      t1.modelcode,
+      t2.idtype,
+      t1.businessno,
+      t2.srcdate
+ 
+          )t1  
+	
+	</select>
+	
+		<select  id="queyRejectRuleModel" parameterType="com.idm.app.idpconfig.countAnalysis.model.IdpRuleResult"
+        resultType="com.idm.app.idpconfig.countAnalysis.model.IdpRuleResult" >
+	 select * from (select t4.*,rownum rnm from ( 
+					 select
+		       t3.serialno,
+		    t3.queryseqNo,
+		    t3.cifname,
+		    t3.cifno,
+		    t3.idno,
+		    t3.modelname,
+		    t3.modelcode,
+		    t3.idtype,
+		    t3.srcdate,
+		    t3.businessno,
+		    t3.rule,
+		    (	select r.rulename from idp_rule_result r where r.businessno =t3.businessNo and  r. ruledecisionresult is not null  ) rulename
+		    from (
+		      select
+		      t2.serialno,
+		      t2.queryseqNo,
+		      t2.cifname,
+		      t2.cifno,
+		      t2.idno,
+		      t1.modelname,
+		      t1.modelcode,
+		      t2.idtype,
+		      t1.businessno,
+		      sum(
+		      case when
+		      t1.ruledecisionresult is null then '0' else '1' end ) rule ,
+		      t2.srcdate
+		      from IDP_RULE_RESULT t1
+		      left join Idp_Request_Info t2
+		      on t1.businessno = t2.businessno where 1=1
+		      
+		    <if test="modelName !=null and modelName!='' ">
+	      	  and modelname like '%'||#{modelName}||'%'
+		    </if>
+		    
+		    <if test="srcDate !=null and srcDate!='' ">
+		        and srcdate like '%'||#{srcDate}||'%'
+		    </if>
+	        <if test="serialNo !=null and serialNo !='' ">
+		        and serialno like '%'||#{serialNo}||'%'
+		    </if>
+		    <if test="cifName !=null and cifName !='' ">
+		        and cifname like '%'||#{cifName}||'%'
+		    </if>
+		      
+		      group by
+		       t2.serialno,
+		      t2.queryseqNo,
+		      t2.cifname,
+		      t2.cifno,
+		      t2.idno,
+		      t1.modelname,
+		      t1.modelcode,
+		      t2.idtype,
+		      t1.businessno,
+		      t2.srcdate
+		      
+		      order by t2.srcdate desc
+		    ) t3
+		   
+      
+          )t4 
+    <if test="page!= null and size!= null">
+      where rownum &lt;= #{page}*#{size}
+    </if>
+    
+    order by t4.srcdate desc
+    
+    )
+    <if test="page!= null and size!= null">
+      where rnm &gt;= (#{page}-1)*#{size} +1 
+    </if>
+	
+	
+	</select>
+		
+	<select  id="queyRuleResult" parameterType="com.idm.app.idpconfig.countAnalysis.model.IdpRuleResult"
+        resultType="com.idm.app.idpconfig.countAnalysis.model.IdpRuleResult" >
+	 select * from (select t1.*,rownum rnm from ( 
+    select  t.rulename, t.rulecode ,t.initializationvalue , t.ruleresult,t.srcdate from IDP_RULE_RESULT t where t.businessno=#{businessNo}
+        <if test="queryseqNo !=null and queryseqNo!='' ">
+	        and ve.queryseqNo like '%'||#{queryseqNo}||'%'
+	    </if>
+	    <if test="srcDate !=null and srcDate!='' ">
+	        and ve.srcDate like '%'||#{srcDate}||'%'
+	    </if>
+    
+     order by t.rulecode asc
+          )t1 
+    <if test="page!= null and size!= null">
+      where rownum &lt;= #{page}*#{size}
+    </if>
+    )
+    <if test="page!= null and size!= null">
+      where rnm &gt;= (#{page}-1)*#{size} +1 
+    </if>
+	
+	
+	</select>
+
+		<select  id="selectRuleResultCountByAll" parameterType="com.idm.app.idpconfig.countAnalysis.model.IdpRuleResult"  resultType="java.lang.Integer" >
+	
+	    select count(1) from ( 
+         select  t.rulename, t.rulecode ,t.initializationvalue , t.ruleresult,t.srcdate, t.ruleresult from IDP_RULE_RESULT t where t.businessno=#{businessNo}
+         <if test="queryseqNo !=null and queryseqNo!='' ">
+	        and ve.queryseqNo like '%'||#{queryseqNo}||'%'
+	    </if>
+	    <if test="srcDate !=null and srcDate!='' ">
+	        and ve.srcDate like '%'||#{srcDate}||'%'
+	    </if>
+          )t1   
+	
+	</select> 
+			<select  id="doRuleResultquery" parameterType="com.idm.app.idpconfig.countAnalysis.model.IdpRuleResult"  resultType="com.idm.app.idpconfig.countAnalysis.model.IdpRuleResult" >
+	
+	select t.rulename from idp_rule_result t where t.businessno =#{businessNo} and  t. ruledecisionresult is not null 
+	
+	</select> 
+	
+</mapper>

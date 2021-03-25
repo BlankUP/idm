@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.ruleengine.exceptioninfo.mapper.MqiExceptionInfoMapper">
+ <select id="queryIdpExceptionInfo" parameterType="com.idm.app.ruleengine.exceptioninfo.model.MqiExceptionInfo"
+          resultType="com.idm.app.ruleengine.exceptioninfo.model.MqiExceptionInfo">
+     select * from (select t1.*,rownum rnm from ( 
+     SELECT a.SRCDATE srcDate, a.SERIALNO serialNo,a.BUSINESSNO businessNo,a.ERRORCODE errorCode, 
+    a.ERRORMSG errorMsg,a.RERUNFLAG rerunFlag,a.EXCEPTIONTIME exceptionTime,
+    a.QUERYSYSTEMCODE querySystemCode,a.QUERYSYSTEMNAME querySystemName,a.RESPSYSTEMCODE respSystemCode,
+    a.RESPSYSTEMNAME respSystemName, b.MESSAGE requestPkg,a.EXSTACKTRACE exStackTrace, 
+    a.REBUSINESSDATE reBusinessDate,a.REBUSINESSTIME reBusinessTime,
+    a.REBUSINESSNO reBusinessNo,a.REBUSINESSOPERATOR reBusinessOperator,
+    case a.REBUSINESSRESULT  when '1' then '发起成功' when '2' then '发起失败' end reBusinessResult
+    FROM MQI_EXCEPTION_INFO a, MQI_REQUEST_NAMENODE b 
+    WHERE a.SERIALNO=b.SERIALNO
+    <if test="srcDate!=null and srcDate!='' ">
+          AND a.SRCDATE=#{srcDate}
+      </if>
+   <if test="serialNo!=null and serialNo!='' ">
+     AND a.SERIALNO like '%'||#{serialNo}||'%'
+   </if> 
+   order by a.srcdate desc,a.rebusinessresult desc 
+   )t1
+   <if test="page!= null and size!= null">
+      where rownum &lt;= #{page}*#{size}
+    </if>
+    )
+    <if test="page!= null and size!= null">
+      where rnm &gt;= (#{page}-1)*#{size} +1 
+    </if>
+ </select>
+ <select id="selectCountByAll" parameterType="com.idm.app.ruleengine.exceptioninfo.model.MqiExceptionInfo"  resultType="java.lang.Integer">
+   SELECT count(1)
+    FROM MQI_EXCEPTION_INFO a, 	MQI_REQUEST_NAMENODE b 
+    WHERE a.SERIALNO=b.SERIALNO
+    <if test="srcDate!=null and srcDate!='' ">
+          AND a.SRCDATE=#{srcDate}
+      </if>
+   <if test="serialNo!=null and serialNo!='' ">
+     AND a.SERIALNO like '%'||#{serialNo}||'%'
+   </if> 
+  </select>
+ 
+ 
+ <select id="queryIdpExceptionInfoBySeqno" parameterType="java.lang.String"
+  resultType="com.idm.app.ruleengine.exceptioninfo.model.MqiExceptionInfo" >
+   SELECT a.SRCDATE srcDate, a.SERIALNO serialNo,a.BUSINESSNO businessNo,a.ERRORCODE errorCode, 
+    a.ERRORMSG errorMsg,a.RERUNFLAG rerunFlag,a.EXCEPTIONTIME exceptionTime,
+    a.QUERYSYSTEMCODE querySystemCode,a.QUERYSYSTEMNAME querySystemName,a.RESPSYSTEMCODE respSystemCode,
+    a.RESPSYSTEMNAME respSystemName, b.MESSAGE requestPkg,a.EXSTACKTRACE exStackTrace,a.rebusinessresult rebusinessresult 
+    FROM MQI_EXCEPTION_INFO a, 	MQI_REQUEST_NAMENODE b 
+    WHERE a.SERIALNO=b.SERIALNO
+    AND a.SERIALNO=#{serialNo}
+ </select>
+ <select id="queryDataInvokInfo" parameterType="java.lang.String" 
+ 	resultType="com.idm.app.ruleengine.exceptioninfo.model.DataInterfaceInvokInfo">
+ 	SELECT businessNo, interfaceCode, interfaceName,
+ 	requestContext requestMsg, responseContext responseMsg,case isSuccess when '01' then '成功' when '02' then '失败' end isSuccess,
+ 	errorCode, errorMsg
+ 	FROM IDP_INTERFACEINVOK_INFO 
+ 	where 1=1
+ 	<if test="businessNo!=null and businessNo!=''">
+ 	 AND BUSINESSNO=#{businessNo}
+ 	</if>
+ </select>
+ <update id="updateBlazeData" parameterType="java.lang.String">
+ UPDATE  MQI_BLAZEMESSAGE SET REQUESTCONTEXT=#{invokeBlazeData} 
+ WHERE businessno=#{businessNo}
+ </update>
+ <!--更改修改人、时间等  -->
+ <update id="updateIdpExceptionInfo" parameterType="java.lang.String">
+	UPDATE MQI_EXCEPTION_INFO SET rebusinessdate=#{dateStr},
+	rebusinesstime=#{timeStr}, rebusinessoperator=#{userId},
+	rebusinessresult=#{reBusinessResult} 
+ 	WHERE 1=1 
+ 	<if test="serialNo!=null and serialNo!='' ">
+ 	AND serialNo=#{serialNo}
+ </if>
+ </update>
+
+ <select id="queryIdpExceptionInfoList" parameterType="com.idm.app.ruleengine.exceptioninfo.model.MqiExceptionInfo"
+          resultType="com.idm.app.ruleengine.exceptioninfo.model.MqiExceptionInfo">
+    SELECT a.SRCDATE srcDate, a.SERIALNO serialNo,a.BUSINESSNO businessNo,a.ERRORCODE errorCode, 
+    a.ERRORMSG errorMsg,a.RERUNFLAG rerunFlag,a.EXCEPTIONTIME exceptionTime,
+    a.QUERYSYSTEMCODE querySystemCode,a.QUERYSYSTEMNAME querySystemName,a.RESPSYSTEMCODE respSystemCode,
+    a.RESPSYSTEMNAME respSystemName, b.MESSAGE requestPkg,a.EXSTACKTRACE exStackTrace, 
+    a.REBUSINESSDATE reBusinessDate,a.REBUSINESSTIME reBusinessTime,
+    a.REBUSINESSNO reBusinessNo,a.REBUSINESSOPERATOR reBusinessOperator,
+    case a.REBUSINESSRESULT when '1' then '发起成功' when '2' then '发起失败' end reBusinessResult
+    FROM MQI_EXCEPTION_INFO a, MQI_REQUEST_NAMENODE b 
+    WHERE a.SERIALNO=b.SERIALNO
+    AND (a.REBUSINESSRESULT is null or a.REBUSINESSRESULT='2') and a.errorcode like 'IDP_LC%' or (a.errorcode like 'IDP_NB%')
+ </select>
+ <!--清除表中相关数据  -->
+ <update id="deleteComboInfo" parameterType="java.lang.String">
+ 	DELETE FROM mqi_request_namenode WHERE SERIALNO = #{serialNo}
+ </update>
+ <update id="deleteComboInfo1" parameterType="java.lang.String">
+ 	DELETE FROM mqi_request_info WHERE SERIALNO = #{serialNo}
+ </update>
+ <update id="deleteComboInfo2" parameterType="java.lang.String">
+ 	DELETE FROM mqi_blazemessage WHERE SERIALNO = #{serialNo}
+ </update>
+ <update id="deleteComboInfo3" parameterType="java.lang.String">
+ 	DELETE FROM mqi_creditscore_details WHERE SERIALNO = #{serialNo}
+ </update>
+ <update id="deleteComboInfo4" parameterType="java.lang.String">
+ 	DELETE FROM mqi_rule_result WHERE SERIALNO = #{serialNo}
+ </update>
+ <update id="deleteComboInfo5" parameterType="java.lang.String">
+ 	DELETE FROM mqi_scorerule_details WHERE SERIALNO = #{serialNo}
+ </update>
+ <update id="deleteComboInfo6" parameterType="java.lang.String">
+ 	DELETE FROM mqi_pmml_info WHERE SERIALNO = #{serialNo}
+ </update>
+ <update id="deleteComboInfo7" parameterType="java.lang.String">
+ 	DELETE FROM MQI_RESPONSE_INFO WHERE SERIALNO = #{serialNo}
+ </update>
+
+</mapper>

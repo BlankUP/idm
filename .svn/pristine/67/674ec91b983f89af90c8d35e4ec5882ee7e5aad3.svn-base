@@ -1,0 +1,124 @@
+package com.idm.app.system.loginfo.controller;
+
+import com.alibaba.fastjson.JSONObject;
+import com.idm.app.system.loginfo.model.SysLog;
+import com.idm.app.system.loginfo.model.RecordUserOperateLog;
+import com.idm.app.system.loginfo.service.RecordUserOperateLogService;
+import com.idm.common.exception.BusinessException;
+import com.idm.common.exception.BusinessExceptionUtil;
+
+import org.apache.log4j.Logger;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.Signature;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Method;
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+import com.idm.app.idpconfig.adbVersionManage.controller.AdbFileUploadController;
+import com.idm.app.system.login.model.IDMUser;
+
+/**
+ * @controller 用户操作日志：切面处理
+ * @author wengjiawei
+ * @Date 2019年2月22日
+ */
+@Aspect
+@Component
+public class RecordUserOperateLogController {
+	static final Logger logger = Logger.getLogger(RecordUserOperateLogController.class);
+	 @Autowired
+	 private RecordUserOperateLogService recordUserOperateLogService;
+	 
+	 
+	 /**
+	  * @Describe 定义切点 @Pointcut，在注解的位置切入代码
+	  */
+	 @Pointcut("@annotation(com.idm.app.system.loginfo.model.SysLog)")
+	 public void logPoinCut() {
+	 }
+	 
+	 /**
+	  * @Describe 切面 配置通知
+	  * @param joinPoint
+	  * @throws BusinessException
+	  */
+	 @AfterReturning("logPoinCut()")
+	 public void saveSysLog(JoinPoint joinPoint) throws BusinessException {	     
+	     RecordUserOperateLog recordUserOperateLog = new RecordUserOperateLog();
+
+	     logger.info("******日志记录开始******");
+	     //从切面织入点处通过反射机制获取织入点处的方法
+	     MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+	     //获取切入点所在的方法
+	     Method method = signature.getMethod();
+
+	     //获取具体操作和模块
+	     SysLog sysLog = method.getAnnotation(SysLog.class);
+	     if (sysLog != null) {
+	         String operate = sysLog.operate();
+	         String module = sysLog.module();
+	         recordUserOperateLog.setOperatType(operate);   //保存获取的操作
+	         recordUserOperateLog.setOperatModule(module);  //保存获取的模块
+	         logger.info("操作模块：" + module + "-----------操作类型：" + operate);
+	     }else{
+	    	 BusinessException exception = new BusinessException("00000","拦截日志信息失败");
+	    	 BusinessExceptionUtil.saveErrorInfo(exception);
+	    	 logger.error("获取操作类型和模块失败！具体内容请查看异常信息表！");
+	     }
+
+	     logger.info("******分析具体操作内容******");
+	     //获取请求参数，将参数所在的数组转换成json     
+	    Signature signature2 = joinPoint.getSignature();
+	  /*   Object[] arguments  = new Object[args.length];
+	     for (int i = 0; i < args.length; i++) {
+	         if (args[i] instanceof ServletRequest || args[i] instanceof ServletResponse || args[i] instanceof MultipartFile) {
+	        	 //ServletRequest、ServletResponse不能序列化，从入参里排除
+	             continue;
+	         }
+	         arguments[i] = args[i];
+	     }
+	     String paramter = "";
+	     if (arguments != null) {
+	    	 try {
+	    		 paramter = JSONObject.toJSONString(arguments);
+	         } catch (Exception e) {
+	             paramter = arguments.toString();
+	         }
+	     }*/	     
+	     recordUserOperateLog.setOperatData(JSONObject.toJSONString(signature2));
+	     
+	     //获取操作时间
+	     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	     Date operatDate = new Date();	     
+	     recordUserOperateLog.setOperatTime(sdf.format(operatDate));
+	     
+	     //获取入库时间
+	     recordUserOperateLog.setCreateTime(sdf.format(new Date()));	    
+	     
+	     //将时间戳设置为记录的uuid
+	     recordUserOperateLog.setId(String.valueOf(System.currentTimeMillis()));
+	    
+	     //获取用户名
+	     HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+	     IDMUser user = (IDMUser)request.getSession().getAttribute("user");
+	     recordUserOperateLog.setUserId(user.getUserId());	     
+	     
+	     //调用service保存recordUserOperateLog实体类到数据库
+	     recordUserOperateLogService.saveSysLogInfo(recordUserOperateLog);
+	     logger.info("******日志截取保存结束******");
+	}
+}

@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.apiservice.datasourceManage.onlineLoanDataManage.mapper.OLRequestParamMapper">
+  <resultMap id="BaseResultMap" type="com.idm.app.apiservice.datasourceManage.onlineLoanDataManage.model.OLRequestParam">
+    <result column="SERVER_CODE" jdbcType="VARCHAR" property="serverCode" />
+    <result column="QUERY_SEQ_NO" jdbcType="VARCHAR" property="querySeqNo" />
+    <result column="QUERY_SYSTEM_CODE" jdbcType="VARCHAR" property="querySystemCode" />
+    <result column="CUST_NO" jdbcType="VARCHAR" property="custNo" />
+    <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+    <result column="ID_TYPE" jdbcType="VARCHAR" property="idType" />
+    <result column="ID_NUMBER" jdbcType="VARCHAR" property="idNumber" />
+    <result column="PHONE_NO" jdbcType="VARCHAR" property="phoneNo" />
+    <result column="PRODUCT_CODE" jdbcType="VARCHAR" property="productCode" />
+    <result column="PRODUCT_NAME" jdbcType="VARCHAR" property="productName" />
+    <result column="AUTHORIZATION_CODE" jdbcType="VARCHAR" property="authorizationCode" />
+    <result column="CREATE_TIME" jdbcType="VARCHAR" property="createTime" />
+    <result column="LOCAL_SEQ_NO" jdbcType="VARCHAR" property="localSeqNo" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    SERVER_CODE, QUERY_SEQ_NO, QUERY_SYSTEM_CODE, CUST_NO, USER_NAME, ID_TYPE, ID_NUMBER, 
+    PHONE_NO, PRODUCT_CODE, PRODUCT_NAME, AUTHORIZATION_CODE, CREATE_TIME, LOCAL_SEQ_NO
+  </sql>
+  <select id="selectByExample" parameterType="com.idm.app.apiservice.datasourceManage.onlineLoanDataManage.model.OLRequestParamExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from V_OL_REQUEST_DATA
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.idm.app.apiservice.datasourceManage.onlineLoanDataManage.model.OLRequestParamExample">
+    delete from V_OL_REQUEST_DATA
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.idm.app.apiservice.datasourceManage.onlineLoanDataManage.model.OLRequestParam">
+    insert into V_OL_REQUEST_DATA (SERVER_CODE, QUERY_SEQ_NO, QUERY_SYSTEM_CODE, 
+      CUST_NO, USER_NAME, ID_TYPE, 
+      ID_NUMBER, PHONE_NO, PRODUCT_CODE, 
+      PRODUCT_NAME, AUTHORIZATION_CODE, CREATE_TIME, 
+      LOCAL_SEQ_NO)
+    values (#{serverCode,jdbcType=VARCHAR}, #{querySeqNo,jdbcType=VARCHAR}, #{querySystemCode,jdbcType=VARCHAR}, 
+      #{custNo,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{idType,jdbcType=VARCHAR}, 
+      #{idNumber,jdbcType=VARCHAR}, #{phoneNo,jdbcType=VARCHAR}, #{productCode,jdbcType=VARCHAR}, 
+      #{productName,jdbcType=VARCHAR}, #{authorizationCode,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, 
+      #{localSeqNo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.idm.app.apiservice.datasourceManage.onlineLoanDataManage.model.OLRequestParam">
+    insert into V_OL_REQUEST_DATA
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="serverCode != null">
+        SERVER_CODE,
+      </if>
+      <if test="querySeqNo != null">
+        QUERY_SEQ_NO,
+      </if>
+      <if test="querySystemCode != null">
+        QUERY_SYSTEM_CODE,
+      </if>
+      <if test="custNo != null">
+        CUST_NO,
+      </if>
+      <if test="userName != null">
+        USER_NAME,
+      </if>
+      <if test="idType != null">
+        ID_TYPE,
+      </if>
+      <if test="idNumber != null">
+        ID_NUMBER,
+      </if>
+      <if test="phoneNo != null">
+        PHONE_NO,
+      </if>
+      <if test="productCode != null">
+        PRODUCT_CODE,
+      </if>
+      <if test="productName != null">
+        PRODUCT_NAME,
+      </if>
+      <if test="authorizationCode != null">
+        AUTHORIZATION_CODE,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="localSeqNo != null">
+        LOCAL_SEQ_NO,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="serverCode != null">
+        #{serverCode,jdbcType=VARCHAR},
+      </if>
+      <if test="querySeqNo != null">
+        #{querySeqNo,jdbcType=VARCHAR},
+      </if>
+      <if test="querySystemCode != null">
+        #{querySystemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="custNo != null">
+        #{custNo,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="idType != null">
+        #{idType,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumber != null">
+        #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNo != null">
+        #{phoneNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode != null">
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="authorizationCode != null">
+        #{authorizationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="localSeqNo != null">
+        #{localSeqNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.idm.app.apiservice.datasourceManage.onlineLoanDataManage.model.OLRequestParamExample" resultType="java.lang.Long">
+    select count(*) from V_OL_REQUEST_DATA
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update V_OL_REQUEST_DATA
+    <set>
+      <if test="record.serverCode != null">
+        SERVER_CODE = #{record.serverCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.querySeqNo != null">
+        QUERY_SEQ_NO = #{record.querySeqNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.querySystemCode != null">
+        QUERY_SYSTEM_CODE = #{record.querySystemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.custNo != null">
+        CUST_NO = #{record.custNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userName != null">
+        USER_NAME = #{record.userName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.idType != null">
+        ID_TYPE = #{record.idType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.idNumber != null">
+        ID_NUMBER = #{record.idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phoneNo != null">
+        PHONE_NO = #{record.phoneNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productCode != null">
+        PRODUCT_CODE = #{record.productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productName != null">
+        PRODUCT_NAME = #{record.productName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.authorizationCode != null">
+        AUTHORIZATION_CODE = #{record.authorizationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        CREATE_TIME = #{record.createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.localSeqNo != null">
+        LOCAL_SEQ_NO = #{record.localSeqNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update V_OL_REQUEST_DATA
+    set SERVER_CODE = #{record.serverCode,jdbcType=VARCHAR},
+      QUERY_SEQ_NO = #{record.querySeqNo,jdbcType=VARCHAR},
+      QUERY_SYSTEM_CODE = #{record.querySystemCode,jdbcType=VARCHAR},
+      CUST_NO = #{record.custNo,jdbcType=VARCHAR},
+      USER_NAME = #{record.userName,jdbcType=VARCHAR},
+      ID_TYPE = #{record.idType,jdbcType=VARCHAR},
+      ID_NUMBER = #{record.idNumber,jdbcType=VARCHAR},
+      PHONE_NO = #{record.phoneNo,jdbcType=VARCHAR},
+      PRODUCT_CODE = #{record.productCode,jdbcType=VARCHAR},
+      PRODUCT_NAME = #{record.productName,jdbcType=VARCHAR},
+      AUTHORIZATION_CODE = #{record.authorizationCode,jdbcType=VARCHAR},
+      CREATE_TIME = #{record.createTime,jdbcType=VARCHAR},
+      LOCAL_SEQ_NO = #{record.localSeqNo,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

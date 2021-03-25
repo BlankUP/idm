@@ -1,0 +1,311 @@
+package com.idm.app.idpconfig.proModelParaConfig.controller;
+
+import com.github.pagehelper.PageHelper;
+import com.idm.app.idpconfig.proModelParaConfig.model.ParaBaseInfo;
+import com.idm.app.idpconfig.proModelParaConfig.model.ProModelParaBaseInfo;
+import com.idm.app.idpconfig.proModelParaConfig.service.ParaInfoConfigService;
+import com.idm.app.idpconfig.proModelParaConfig.service.ProModelParaConfigService;
+import com.idm.app.system.login.model.IDMUser;
+import com.idm.app.system.loginfo.model.SysLog;
+import com.idm.common.util.ResByPageVo;
+import com.idm.config.resubmit.repeat_form_validator.SameUrlData;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**    
+ * <p>Description:产品模型配置参数校验界面</p>  
+ * <p>Company: </p>  
+ * @author caiwenjian  
+ * @date 2019年2月25日  
+ * @version 1.0  
+ */
+
+@Controller
+public class ProModelParaConfigController {
+	private Logger logger = Logger.getLogger(ProModelParaConfigController.class);
+	static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	
+	@Autowired
+	private ProModelParaConfigService proModelParaConfigService;
+	@Autowired
+	private ParaInfoConfigService paraInfoConfigService;	
+	
+	/**
+	 *<p>Descr:产品模型参数字段界面请求跳转 </p>  
+	 *@return
+	 */
+	@RequestMapping("/proModelPara_Config")
+	public String exceptionBase() {
+		return "idpconfig/proModelParaConfig/proModelParaConfig";
+	}
+	
+	/**				  
+	 *<p>Descr:查询产品模型的参数校验信息 </p>  
+	 *@param request
+	 *@param page
+	 *@param rows
+	 *@return
+	 */
+	@RequestMapping("/proModelPara_Config_query")
+	@ResponseBody
+	public Object queyProModeParalInfoConfig(HttpServletRequest request, String page,
+			String rows) {
+		logger.info("******proModelPara模型参数校验信息查询开始******");
+		int pageNum = Integer.parseInt(StringUtils.isNotBlank(page) ? page : "1");
+		int pageSize = Integer.parseInt(StringUtils.isNotBlank(rows) ? rows: "10");
+		PageHelper.startPage(pageNum, pageSize);
+		String modelcode = request.getParameter("modelCode");	    //模型编码
+		String modelname = request.getParameter("modelName");	    //模型名称
+		logger.info(">>>modelcode[" + modelcode + "]");
+		logger.info(">>>modelname[" + modelname + "]");
+		
+		ProModelParaBaseInfo proModelParaBaseInfo = new ProModelParaBaseInfo();
+		proModelParaBaseInfo.setModelcode(modelcode);
+		proModelParaBaseInfo.setModelname(modelname);
+		proModelParaBaseInfo.setPage(pageNum);
+		proModelParaBaseInfo.setSize(pageSize);
+
+		int count = proModelParaConfigService.selectCountByAll(proModelParaBaseInfo);
+		List<ProModelParaBaseInfo> proModelParaList = proModelParaConfigService.queryModelParaBaseInfo(proModelParaBaseInfo);
+		ResByPageVo resByPageVo =null;
+		resByPageVo = new ResByPageVo(pageSize,pageNum,count);
+		if (proModelParaBaseInfo != null && proModelParaList.size() > 0) {
+			logger.info("参数校验查询成功，总记录[" + count + "]");
+			resByPageVo.setRows(proModelParaList);
+		} else if (proModelParaList != null && proModelParaList.size() == 0) {
+			logger.info(">>proModelPara模型参数校验查询无记录");
+			resByPageVo = new ResByPageVo(pageSize, pageNum, 0);
+		} else {
+			logger.info(">>proModelPara参数校验查询数据库查询错误");
+			resByPageVo = new ResByPageVo(pageSize, pageNum, 0);
+		}
+		logger.info("******proModelPara模型参数校验信息查询结束******");
+		return JSONObject.fromObject(resByPageVo);
+
+	}
+	
+	/**
+	 *<p>Descr:产品模型新增参数校验 </p>  
+	 *@param 
+	 *@return
+	 */
+	@SameUrlData
+	@SysLog(operate = "新增模型的参数校验",module= "参数校验配置")
+	@RequestMapping("/proModelPara_Config_add")
+	@ResponseBody
+	public Object addproModelPara(HttpServletRequest request,HttpServletResponse response) {
+		logger.info("******proModelPara模型下新增字段参数校验方法开始******");
+		boolean isPass = false;
+		try {
+			request.setCharacterEncoding("utf-8");
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace();
+			logger.error("类ProModelParaConfigController中方法addproModelPara出现UnsupportedEncodingException异常：", e1);
+			return "fail";
+		}
+		try{
+			IDMUser user = (IDMUser)request.getSession().getAttribute("user");
+			String status = "0";   //状态0-有效，1-无效
+			String modelcode = request.getParameter("modelCode");	//模型code
+			//获取产品模型表id
+			List<Map<String,Object>> modelIdAndFieldList = new ArrayList<>();
+			modelIdAndFieldList = proModelParaConfigService.modelIdAndField(modelcode);
+			Object modelid = modelIdAndFieldList.get(0).get("MODELID");
+			Integer countField = Integer.parseInt(modelIdAndFieldList.get(0).get("FIELDSNUM").toString());
+			if(countField!=null&&countField>0){
+				return JSONObject.fromObject("{\'isExist\':'YES'}");
+			}
+			
+			String data = request.getParameter("data");	   			//拼接数据
+			logger.info(">>>status[" + status + "]");
+			logger.info(">>>modelid[" + modelid + "]");
+			logger.info(">>>data[" + data + "]");
+			List<ProModelParaBaseInfo> list = new ArrayList<ProModelParaBaseInfo>();
+			String[] datas = data.split("#");						//对数据进行拆分
+			for(int i=0;i<datas.length;i++){
+				String str ="{"+datas[i]+"}";
+				JSONObject jsonO = JSONObject.fromObject(str);     //把String转为jsonObject
+				ProModelParaBaseInfo proModelParaBaseInfo = new ProModelParaBaseInfo();
+				proModelParaBaseInfo.setModelid(modelid.toString());
+				proModelParaBaseInfo.setStatus(status);
+				proModelParaBaseInfo.setCreateuser(user.getUserId());
+				proModelParaBaseInfo.setCreatetime(sdf.format(new Date()));
+				proModelParaBaseInfo.setUpdateuser(null);
+				proModelParaBaseInfo.setUpdatetime(null);
+				proModelParaBaseInfo.setFieldid(jsonO.getString("fieldid"));
+				proModelParaBaseInfo.setIscheckout(jsonO.getString("ischeckout"));
+				proModelParaBaseInfo.setCheckoutmothed(jsonO.getString("checkoutMothed"));
+				proModelParaBaseInfo.setCheckoutway(jsonO.getString("checkoutWay"));
+				list.add(proModelParaBaseInfo);
+			}
+			proModelParaConfigService.addModelParaBaseInfoList(list);
+			isPass =true;
+		}catch(Exception e){
+			e.printStackTrace();
+			isPass = false;
+			logger.error("类ProModelParaConfigController中方法addproModelPara出现Exception异常：", e);
+			return JSONObject.fromObject("{\'isPass\':"+isPass+"}");
+		}
+		logger.info("******proModelPara模型模型下新增参数校验方法结束******");
+		return JSONObject.fromObject("{\'isPass\':"+isPass+"}");
+	}
+	
+	/**
+	 *<p>Descr:产品模型参数修改配置 </p>  
+	 *@param 
+	 *@return
+	 */
+	@SameUrlData
+	@SysLog(operate = "修改模型的参数校验",module= "参数校验配置")
+	@RequestMapping("/proModelPara_Config_update")
+	@ResponseBody
+	public Object updateproModelPara(HttpServletRequest request,HttpServletResponse response) {
+		logger.info("******proModelPara模型下修改参数校验方法开始******");
+		boolean isPass = false;
+		try {
+			request.setCharacterEncoding("utf-8");
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace();
+			logger.error("类ProModelParaConfigController中方法updateproModelPara出现UnsupportedEncodingException异常：", e1);
+			return "fail";
+		}
+		try{
+			IDMUser user = (IDMUser)request.getSession().getAttribute("user");
+			String modelid = request.getParameter("modelid");        //获取modelid
+			String fieldIdStr = request.getParameter("fieldIdStr");  //获取模型下原有字段（fieldid）
+			String createuser = request.getParameter("createuser");  //获取创建人
+			String createtime = request.getParameter("createtime");  //获取创建时间
+			String status = request.getParameter("status");      	 //获取模型与参数每条记录的状态
+			String data = request.getParameter("data");	   			 //拼接数据
+			logger.info(">>>modelId[" + modelid + "]");
+			logger.info(">>>fieldIdStr[" + fieldIdStr + "]");
+			logger.info(">>>data[" + data + "]");
+			if(fieldIdStr==null||"[]".equals(fieldIdStr)||"".equals(fieldIdStr)){
+				logger.error("类ProModelParaConfigController中方法updateproModelPara出现fieldIdStr为空的异常！");
+				return "fail";
+			}
+			String[] strs = fieldIdStr.split(",");
+			List<String> fieldList = new ArrayList<String>();
+			for(int i=0;i<strs.length;i++){ 
+				fieldList.add(strs[i]);
+			}
+			//先根据模型修改模型与字段关系表中的状态
+			Map map = new HashMap();
+			map.put("modelid", modelid);
+			map.put("updateuser",user.getUserId());
+			map.put("updatetime",sdf.format(new Date()));
+			map.put("list", fieldList);
+			proModelParaConfigService.updateStatusInfoByModelIdAndField(map);
+			logger.info("类ProModelParaConfigController中方法updateproModelPara修改数据状态成功！");
+			//再给模型下新增字段
+			if(data != null && !"".equals(data)){
+				List<ProModelParaBaseInfo> list = new ArrayList<ProModelParaBaseInfo>();
+				String[] datas = data.split("#");						//对数据进行拆分
+				for(int i=0;i<datas.length;i++){
+					String str ="{"+datas[i]+"}";
+					JSONObject jsonO = JSONObject.fromObject(str);     //把String转为jsonObject
+					ProModelParaBaseInfo proModelParaBaseInfo = new ProModelParaBaseInfo();
+					proModelParaBaseInfo.setModelid(modelid);
+					proModelParaBaseInfo.setStatus(status);
+					proModelParaBaseInfo.setCreateuser(user.getUserId());
+					proModelParaBaseInfo.setCreatetime(sdf.format(new Date()));
+					for(int j=0;j<strs.length;j++){
+						if(strs[j].toString().equals(jsonO.getString("fieldid"))){
+							proModelParaBaseInfo.setCreateuser(createuser);	//创建人
+							proModelParaBaseInfo.setCreatetime(createtime);	 //创建时间
+						}
+					}
+					proModelParaBaseInfo.setUpdateuser(user.getUserId());
+					proModelParaBaseInfo.setUpdatetime(sdf.format(new Date()));
+					proModelParaBaseInfo.setFieldid(jsonO.getString("fieldid"));
+					proModelParaBaseInfo.setIscheckout(jsonO.getString("ischeckout"));
+					proModelParaBaseInfo.setCheckoutmothed(jsonO.getString("checkoutMothed"));
+					proModelParaBaseInfo.setCheckoutway(jsonO.getString("checkoutWay"));
+					list.add(proModelParaBaseInfo);
+				}
+				proModelParaConfigService.addModelParaBaseInfoList(list);
+				logger.info("类ProModelParaConfigController中方法updateproModelPara新增数据成功！");
+			}
+			isPass =true;
+		}catch(Exception e){
+			e.printStackTrace();
+			isPass = false;
+			logger.error("类ProModelParaConfigController中方法updateproModelPara出现Exception异常：", e);
+			return JSONObject.fromObject("{\'isPass\':"+isPass+"}");
+		}
+		logger.info("******proModelPara模型模型下修改参数校验方法结束******");
+		return JSONObject.fromObject("{\'isPass\':"+isPass+"}");
+	}
+	
+	/**
+	 *<p>Descr:根据modelid查询字段信息 </p>  
+	 *@param 
+	 *@return
+	 */
+	@RequestMapping("/query_paraByModelId_para")
+	@ResponseBody
+	public Object queryParaByModelId(HttpServletRequest request,HttpServletResponse response) {
+		
+		logger.info("******根据modelid获取参数方法开始******");
+		try {
+			request.setCharacterEncoding("utf-8");
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace();
+			logger.error("类ProModelParaConfigController中方法queryParaByModelId出现UnsupportedEncodingException异常：", e1);
+			return JSONObject.fromObject("{\'msg\':\'fail\'}");
+		}
+		try{
+			String modelid = request.getParameter("modelid");  //获取模型表id
+			if(modelid==null||"".equals(modelid)){
+				logger.error("类ProModelParaConfigController中方法queryParaByModelId中modelId值异常：modelid="+modelid);
+				return JSONObject.fromObject("{\'msg\':\'fail\'}");
+			}
+			List<ProModelParaBaseInfo> proModelParaList = proModelParaConfigService.queryModelParalist(modelid);
+			if(proModelParaList==null||proModelParaList.size()==0){
+				logger.error("类ProModelParaConfigController中方法queryParaByModelId中proModelParaList值异常");
+				return JSONObject.fromObject("{\'msg\':\'fail\'}");
+			}
+			logger.info("******根据modelid获取参数方法结束******");
+			return proModelParaList;
+		}catch(Exception e){
+			e.printStackTrace();
+			logger.error("类ProModelParaConfigController中方法addproModelPara出现Exception异常：", e);
+			return JSONObject.fromObject("{\'msg\':\'fail\'}");
+		}
+	}
+	
+	/**
+     * @Description: 加载有效的参数源信息
+     * @param request
+     * @return
+     */
+    @RequestMapping("/query_promodelpara_para")
+    @ResponseBody
+    public Object queryInterfaceInfo(HttpServletRequest request)
+    {
+		logger.info("******proModelPara加载参数源方法开始******");
+	    List<ParaBaseInfo>  paraList = paraInfoConfigService.queryPatameteFieldsInfoY();
+    	JSONArray json = JSONArray.fromObject(paraList);
+    	logger.info("******proModelPara加载参数源方法结束******");
+		return json;
+    }
+}

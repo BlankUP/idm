@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.idpconfig.mqiCountAnalysis.mapper.MqiIdpResponseMapper">
+  
+	
+	<select  id="selectCountByAll" parameterType="com.idm.app.idpconfig.mqiCountAnalysis.model.MqiResponseInfo"  resultType="java.lang.Integer" >
+	
+	    select count(1) from ( 
+	    select  
+             distinct a.businessno,
+       a.modelname,
+        a.modelcode,
+       a.productid,
+       a.suggestamount,
+       a.score,
+       a.loanrate,
+       a.customertype,
+       a.ratingresults,
+       a.ruleresult,
+       b.cifname,
+       b.cifno,
+       b.idno,
+       b.idtype,
+       b.deptname,
+       b.productname,
+       a.errorcode,
+       a.errormsg,
+       a.elapsedtime,
+       a.rkDate,
+       a.queryseqno,
+       a.serialno,
+       a.joint,
+             b.querysystemname,
+       to_char（a.message） message    
+         from MQI_RESPONSE_INFO a left join MQI_Request_Info b on a.businessno=b.businessno 
+         
+         where 1=1 
+			<if test="rkDate!=null and rkDate!='' ">
+		        and a.rkDate like '%'||#{rkDate}||'%'
+		    </if>
+		    <if test="queryseqNo!=null and queryseqNo!='' ">
+		        and a.queryseqno like '%'||#{queryseqNo}||'%'
+		    </if>
+		    <if test="cifName!=null and cifName!='' ">
+		        and b.cifName like '%'||#{cifName}||'%'
+		    </if>
+		    <if test="idNo!=null and idNo!='' ">
+		        and b.idNo like '%'||#{idNo}||'%'
+		    </if>
+          )t1  
+	
+	</select>
+	
+	
+		
+	<select  id="queryIdpResponseInfo" parameterType="com.idm.app.idpconfig.mqiCountAnalysis.model.MqiResponseInfo"
+        resultType="com.idm.app.idpconfig.mqiCountAnalysis.model.MqiResponseInfo" >
+	 select * from (select t1.*,rownum rnm from ( 
+select 
+             distinct a.businessno,
+       a.modelname,
+        a.modelcode,
+       a.productid,
+       a.suggestamount,
+       a.score,
+       a.loanrate,
+       a.customertype,
+       a.ratingresults,
+       a.ruleresult,
+       b.cifname,
+       b.cifno,
+       b.idno,
+       b.idtype,
+       b.deptname,
+       b.productname,
+       a.errorcode,
+       a.errormsg,
+       a.elapsedtime,
+       a.rkDate,
+       a.queryseqno,
+       a.serialno,
+       a.joint,
+             b.querysystemname,
+       to_char（a.message） message
+
+  from MQI_RESPONSE_INFO a left join MQI_Request_Info b on a.businessno=b.businessno 
+          where 1=1 
+         <if test="rkDate!=null and rkDate!='' ">
+		        and a.rkDate like '%'||#{rkDate}||'%'
+		    </if>
+		    <if test="queryseqNo!=null and queryseqNo!='' ">
+		        and a.queryseqno like '%'||#{queryseqNo}||'%'
+		    </if>
+		    <if test="cifName!=null and cifName!='' ">
+		        and b.cifName like '%'||#{cifName}||'%'
+		    </if>
+		    <if test="idNo!=null and idNo!='' ">
+		        and b.idNo like '%'||#{idNo}||'%'
+		    </if>
+          )t1 
+    <if test="page!= null and size!= null">
+      where rownum &lt;= #{page}*#{size}
+    </if>
+    )
+    <if test="page!= null and size!= null">
+      where rnm &gt;= (#{page}-1)*#{size} +1 
+    </if>
+	
+	
+	</select>
+	
+	
+</mapper>

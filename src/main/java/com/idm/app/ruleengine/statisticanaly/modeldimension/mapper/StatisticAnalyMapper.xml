@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.ruleengine.statisticanaly.modeldimension.mapper.StatisticAnalyMapper">
+    <select  id="getModelDimension" parameterType="com.idm.app.ruleengine.statisticanaly.modeldimension.model.ModelDimension"
+             resultType="com.idm.app.ruleengine.statisticanaly.modeldimension.model.ModelDimension">
+        select MODE_CODE modelCode,
+        MODE_NAME modelName,
+        RISK_CODE riskCode,
+        RISK_INDEX riskIndex,
+        RISK_LEVEL riskLevel,
+        MODELCUSTOM_CT modelcustomCt,
+        INDEX_NULLCUSTOM_CT indexNullCustomCt,
+        INDEX_HIT_CT indexHitCt,
+        PRODUCT_CODE productCode,
+        PRODUCT_NAME productName,
+        INPUT_DATE inputDate
+        from v_modeldimension where 1=1
+            <if test="modelCode!=null and modelCode!=''">
+                and MODE_CODE=#{modelCode}
+            </if>
+            <if test="modelName!=null and modelName!=''">
+                and MODE_NAME like '%'||#{modelName}||'%'
+            </if>
+            <if test="productCode!=null and  productCode!=''">
+                and PRODUCT_CODE=#{productCode}
+            </if>
+            <if test="productName!=null and productName!=''">
+                and PRODUCT_NAME=#{productName}
+            </if>
+            <if test="inputDate!=null and inputDate!='' ">
+                and INPUT_DATE &lt;=to_date(#{inputDate},'YYYY-MM-DD')
+            </if>
+          order by MODE_CODE
+    </select>
+    <select id="getModelHit" parameterType="com.idm.app.ruleengine.statisticanaly.modeldimension.model.ModelDimension"
+            resultType="com.idm.app.ruleengine.statisticanaly.modeldimension.model.ModelHit">
+    select MODE_NAME  modelName,
+        sum(INDEX_HIT_CT) custNum
+    from v_modeldimension where 1=1
+            <if test="modelCode!=null and modelCode!=''">
+                and MODE_CODE=#{modelCode}
+            </if>
+            <if test="modelName!=null and modelName!=''">
+                and MODE_NAME like '%'||#{modelName}||'%'
+            </if>
+            <if test="productCode!=null and  productCode!=''">
+                and PRODUCT_CODE=#{productCode}
+            </if>
+            <if test="productName!=null and productName!=''">
+                and PRODUCT_NAME=#{productName}
+            </if>
+            <if test="inputDate!=null and inputDate!='' ">
+                and INPUT_DATE &lt;=to_date(#{inputDate},'YYYY-MM-DD')
+            </if>
+        and MODE_NAME is not null
+    group by MODE_NAME having sum(INDEX_HIT_CT) is not null
+    </select>
+</mapper>

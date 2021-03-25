@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- edited with XMLSpy v2011 (http://www.altova.com) by jiang (xiao) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.0.0">  
+  <xs:element name="Application"> 
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element ref="ReturnResult" minOccurs="0" maxOccurs="unbounded"/>  
+        <xs:element ref="DecisionResponse" minOccurs="0"/>  
+        <xs:element ref="ProcessingHistory" minOccurs="0"/>  
+        <xs:element ref="MessageList" minOccurs="0"/>  
+        <xs:element ref="baseData" minOccurs="0"/>
+        <xs:element ref="bingJianData" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="tongDunData" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="baiRongData" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="inlineInfo" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>  
+      <xs:attribute name="ApplicationID" type="xs:string" use="optional"/>  
+      <xs:attribute name="DecisionArea" type="xs:string" use="optional"/>  
+      <xs:attribute name="SourceCode" type="xs:string" use="optional"/>  
+      <xs:attribute name="CallNode" type="xs:string" use="optional"/>  
+      <xs:attribute name="SPID" type="xs:string" use="optional"/>  
+      <xs:attribute name="productCode" type="xs:string" use="optional"/>  
+      <xs:attribute name="productName" type="xs:string" use="optional"/>  
+      <xs:attribute name="StrategyRandomDigit1" type="xs:integer" use="optional"/>  
+      <xs:attribute name="StrategyRandomDigit2" type="xs:integer" use="optional"/>  
+      <xs:attribute name="StrategyRandomDigit3" type="xs:integer" use="optional"/>  
+      <xs:attribute name="StrategyRandomDigit4" type="xs:integer" use="optional"/> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="ReturnResult"> 
+    <xs:complexType> 
+      <xs:attribute name="Result" type="xs:string" use="optional"/>  
+      <xs:attribute name="RuleName" type="xs:string" use="optional"/>  
+      <xs:attribute name="RuleCode" type="xs:string" use="optional"/>  
+      <xs:attribute name="ReasonCode" type="xs:string" use="optional"/>  
+      <xs:attribute name="RuleDecisionResult" type="xs:string" use="optional"/>  
+      <xs:attribute name="RuleTriggerReason" type="xs:string" use="optional"/> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="DecisionResponse"> 
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element ref="FlowDecision" minOccurs="0" maxOccurs="unbounded"/>  
+        <xs:element ref="RuleDecision" minOccurs="0" maxOccurs="unbounded"/>  
+        <xs:element ref="ChampionChallenger" minOccurs="0" maxOccurs="unbounded"/>  
+        <xs:element ref="ScoreModelReturnInfo" minOccurs="0" maxOccurs="unbounded"/> 
+      </xs:sequence> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="RuleDecision"> 
+    <xs:complexType> 
+      <xs:attribute name="Index" type="xs:integer" use="optional"/>  
+      <xs:attribute name="RulesetName" type="xs:string" use="optional"/>  
+      <xs:attribute name="RulesetCode" type="xs:string" use="optional"/>  
+      <xs:attribute name="RuleCode" type="xs:string" use="optional"/>  
+      <xs:attribute name="RuleName" type="xs:string" use="optional"/>  
+      <xs:attribute name="RuleDecisionResult" type="xs:string" use="optional"/>  
+      <xs:attribute name="ReasonCode" type="xs:string" use="optional"/>  
+      <xs:attribute name="RuleTriggerReason" type="xs:string" use="optional"/>  
+      <xs:attribute name="ObjectListID" type="xs:string" use="optional"/>  
+      <xs:attribute name="RuleSeverityLevel" type="xs:integer" use="optional"/>  
+      <xs:attribute name="modleNo" type="xs:string" use="optional"/>  
+      <xs:attribute name="modleName" type="xs:string" use="optional"/> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="FlowDecision"> 
+    <xs:complexType> 
+      <xs:attribute name="CallNo" type="xs:string" use="optional"/>  
+      <xs:attribute name="Node" type="xs:string" use="optional"/> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="ChampionChallenger"> 
+    <xs:complexType> 
+      <xs:attribute name="Name" type="xs:string" use="optional"/>  
+      <xs:attribute name="ChampionChallengerID" type="xs:string" use="optional"/>  
+      <xs:attribute name="SPID" type="xs:string" use="optional"/>  
+      <xs:attribute name="VersionID" type="xs:string" use="optional"/>  
+      <xs:attribute name="StrategyRandomDigit" type="xs:integer" use="optional"/>  
+      <xs:attribute name="StrategyID" type="xs:string" use="optional"/>  
+      <xs:attribute name="ChallengerFlag" type="xs:boolean" use="optional"/> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="ScoreModelReturnInfo"> 
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element ref="ScoredCharacteristic" minOccurs="0" maxOccurs="unbounded"/> 
+      </xs:sequence>  
+      <xs:attribute name="AssociationID" type="xs:string" use="optional"/>  
+      <xs:attribute name="ScoreModelName" type="xs:string" use="optional"/>  
+      <xs:attribute name="ScoreModelID" type="xs:string" use="optional"/>  
+      <xs:attribute name="VersionID" type="xs:string" use="optional"/>  
+      <xs:attribute name="ScoreDateTime" type="xs:dateTime" use="optional"/>  
+      <xs:attribute name="FinalScore" type="xs:double" use="optional"/>  
+      <xs:attribute name="RawScore" type="xs:double" use="optional"/>  
+      <xs:attribute name="InitialScore" type="xs:double" use="optional"/>  
+      <xs:attribute name="UnexpectedCount" type="xs:integer" use="optional"/>  
+      <xs:attribute name="CharacteristicCount" type="xs:integer" use="optional"/> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="ScoredCharacteristic"> 
+    <xs:complexType> 
+      <xs:sequence/>  
+      <xs:attribute name="Characteristic" type="xs:string" use="optional"/>  
+      <xs:attribute name="MappedFieldName" type="xs:string" use="optional"/>  
+      <xs:attribute name="CharacteristicName" type="xs:string" use="optional"/>  
+      <xs:attribute name="CharacteristicValue" type="xs:string" use="optional"/>  
+      <xs:attribute name="BinLabel" type="xs:string" use="optional"/>  
+      <xs:attribute name="BaselineScore" type="xs:double" use="optional"/>  
+      <xs:attribute name="PartialScore" type="xs:double" use="optional"/>  
+      <xs:attribute name="MaxBinScore" type="xs:double" use="optional"/>  
+      <xs:attribute name="UnexpectedValueFlag" type="xs:boolean" use="optional"/> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="ProcessingHistory"> 
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element ref="DecisionFlowHistory" minOccurs="0" maxOccurs="unbounded"/>  
+        <xs:element ref="DerivedVariableHistory" minOccurs="0" maxOccurs="unbounded"/> 
+      </xs:sequence>  
+      <xs:attribute name="DecisionArea" type="xs:string" use="optional"/>  
+      <xs:attribute name="StartTimestamp" type="xs:dateTime" use="optional"/>  
+      <xs:attribute name="StopTimestamp" type="xs:dateTime" use="optional"/>  
+      <xs:attribute name="ElapsedMillis" type="xs:integer" use="optional"/> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="DerivedVariableHistory"> 
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element ref="PropertyHistory" minOccurs="0" maxOccurs="unbounded"/> 
+      </xs:sequence>  
+      <xs:attribute name="FlowName" type="xs:string" use="optional"/> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="PropertyHistory"> 
+    <xs:complexType> 
+      <xs:attribute name="Index" type="xs:integer" use="optional"/>  
+      <xs:attribute name="ImplementationType" type="xs:string" use="optional"/>  
+      <xs:attribute name="ImplementationName" type="xs:string" use="optional"/>  
+      <xs:attribute name="Name" type="xs:string" use="optional"/>  
+      <xs:attribute name="DataType" type="xs:string" use="optional"/>  
+      <xs:attribute name="Value" type="xs:string" use="optional"/> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="DecisionFlowHistory"> 
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element ref="DecisionFlowStepHistory" minOccurs="0" maxOccurs="unbounded"/> 
+      </xs:sequence>  
+      <xs:attribute name="FlowName" type="xs:string" use="optional"/> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="DecisionFlowStepHistory"> 
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element ref="RulesetHistory" minOccurs="0" maxOccurs="unbounded"/> 
+      </xs:sequence>  
+      <xs:attribute name="StepIndex" type="xs:integer" use="optional"/>  
+      <xs:attribute name="ImplementationType" type="xs:string" use="optional"/>  
+      <xs:attribute name="ImplementationName" type="xs:string" use="optional"/>  
+      <xs:attribute name="FunctionResult" type="xs:string" use="optional"/> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="RulesetHistory"> 
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element ref="RuleHistory" minOccurs="0" maxOccurs="unbounded"/> 
+      </xs:sequence>  
+      <xs:attribute name="RulesetName" type="xs:string" use="optional"/>  
+      <xs:attribute name="RulesetCode" type="xs:string" use="optional"/> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="RuleHistory"> 
+    <xs:complexType> 
+      <xs:attribute name="RuleName" type="xs:string" use="optional"/>  
+      <xs:attribute name="RuleCode" type="xs:string" use="optional"/> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="MessageList"> 
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element ref="Message" minOccurs="0" maxOccurs="unbounded"/> 
+      </xs:sequence>  
+      <xs:attribute name="StatusCode" type="xs:integer" use="optional"/>  
+      <xs:attribute name="StatusDescription" type="xs:string" use="optional"/> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="Message"> 
+    <xs:complexType> 
+      <xs:sequence> 
+        <xs:element name="Description" type="xs:string" minOccurs="0"/>  
+        <xs:element name="DetailedDescription" type="xs:string" minOccurs="0"/>  
+        <xs:element name="Resolution" type="xs:string" minOccurs="0"/> 
+      </xs:sequence>  
+      <xs:attribute name="MessageNumber" type="xs:integer" use="optional"/>  
+      <xs:attribute name="SeverityCode" type="xs:integer" use="optional"/> 
+    </xs:complexType> 
+  </xs:element>  
+  <xs:element name="baseData">
+    <xs:complexType>
+      <xs:sequence/>
+      <xs:attribute name="name" type="xs:string" use="optional"/>
+      <xs:attribute name="sex" type="xs:string" use="optional"/>
+      <xs:attribute name="age" type="xs:string" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="bingJianData">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="tongDunData">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="baiRongData">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="inlineInfo">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

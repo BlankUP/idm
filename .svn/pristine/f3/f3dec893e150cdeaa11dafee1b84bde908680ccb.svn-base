@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.idpconfig.eventconfig.mapper.EventConfigMapper">
+<select id="queryEventConfig" parameterType="com.idm.app.idpconfig.eventconfig.model.EventConfig"
+        resultType="com.idm.app.idpconfig.eventconfig.model.EventConfig">
+         select * from (select t1.*,rownum rnm from ( 
+  select
+      c.eventid,
+      c.eventname,
+      c.respsystemcode,
+      c.respsystemname,
+      c.productId,
+      c.modelId,
+      c.interfacecode,
+      c.createtime,
+      c.updatetime,
+      c.createuser,
+      c.updateuser,
+      c.status,
+      m.modelname
+  from idp_event_config c 
+  left join idm_model_info m on m.modelid=c.modelid 
+  where 1=1
+    <if test="eventName!=null and eventName!='' ">
+        and c.eventName like '%'||#{eventName}||'%'
+    </if>
+    <if test="modelName!=null and modelName!='' ">
+        and m.modelName like '%'||#{modelName}||'%'
+    </if>
+     ) t1 
+    <if test="page!= null and size!= null">
+      where rownum &lt;= #{page}*#{size}
+    </if>
+    )
+    <if test="page!= null and size!= null">
+      where rnm &gt;= (#{page}-1)*#{size} +1 
+    </if>
+</select>
+
+  <select id="selectCountByAll" parameterType="com.idm.app.idpconfig.eventconfig.model.EventConfig"  resultType="java.lang.Integer">
+    select count(1)
+    from idp_event_config c  
+    left join idm_product_info p on p.productid=c.productid
+    WHERE 1=1
+    <if test="eventName!=null and eventName!='' ">
+        and c.eventName like '%'||#{eventName}||'%'
+    </if>
+    <if test="productName!=null and productName!='' ">
+        and p.productName like '%'||#{productName}||'%'
+    </if>
+  </select>
+  <insert id="addEventConfig" parameterType="com.idm.app.idpconfig.eventconfig.model.EventConfig">
+    insert into IDP_EVENT_CONFIG (EVENTID, EVENTNAME, RESPSYSTEMCODE, RESPSYSTEMNAME, ORGNO, PRODUCTID,
+                               MODELID, INTERFACECODE, CREATETIME, CREATEUSER)
+    values (IDP_EVENT_CONFIG_SEQ.NEXTVAL, #{eventName,jdbcType=VARCHAR},#{respSystemCode,jdbcType=VARCHAR},#{respSystemName,jdbcType=VARCHAR},
+    		#{orgNo,jdbcType=VARCHAR},#{productId,jdbcType=VARCHAR},
+    		#{modelId,jdbcType=VARCHAR},#{interfaceCode,jdbcType=VARCHAR},#{createTime,jdbcType=VARCHAR},
+    		#{createUser,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="updateEventConfig" parameterType="com.idm.app.idpconfig.eventconfig.model.EventConfig">
+        UPDATE IDP_EVENT_CONFIG SET INTERFACECODE=#{interfaceCode},UPDATETIME=#{updateTime},UPDATEUSER=#{updateUser},STATUS=#{status}
+        WHERE EVENTID=#{eventId}
+  </update>
+  <select id="queryProductInfo" parameterType="com.idm.app.idpconfig.proModelParaConfig.model.ProductBaseInfo"
+        resultType="com.idm.app.idpconfig.proModelParaConfig.model.ProductBaseInfo">
+	select
+			productid,
+			productCode,
+			productname
+	from IDM_PRODUCT_INFO where 1=1 and status='0'
+</select>
+  <select id="queryModelInfo" parameterType="com.idm.app.idpconfig.proModelParaConfig.model.ProModelBaseInfo"
+        resultType="com.idm.app.idpconfig.proModelParaConfig.model.ProModelBaseInfo">
+  select
+      i.modelid,
+      i.modelcode,
+      i.modelname,
+      i.productid
+  from IDM_MODEL_INFO i where 1=1   and status='0'
+	<if test="productid!=null and productid!='' ">
+        and productid=#{productid}
+    </if>
+</select>
+  <select id="queryInterfaceInfo" parameterType="com.idm.app.idpconfig.eventconfig.model.InterfaceInfo"
+        resultType="com.idm.app.idpconfig.eventconfig.model.InterfaceInfo">
+	select
+			interfaceCode,
+			interfaceName
+	from Idp_Interface_Info where status='0'
+</select>
+
+  <select id="repeatEventName" parameterType="com.idm.app.idpconfig.eventconfig.model.EventConfig"
+        resultType="java.lang.Long">
+	select count(*)
+	from idp_event_config where 1=1  and eventName = #{eventName}
+</select>
+
+  <select id="repeatModel" parameterType="com.idm.app.idpconfig.eventconfig.model.EventConfig"
+        resultType="java.lang.Long">
+	select count(*)
+	from idp_event_config where 1=1  and modelId = #{modelId}
+</select>
+  <select id="queryOrgInfo" parameterType="com.idm.app.system.auth.model.Organization"
+        resultType="com.idm.app.system.auth.model.Organization">
+	select
+			ORGNO,
+			ORGNAME
+	from IDM_ORG_INFO where 1=1
+</select>
+</mapper>

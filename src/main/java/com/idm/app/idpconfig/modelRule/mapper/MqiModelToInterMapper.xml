@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.idpconfig.modelRule.mapper.MqiModelToInterMapper">
+   <insert id="saveModToInter" parameterType="com.idm.app.idpconfig.modelRule.model.MqiModelToInterInfo">
+	   insert into MQI_RESP_INFO (reId,businessNo,interfaceCode,interfaceName,interField,interValue) VALUES(
+	   #{reId},#{businessNo},#{interfaceCode},#{interfaceName},#{interField},#{interValue})
+   </insert>
+</mapper>

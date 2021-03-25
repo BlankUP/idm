@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.idpconfig.proModelParaConfig.mapper.ProductConfigMapper">
+	<select id="queryProdcutInfo" resultType="com.idm.app.idpconfig.proModelParaConfig.model.ProductBaseInfo">
+	   select * from (select t1.*,rownum rnm from ( 
+	   	   select a.productid productid,a.orgno orgno,b.orgname orgname,a.productcode productcode,
+	   	   a.productname productname,a.productdes productdes,a.createuser createuser,a.updateuser updateuser,
+	   	   a.createtime createtime,a.updatetime updatetime,a.status status
+	    	from IDM_PRODUCT_INFO a,IDM_org_info b where a.orgno = b.orgno(+)
+	    <if test="orgno!=null and orgno!='' ">
+	        and a.orgno like '%'||#{orgno}||'%'
+	    </if>
+	    <if test="orgname!=null and orgname!='' ">
+	        and b.orgname like '%'||#{orgname}||'%'
+	    </if>
+	    <if test="productcode !=null and productcode!='' ">
+	        and a.productcode like '%'||#{productcode}||'%' 
+	    </if>
+	    <if test="productname!=null and productname!='' ">
+	        and a.productname like '%'||#{productname}||'%'
+	    </if>
+	    order by orgno,createtime desc
+	   )t1
+	   <if test="page!= null and size!= null">
+     	 where rownum &lt;= #{page}*#{size}
+       </if>
+     )
+	 <if test="page!= null and size!= null">
+	      where rnm &gt;= (#{page}-1)*#{size} +1 
+	 </if>   
+    </select>
+	
+   <select id="selectCountByAll" parameterType="com.idm.app.idpconfig.proModelParaConfig.model.ProductBaseInfo"  resultType="java.lang.Integer">
+    	select count(1) from ( select a.productid productid,a.orgno orgno,b.orgname orgname,a.productcode productcode,
+	   	   a.productname productname,a.productdes productdes,a.createuser createuser,a.updateuser updateuser,
+	   	   a.createtime createtime,a.updatetime updatetime,a.status status 
+    		from IDM_PRODUCT_INFO a,IDM_org_info b where a.orgno = b.orgno(+) ) where 1=1
+	    <if test="productcode !=null and productcode!='' ">
+	        and productcode like '%'||#{productcode}||'%' 
+	    </if>
+	    <if test="productname!=null and productname!='' ">
+	        and productname like '%'||#{productname}||'%'
+	    </if>
+	    <if test="orgno !=null and orgno!='' ">
+	        and orgno like '%'||#{orgno}||'%' 
+	    </if>
+	    <if test="orgname!=null and orgname!='' ">
+	        and orgname like '%'||#{orgname}||'%'
+	    </if>
+   </select>
+
+    <insert id="addProductInfo" parameterType="com.idm.app.idpconfig.proModelParaConfig.model.ProductBaseInfo">
+       INSERT INTO IDM_PRODUCT_INFO (productid,orgno,productcode,productname, productdes,createuser,createtime,status)
+        VALUES (IDM_PRODUCT_INFO_SEQ.nextval,#{orgno},#{productcode},#{productname},#{productdes},#{createuser},#{createtime},#{status})
+    </insert>
+    
+    <update id="updateProductInfo" parameterType="com.idm.app.idpconfig.proModelParaConfig.model.ProductBaseInfo">
+        UPDATE IDM_PRODUCT_INFO SET productid=#{productid},orgno=#{orgno},productcode=#{productcode}, productname=#{productname},productdes=#{productdes}, 
+        updatetime=#{updatetime},updateuser=#{updateuser},status=#{status} WHERE productid=#{productid}
+    </update>
+    
+    <select id="getCounts" resultType="java.lang.Integer">
+    	select count(*) from IDM_PRODUCT_INFO where 1=1
+	</select>
+	
+    <select id="countByCodeName" parameterType="java.lang.String"  resultType="java.lang.Integer">
+    	select count(*) from idm_product_info where 1=1 
+    	<if test="productcode !=null and productcode!='' ">
+	        and productcode ='${productcode}'
+	    </if>
+	    <if test="productname!=null and productname!='' ">
+	        and productname ='${productname}'
+	    </if>
+	</select>
+	
+	<select id="getOrganizations" resultType="com.idm.app.system.auth.model.Organization">
+		select orgno, orgname, orgdesc, orgstatus, orgaddr, createtime, updatetime, createuser, updateuser from idm_org_info
+		where orgstatus = '0'
+	</select>
+	
+</mapper>

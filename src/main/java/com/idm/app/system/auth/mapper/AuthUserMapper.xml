@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.system.auth.mapper.AuthUserMapper">
+  <resultMap id="BaseResultMap" type="com.idm.app.system.auth.model.AuthUser">
+    <result column="USERID" jdbcType="VARCHAR" property="userId" />
+    <result column="USERNAME" jdbcType="VARCHAR" property="userName" />
+    <result column="USERSTATUS" jdbcType="VARCHAR" property="userStatus" />
+    <result column="DEPNO" jdbcType="VARCHAR" property="depNo" />
+    <result column="CREATETIME" jdbcType="DATE" property="createTime" />
+    <result column="UPDATETIME" jdbcType="DATE" property="updateTime" />
+    <result column="CREATEUSER" jdbcType="DATE" property="createUser" />
+    <result column="UPDATEUSER" jdbcType="DATE" property="updateUser" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    USERID, USERNAME, USERSTATUS, DEPNO, CREATETIME, UPDATETIME, CREATEUSER, UPDATEUSER
+  </sql>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <select id="selectCountByRoleNo" parameterType="com.idm.app.system.auth.model.AuthUserExample"  resultType="java.lang.Integer">
+    select count(1)
+    from IDM_USER_INFO u1, IDM_USER_ROLE_INFO u2 
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <select id="selectByRoleNo" parameterType="com.idm.app.system.auth.model.AuthUserExample"  resultMap="BaseResultMap">
+    select * from (select t1.*,rownum rnm from ( select 
+    u1.USERID, USERNAME, USERSTATUS, DEPNO, CREATETIME, UPDATETIME, CREATEUSER, UPDATEUSER
+    from IDM_USER_INFO u1, IDM_USER_ROLE_INFO u2 
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by #{orderByClause}
+    </if>
+    )t1 
+    <if test="page!= null and size!= null">
+      where rownum &lt;= #{page}*#{size}
+    </if>
+    )
+    <if test="page!= null and size!= null">
+      where rnm &gt;= (#{page}-1)*#{size} +1 
+    </if>
+  </select>
+  
+  
+</mapper>

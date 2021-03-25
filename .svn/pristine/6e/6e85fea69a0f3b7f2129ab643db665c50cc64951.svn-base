@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.system.auth.mapper.OrganizationMapper">
+  <resultMap id="BaseResultMap" type="com.idm.app.system.auth.model.Organization">
+    <result column="ORGNO" jdbcType="VARCHAR" property="orgNo" />
+    <result column="ORGNAME" jdbcType="VARCHAR" property="orgName" />
+    <result column="ORGDESC" jdbcType="VARCHAR" property="orgDesc" />
+    <result column="ORGSTATUS" jdbcType="VARCHAR" property="orgStatus" />
+    <result column="ORGADDR" jdbcType="VARCHAR" property="orgAddr" />
+    <result column="CREATETIME" jdbcType="VARCHAR" property="createTime" />
+    <result column="UPDATETIME" jdbcType="VARCHAR" property="updateTime" />
+    <result column="CREATEUSER" jdbcType="VARCHAR" property="createUser" />
+    <result column="UPDATEUSER" jdbcType="VARCHAR" property="updateUser" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ORGNO, ORGNAME, ORGDESC, ORGSTATUS,  ORGADDR, CREATETIME, 
+    UPDATETIME, CREATEUSER, UPDATEUSER
+  </sql>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <select id="selectCountByAll" parameterType="com.idm.app.system.auth.model.OrganizationExample"  resultType="java.lang.Integer">
+    select count(1)
+    from IDM_ORG_INFO t1
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <select id="selectByAll" parameterType="com.idm.app.system.auth.model.OrganizationExample"  resultMap="BaseResultMap">
+    select * from (select t1.*,rownum rnm from ( select 
+    <include refid="Base_Column_List" />
+    from IDM_ORG_INFO t1
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    )t1 
+    <if test="page!= null and size!= null">
+      where rownum &lt;= ${page}*${size}
+    </if>
+    )
+    <if test="page!= null and size!= null">
+      where rnm &gt;= (${page}-1)*${size} +1 
+    </if>
+  </select>
+  <select id="selectOrgInfoByorgNo" parameterType="java.lang.String" resultType="com.idm.app.system.auth.model.Organization">
+    select *
+    from IDM_ORG_INFO
+    where orgno=#{orgNo,jdbcType=VARCHAR}
+  </select>
+   <select id="selectOrgInfoByorgName" parameterType="java.lang.String" resultType="com.idm.app.system.auth.model.Organization">
+    select *
+    from IDM_ORG_INFO
+    where orgname=#{orgName,jdbcType=VARCHAR}
+  </select>
+  <insert id="saveOrgInfo" parameterType="com.idm.app.system.auth.model.Organization">
+    insert into IDM_ORG_INFO (ORGNO, ORGNAME, ORGDESC, 
+      ORGSTATUS,  ORGADDR, 
+      CREATETIME, UPDATETIME, CREATEUSER, UPDATEUSER
+      )
+    values (#{orgNo,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, #{orgDesc,jdbcType=VARCHAR}, 
+      #{orgStatus,jdbcType=VARCHAR},  #{orgAddr,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=VARCHAR}, #{updateTime,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, 
+      #{updateUser,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="updateOrgInfo" parameterType="com.idm.app.system.auth.model.Organization">
+    update IDM_ORG_INFO set 
+    ORGNAME=#{orgName,jdbcType=VARCHAR}, 
+    ORGDESC=#{orgDesc,jdbcType=VARCHAR}, 
+      ORGSTATUS=#{orgStatus,jdbcType=VARCHAR}, 
+      ORGADDR=#{orgAddr,jdbcType=VARCHAR}, 
+      UPDATETIME=#{updateTime,jdbcType=DATE}, 
+      UPDATEUSER=#{updateUser,jdbcType=VARCHAR} 
+      where ORGNO=#{orgNo,jdbcType=VARCHAR}
+  </update>
+  
+
+  <delete id="deleteOrgInfo" parameterType="java.lang.String">
+    delete IDM_ORG_INFO  
+      where ORGNO=#{orgNo,jdbcType=VARCHAR}
+  </delete>
+</mapper>

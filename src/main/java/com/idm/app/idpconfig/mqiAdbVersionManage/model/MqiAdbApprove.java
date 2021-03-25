@@ -1,0 +1,79 @@
+package com.idm.app.idpconfig.mqiAdbVersionManage.model;
+
+import java.io.Serializable;
+
+/**
+ * @class adb规则文件审批信息实体类
+ * @author wengjiawei
+ * @Date 2019-03-11
+ */
+public class MqiAdbApprove implements Serializable {
+	private static final long serialVersionUID = 1L;
+	private String versionName ;
+	private String versionNo ;
+	private String versionDesc;
+	private String applicationTime;
+	private String applicationUserId;
+	private String status;
+	private String approveRole;
+	private String applicationReason;
+	
+	public String getVersionNo() {
+		return versionNo;
+	}
+	public void setVersionNo(String versionNo) {
+		this.versionNo = versionNo;
+	}
+	
+	public String getVersionDesc() {
+		return versionDesc;
+	}
+	public void setVersionDesc(String versionDesc) {
+		this.versionDesc = versionDesc;
+	}
+	
+	public String getApplicationTime() {
+		return applicationTime;
+	}
+	public void setApplicationTime(String applicationTime) {
+		this.applicationTime = applicationTime;
+	}
+	
+	
+	
+	public String getApplicationUserId() {
+		return applicationUserId;
+	}
+	public void setApplicationUserId(String applicationUserId) {
+		this.applicationUserId = applicationUserId;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	public String getApproveRole() {
+		return approveRole;
+	}
+	public void setApproveRole(String approveRole) {
+		this.approveRole = approveRole;
+	}
+	
+	public String getApplicationReason() {
+		return applicationReason;
+	}
+	public void setApplicationReason(String applicationReason) {
+		this.applicationReason = applicationReason;
+	}
+	public String getVersionName() {
+		return versionName;
+	}
+	public void setVersionName(String versionName) {
+		this.versionName = versionName;
+	}
+	
+	
+}
+

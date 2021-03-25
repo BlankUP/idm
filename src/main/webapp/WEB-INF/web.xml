@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+	  <display-name>idm</display-name>
+	  
+  <!-- <servlet>
+    <servlet-name>dispatcherServlet</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+                 classpath:spring-task.xml
+            </param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet> -->
+    <!-- quartz监听器 -->  
+<!-- <listener>
+    <listener-class>com.idm.app.idpconfig.taskQuartz.ScheduleStartListener</listener-class>
+</listener> -->
+<filter>
+   <filter-name>XssFilter</filter-name>
+   <filter-class>com.idm.common.xss.XssFilter</filter-class>
+</filter>
+<filter>
+		<filter-name>InjectFilter</filter-name>
+		<filter-class>com.idm.common.csrf.InjectFilter</filter-class>
+</filter>
+<filter>
+		<filter-name>CSRFFilter</filter-name>
+		<filter-class>com.idm.common.csrf.CSRFFilter</filter-class>
+</filter>
+<filter>
+		<filter-name>SimpleFilter</filter-name>
+		<filter-class>com.idm.common.csrf.SimpleFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>SimpleFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+<filter-mapping>
+   <filter-name>XssFilter</filter-name>
+   <url-pattern>/*</url-pattern>  
+</filter-mapping>
+<filter-mapping>
+   <filter-name>InjectFilter</filter-name>
+   <url-pattern>/*</url-pattern>  
+</filter-mapping>
+<filter-mapping>
+   <filter-name>CSRFFilter</filter-name>
+   <url-pattern>/*</url-pattern>  
+</filter-mapping>
+
+<error-page>    
+        <exception-type>java.lang.Exception</exception-type>    
+        <location>/WEB-INF/error/500.jsp</location>    
+</error-page>  
+<error-page>  
+ <error-code>500</error-code>  
+ <location>/WEB-INF/error/500.jsp</location>  
+</error-page> 
+</web-app>

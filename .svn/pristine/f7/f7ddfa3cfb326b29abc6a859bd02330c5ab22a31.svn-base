@@ -1,0 +1,26 @@
+package com.idm.app.idpconfig.proModelParaConfig.mapper;
+
+import com.idm.app.idpconfig.proModelParaConfig.model.ProductBaseInfo;
+import com.idm.app.system.auth.model.Organization;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+ 
+public interface ProductConfigMapper {
+
+    List<ProductBaseInfo> queryProdcutInfo(ProductBaseInfo productBaseInfo);
+
+    void addProductInfo(ProductBaseInfo productBaseInfo) throws Exception;
+
+    void updateProductInfo(ProductBaseInfo productBaseInfo);
+    
+    Integer getCounts();
+    
+	Integer countByCodeName(@Param("productcode") String productcode,@Param("productname") String productname);
+
+	int selectCountByAll(ProductBaseInfo prodcutBaseInfo);
+	
+	List<Organization> getOrganizations();
+}

@@ -1,0 +1,171 @@
+package com.idm.app.system.auth.controller;
+
+import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import net.sf.json.JSONObject;
+
+import com.idm.app.system.auth.model.Department;
+import com.idm.app.system.auth.model.Role;
+import com.idm.app.system.auth.service.DepartmentService;
+import com.idm.app.system.auth.service.DepartmentService;
+import com.idm.app.system.login.model.IDMUser;
+import com.idm.app.system.loginfo.model.SysLog;
+import com.idm.common.util.ResByPageVo;
+
+/**
+ * 
+ *<p>Title: DepartmentController</p>  
+ * @Description: 部门管理
+ * @author panling
+ * @date 2019年6月14日
+ * @version  1.0
+ *
+ */
+@Controller
+public class DepartmentController {
+	static final Logger logger = Logger.getLogger(DepartmentController.class);
+	static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	
+	@Autowired
+	public DepartmentService departmentService;
+
+	@RequestMapping("/department")
+    public String department(){
+
+        return "department/depPage";
+    }
+
+    /**
+     * 
+     * @Description: 查询
+     * @param request
+     * @return
+     */
+	@RequestMapping("/dep_service")
+	@ResponseBody
+	@SysLog(operate="查询",module="部门管理")
+    public Object departmentView(HttpServletRequest request){
+		ResByPageVo resByPageVo = null;
+		String depNo = request.getParameter("depNo");
+		String depName = request.getParameter("depName");
+		String init = request.getParameter("init");
+	
+		try {
+			if(depName!=null&&!"".equals(depName)) {
+				depName = java.net.URLDecoder.decode(depName, "UTF-8");
+			}
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		try {
+			if ("true".equals(init)) {
+			} else if (!"true".equals(init)) {
+				int page =Integer.parseInt(request.getParameter("page"));
+				int size = Integer.parseInt(request.getParameter("rows"));
+				resByPageVo = new ResByPageVo(size, page,departmentService.selectCountByAll(depNo, depName));
+				resByPageVo.setRows(departmentService.selectByAll(size, page, depNo, depName));
+			}
+		} catch (Exception e) {
+			logger.error("", e);
+		}
+		return JSONObject.fromObject(resByPageVo);
+    }
+	
+	
+    /**
+     * 
+     * @Description: 增加和修改
+     * @param request
+     * @return
+     */
+	@RequestMapping("/dep_saveOrUpdate")
+	@ResponseBody
+	@SysLog(operate="增加或修改",module="部门管理")
+    public synchronized Object depSaveOrUpdate(HttpServletRequest request, Department department){
+		IDMUser user = (IDMUser)request.getSession().getAttribute("user");
+		Integer result = 0;
+		
+		department.setCreateUser(user.getUserId());
+		department.setCreateTime(sdf.format(new Date()));
+		department.setUpdateUser(user.getUserId());
+		department.setUpdateTime(sdf.format(new Date()));
+		String option = request.getParameter("dep_option");
+		if("add".equals(option)) {
+			result = departmentService.saveDepInfo(department);
+		}else if("modify".equals(option)) {
+			result = departmentService.updateDepInfo(department);
+		}
+		
+		if(result > 0){
+			return JSONObject.fromObject("{\"success\":true}");
+		}else {
+			return JSONObject.fromObject("{\"success\":false}");
+		}
+    }
+    /**
+     * 
+     * @Description: 删除
+     * @param request
+     * @return
+     */
+	@RequestMapping("/dep_deleteDepInfo")
+	@ResponseBody
+	@SysLog(operate="删除",module="部门管理")
+    public Object depDeleteDepInfo(HttpServletRequest request){
+		Integer result = 0;
+		
+		String depNo = request.getParameter("depNo");
+		result = departmentService.deleteDepInfo(depNo);
+		if(result > 0){
+			return JSONObject.fromObject("{\"success\":true}");
+		}else {
+			return JSONObject.fromObject("{\"success\":false}");
+		}
+    }
+	
+    /**
+     * 
+     * @Description: 部门编号重复校验
+     * @param request
+     * @return
+     */
+	@RequestMapping("/dep_service_selectDepInfoBydepNo")
+	@ResponseBody
+    public Object selectDepInfoBydepNo(HttpServletRequest request){
+		String depNo = request.getParameter("depNo");
+		Department o= departmentService.selectDepInfoBydepNo(depNo);
+		if(o!=null){
+			return JSONObject.fromObject("{\"success\":true}");
+		}
+		return JSONObject.fromObject("{\"success\":false}");
+    } 
+	
+    /**
+     * 
+     * @Description: 部门名称重复校验
+     * @param request
+     * @return
+     */
+	@RequestMapping("/dep_service_selectDepInfoBydepName")
+	@ResponseBody
+    public Object selectDepInfoBydepName(HttpServletRequest request){
+		String depName = request.getParameter("depName");
+		Department o= departmentService.selectDepInfoBydepName(depName);
+		if(o!=null){
+			return JSONObject.fromObject("{\"success\":true}");
+		}
+		return JSONObject.fromObject("{\"success\":false}");
+    } 
+}

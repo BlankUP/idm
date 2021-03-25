@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.system.auth.mapper.OrganizationMapper">
+  <resultMap id="BaseResultMap" type="com.idm.app.system.auth.model.Organization">
+    <result column="DEPTID" jdbcType="VARCHAR" property="DeptId" />
+    <result column="CREATETIME" jdbcType="VARCHAR" property="CREATETIME" />
+    <result column="DEPTNO" jdbcType="VARCHAR" property="DEPTNO" />
+    <result column="DEPTNAME" jdbcType="VARCHAR" property="DeptName" />
+    <result column="BRANCH_SHORT" jdbcType="VARCHAR" property="BRANCH_SHORT" />
+    <result column="CHEQUE_ISSUING_BRANCH" jdbcType="VARCHAR" property="CHEQUE_ISSUING_BRANCH" />
+    <result column="INTERNAL_CLIENT" jdbcType="VARCHAR" property="INTERNAL_CLIENT" />
+    <result column="COUNTRY" jdbcType="VARCHAR" property="COUNTRY" />
+    <result column="COMPANY" jdbcType="VARCHAR" property="COMPANY" />
+    <result column="STATE" jdbcType="VARCHAR" property="STATE" />
+    <result column="BASE_CCY" jdbcType="VARCHAR" property="BASE_CCY" />
+    <result column="LOCAL_CCY" jdbcType="VARCHAR" property="LOCAL_CCY" />
+    <result column="PROFIT_SEGMENT" jdbcType="VARCHAR" property="PROFIT_SEGMENT" />
+    <result column="HIERARCHY_CODE" jdbcType="NUMERIC" property="HIERARCHY_CODE" />
+    <result column="ATTACHED_TO" jdbcType="VARCHAR" property="ATTACHED_TO" />
+    <result column="TRAN_BR_IND" jdbcType="VARCHAR" property="TRAN_BR_IND" />
+    <result column="SUB_BRANCH_CODE" jdbcType="VARCHAR" property="SUB_BRANCH_CODE" />
+    <result column="CNY_BUSINESS_UNIT" jdbcType="VARCHAR" property="CNY_BUSINESS_UNIT" />
+    <result column="HKD_BUSINESS_UNIT" jdbcType="VARCHAR" property="HKD_BUSINESS_UNIT" />
+    <result column="FX_ORGAN_CODE" jdbcType="VARCHAR" property="FX_ORGAN_CODE" />
+    <result column="IS_CHK_SEAL" jdbcType="VARCHAR" property="IS_CHK_SEAL" />
+    <result column="SETTLE_LEVEL" jdbcType="NUMERIC" property="SETTLE_LEVEL" />
+    <result column="SETTLE_BRANCH" jdbcType="VARCHAR" property="SETTLE_BRANCH" />
+    <result column="PAYMENT_BRANCH_FLAG" jdbcType="VARCHAR" property="PAYMENT_BRANCH_FLAG" />
+    <result column="PAYMENT_BRANCH" jdbcType="VARCHAR" property="PAYMENT_BRANCH" />
+    <result column="SETTLE_GL_CODE" jdbcType="VARCHAR" property="SETTLE_GL_CODE" />
+    <result column="SETTLE_GL_SEQ" jdbcType="NUMERIC" property="SETTLE_GL_SEQ" />
+    <result column="SETTLE_GL_CODE_UP" jdbcType="VARCHAR" property="SETTLE_GL_CODE_UP" />
+    <result column="SETTLE_GL_SEQ_UP" jdbcType="NUMERIC" property="SETTLE_GL_SEQ_UP" />
+    <result column="PAYMENT_ACCT_GL_CODE" jdbcType="VARCHAR" property="PAYMENT_ACCT_GL_CODE" />
+    <result column="PAYMENT_ACCT_GL_SEQ" jdbcType="VARCHAR" property="PAYMENT_ACCT_GL_SEQ" />
+    <result column="SETTLE_ACCT_OPEN_FALG" jdbcType="VARCHAR" property="SETTLE_ACCT_OPEN_FALG" />
+    <result column="SETTLE_ACCT_CHECK_FUND" jdbcType="VARCHAR" property="SETTLE_ACCT_CHECK_FUND" />
+    <result column="PAYMENT_ACCT_OPEN_FLAG" jdbcType="VARCHAR" property="PAYMENT_ACCT_OPEN_FLAG" />
+    <result column="PBOC_FUND_CHECK_FALG" jdbcType="VARCHAR" property="PBOC_FUND_CHECK_FALG" />
+    <result column="VB" jdbcType="VARCHAR" property="PBOC_FUND_CHECK_FALG" />
+    <result column="VB_LEVEL" jdbcType="VARCHAR" property="PBOC_FUND_CHECK_FALG" />
+    <result column="VB_CASH_SAVE" jdbcType="VARCHAR" property="PBOC_FUND_CHECK_FALG" />
+    <result column="OPEN_MORE_FLAG" jdbcType="VARCHAR" property="PBOC_FUND_CHECK_FALG" />
+    <result column="IS_FINANCIAL_ACCT" jdbcType="VARCHAR" property="PBOC_FUND_CHECK_FALG" />
+    <result column="FINANCIAL_ACCT_CONTROL" jdbcType="VARCHAR" property="PBOC_FUND_CHECK_FALG" />
+    <result column="CB_AUTH_AMT" jdbcType="NUMERIC" property="PBOC_FUND_CHECK_FALG" />
+    <result column="AREA_AUTH_AMT" jdbcType="NUMERIC" property="AREA_AUTH_AMT" />
+    <result column="IS_USE_PAY_PWD" jdbcType="VARCHAR" property="IS_USE_PAY_PWD" />
+    <result column="IS_CHK_SEAL_NEW" jdbcType="VARCHAR" property="IS_CHK_SEAL_NEW" />
+    <result column="CHECK_SEAL_SWITCH" jdbcType="VARCHAR" property="CHECK_SEAL_SWITCH" />
+    <result column="BRANCH_LEVEL" jdbcType="VARCHAR" property="BRANCH_LEVEL" />
+    <result column="STRUTS" jdbcType="VARCHAR" property="STRUTS" />
+  </resultMap>
+  <sql id="Base_Column_List">
+      DeptId, CREATETIME, DEPTNO, DeptName ,BRANCH_SHORT,CHEQUE_ISSUING_BRANCH,INTERNAL_CLIENT,COUNTRY,
+	COMPANY,STATE,BASE_CCY,LOCAL_CCY,PROFIT_SEGMENT,  HIERARCHY_CODE, ATTACHED_TO,TRAN_BR_IND,SUB_BRANCH_CODE,
+ 	CNY_BUSINESS_UNIT, HKD_BUSINESS_UNIT, FX_ORGAN_CODE,IS_CHK_SEAL,SETTLE_LEVEL,SETTLE_BRANCH,PAYMENT_BRANCH_FLAG,
+   PAYMENT_BRANCH,SETTLE_GL_CODE,SETTLE_GL_SEQ,SETTLE_GL_CODE_UP,SETTLE_GL_SEQ_UP,PAYMENT_ACCT_GL_CODE,
+  PAYMENT_ACCT_GL_SEQ, SETTLE_ACCT_OPEN_FALG,SETTLE_ACCT_CHECK_FUND, PAYMENT_ACCT_OPEN_FLAG ,
+  PBOC_FUND_CHECK_FALG, VB, VB_LEVEL,VB_CASH_SAVE,OPEN_MORE_FLAG,IS_FINANCIAL_ACCT,FINANCIAL_ACCT_CONTROL,
+  CB_AUTH_AMT,AREA_AUTH_AMT,IS_USE_PAY_PWD,IS_CHK_SEAL_NEW,CHECK_SEAL_SWITCH ,BRANCH_LEVEL,STRUTS
+  </sql>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <select id="selectCountByAll" parameterType="com.idm.app.system.auth.model.OrganizationExample"  resultType="java.lang.Integer">
+    select count(1)
+    from IDM_ORG_INFO t1
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <select id="selectByAll" parameterType="com.idm.app.system.auth.model.OrganizationExample"  resultMap="BaseResultMap">
+    select * from (select t1.*,rownum rnm from ( select 
+    <include refid="Base_Column_List" />
+    from IDM_ORG_INFO t1
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    )t1 
+    <if test="page!= null and size!= null">
+      where rownum &lt;= ${page}*${size}
+    </if>
+    )
+    <if test="page!= null and size!= null">
+      where rnm &gt;= (${page}-1)*${size} +1 
+    </if>
+  </select>
+  <select id="selectOrgInfoByorgNo" parameterType="java.lang.String" resultType="com.idm.app.system.auth.model.Organization">
+    select *
+    from IDM_ORG_INFO
+    where deptid=#{DeptId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll"  resultType="com.idm.app.system.auth.model.Organization">
+    select *
+    from IDM_ORG_INFO
+    where status='0'
+  </select>
+   <select id="selectOrgInfoByorgName" parameterType="java.lang.String" resultType="com.idm.app.system.auth.model.Organization">
+    select *
+    from IDM_ORG_INFO
+    where deptname=#{DeptName,jdbcType=VARCHAR}
+  </select>
+  <insert id="saveOrgInfo" parameterType="com.idm.app.system.auth.model.Organization">
+    insert into IDM_ORG_INFO (DeptId, CREATETIME, DEPTNO, DeptName ,BRANCH_SHORT,CHEQUE_ISSUING_BRANCH,INTERNAL_CLIENT,COUNTRY,
+	COMPANY,STATE,BASE_CCY,LOCAL_CCY,PROFIT_SEGMENT,  HIERARCHY_CODE, ATTACHED_TO,TRAN_BR_IND,SUB_BRANCH_CODE,
+ 	CNY_BUSINESS_UNIT, HKD_BUSINESS_UNIT, FX_ORGAN_CODE,IS_CHK_SEAL,SETTLE_LEVEL,SETTLE_BRANCH,PAYMENT_BRANCH_FLAG,
+   PAYMENT_BRANCH,SETTLE_GL_CODE,SETTLE_GL_SEQ,SETTLE_GL_CODE_UP,SETTLE_GL_SEQ_UP,PAYMENT_ACCT_GL_CODE,
+  PAYMENT_ACCT_GL_SEQ, SETTLE_ACCT_OPEN_FALG,SETTLE_ACCT_CHECK_FUND, PAYMENT_ACCT_OPEN_FLAG ,
+  PBOC_FUND_CHECK_FALG, VB, VB_LEVEL,VB_CASH_SAVE,OPEN_MORE_FLAG,IS_FINANCIAL_ACCT,FINANCIAL_ACCT_CONTROL,
+  CB_AUTH_AMT,AREA_AUTH_AMT,IS_USE_PAY_PWD,IS_CHK_SEAL_NEW,CHECK_SEAL_SWITCH ,BRANCH_LEVEL,STRUTS
+      )
+    values (#{DeptId,jdbcType=VARCHAR}, #{CREATETIME,jdbcType=VARCHAR},#{DEPTNO,jdbcType=VARCHAR}, #{DeptName,jdbcType=VARCHAR}, 
+      #{BRANCH_SHORT,jdbcType=VARCHAR},  #{CHEQUE_ISSUING_BRANCH,jdbcType=VARCHAR}, #{INTERNAL_CLIENT,jdbcType=VARCHAR},
+      #{COUNTRY,jdbcType=VARCHAR}, #{COMPANY,jdbcType=VARCHAR}, #{HIERARCHY_CODE,jdbcType=VARCHAR}, #{BASE_CCY,jdbcType=VARCHAR},
+      #{LOCAL_CCY,jdbcType=VARCHAR}, #{PROFIT_SEGMENT,jdbcType=VARCHAR}, #{STATE,jdbcType=VARCHAR}, #{ATTACHED_TO,jdbcType=VARCHAR},
+      #{TRAN_BR_IND,jdbcType=VARCHAR}, #{SUB_BRANCH_CODE,jdbcType=VARCHAR}, #{CNY_BUSINESS_UNIT,jdbcType=VARCHAR}, #{HKD_BUSINESS_UNIT,jdbcType=VARCHAR},
+      #{FX_ORGAN_CODE,jdbcType=VARCHAR}, #{IS_CHK_SEAL,jdbcType=VARCHAR}, #{SETTLE_LEVEL,jdbcType=VARCHAR}, #{SETTLE_BRANCH,jdbcType=VARCHAR},
+      #{PAYMENT_BRANCH_FLAG,jdbcType=VARCHAR}, #{PAYMENT_BRANCH,jdbcType=VARCHAR}, #{SETTLE_GL_CODE,jdbcType=VARCHAR}, #{SETTLE_GL_SEQ,jdbcType=VARCHAR},
+      #{SETTLE_GL_CODE_UP,jdbcType=VARCHAR}, #{SETTLE_GL_SEQ_UP,jdbcType=VARCHAR}, #{PAYMENT_ACCT_GL_CODE,jdbcType=VARCHAR}, #{PAYMENT_ACCT_GL_SEQ,jdbcType=VARCHAR},
+      #{SETTLE_ACCT_OPEN_FALG,jdbcType=VARCHAR}, #{SETTLE_ACCT_CHECK_FUND,jdbcType=VARCHAR}, #{PAYMENT_ACCT_OPEN_FLAG,jdbcType=VARCHAR}, #{PBOC_FUND_CHECK_FALG,jdbcType=VARCHAR},
+      #{VB,jdbcType=VARCHAR}, #{VB_LEVEL,jdbcType=VARCHAR}, #{VB_CASH_SAVE,jdbcType=VARCHAR}, #{OPEN_MORE_FLAG,jdbcType=VARCHAR},
+      #{IS_FINANCIAL_ACCT,jdbcType=VARCHAR}, #{FINANCIAL_ACCT_CONTROL,jdbcType=VARCHAR}, #{CB_AUTH_AMT,jdbcType=VARCHAR}, #{AREA_AUTH_AMT,jdbcType=VARCHAR},
+      #{IS_USE_PAY_PWD,jdbcType=VARCHAR}, #{IS_CHK_SEAL_NEW,jdbcType=VARCHAR}, #{CHECK_SEAL_SWITCH,jdbcType=VARCHAR}, #{BRANCH_LEVEL,jdbcType=VARCHAR},
+      #{STRUTS,jdbcType=VARCHAR})
+  </insert>
+  
+  <!-- <update id="updateOrgInfo" parameterType="com.idm.app.system.auth.model.Organization">
+    update IDM_ORG_INFO set 
+    ORGNAME=#{orgName,jdbcType=VARCHAR}, 
+    ORGNC=#{orgNc,jdbcType=VARCHAR}, 
+    ORGDESC=#{orgDesc,jdbcType=VARCHAR}, 
+      ORGSTATUS=#{orgStatus,jdbcType=VARCHAR}, 
+      ORGADDR=#{orgAddr,jdbcType=VARCHAR}, 
+      UPDATETIME=#{updateTime,jdbcType=DATE}, 
+      UPDATEUSER=#{updateUser,jdbcType=VARCHAR} 
+      where ORGNO=#{orgNo,jdbcType=VARCHAR}
+  </update> -->
+  
+
+  <delete id="deleteOrgInfo" parameterType="java.lang.String">
+    delete IDM_ORG_INFO  
+      where ORGNO=#{orgNo,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="saveOrgList" parameterType="java.util.List" useGeneratedKeys="false">
+    			insert into IDM_ORG_INFO 
+    			( ORGNO, ORGNAME,ORGNC, ORGDESC, 
+      ORGSTATUS,  ORGADDR, 
+      CREATETIME, UPDATETIME, CREATEUSER, UPDATEUSER)
+    			values
+    			<foreach collection="orgs" item="item" index="index" separator=",">
+    				(
+    					#{item.ORGNO},
+    					#{item.ORGNAME},
+    					#{item.ORGNC},
+    					#{item.ORGDESC},
+    					#{item.ORGSTATUS},
+    					#{item.ORGADDR},
+    					#{item.CREATETIME},
+    					#{item.UPDATETIME},
+    					#{item.CREATEUSER},
+    					#{item.UPDATEUSER}
+    				)
+    		     </foreach>		
+    </insert>  
+</mapper>

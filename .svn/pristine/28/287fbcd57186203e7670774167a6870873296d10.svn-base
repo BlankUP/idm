@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.idpconfig.adbVersionManage.mapper.AdbVerManageMapper">
+  <resultMap id="BaseResultMap" type="com.idm.app.idpconfig.adbVersionManage.model.AdbVerInfo">
+    <result column="ADBID" jdbcType="VARCHAR" property="id" />
+    <result column="VERSIONNAME" jdbcType="VARCHAR" property="versionName" />
+    <result column="VERSIONNO" jdbcType="VARCHAR" property="versionNo" />
+    <result column="FILENAME" jdbcType="VARCHAR" property="fileName" />
+    <result column="VERSIONDESC" jdbcType="VARCHAR" property="versionDesc" />
+    <result column="CREATETIME" jdbcType="VARCHAR" property="createTime" />
+    <result column="UPDATETIME" jdbcType="VARCHAR" property="updateTime" />
+    <result column="UPDATEUSER" jdbcType="VARCHAR" property="updateUser" />
+    <result column="CREATEUSER" jdbcType="VARCHAR" property="createUser" />
+    <result column="VERSIONSTATE" jdbcType="VARCHAR" property="versionState" />
+    <result column="STATUS" jdbcType="VARCHAR" property="isValid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ADBID,VERSIONNAME, VERSIONNO, FILENAME, VERSIONDESC, CREATETIME, UPDATETIME, 
+    UPDATEUSER, CREATEUSER, VERSIONSTATE,STATUS
+  </sql>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>                  
+                </when>
+              </choose>
+            </foreach>
+            escape '\'
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+ <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <select id="selectCountByAll" parameterType="com.idm.app.idpconfig.adbVersionManage.model.AdbVerExample"  resultType="java.lang.Integer">
+    select count(1)
+    from IDM_ADBVERSION t1
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <select id="selectByAll" parameterType="com.idm.app.idpconfig.adbVersionManage.model.AdbVerExample"  resultMap="BaseResultMap">
+    select * from (select t1.*,rownum rnm from ( select 
+    <include refid="Base_Column_List" />
+    from IDM_ADBVERSION t1 
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />  
+    </if>
+    order by versionstate asc,createtime desc,status desc
+   <!--  <if test="orderByClause != null">
+      order by #{orderByClause}
+    </if> -->
+    )t1 
+    <if test="page!= null and size!= null">
+      where rownum &lt;= #{page}*#{size}
+    </if>
+    )
+    <if test="page!= null and size!= null">
+      where rnm &gt;= (#{page}-1)*#{size} +1 
+    </if>
+  </select>
+  
+  <insert id="saveAdbVerInfo" parameterType="com.idm.app.idpconfig.adbVersionManage.model.AdbVerInfo">
+    insert into IDM_ADBVERSION ( ADBID, VERSIONNAME, VERSIONNO, FILENAME, VERSIONDESC, CREATETIME, UPDATETIME, 
+    UPDATEUSER, CREATEUSER, VERSIONSTATE,STATUS
+      )
+    values (#{id,jdbcType=VARCHAR},#{versionName,jdbcType=VARCHAR}, #{versionNo,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, 
+      #{versionDesc,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, 
+      #{versionState,jdbcType=VARCHAR},#{isValid,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="updateAdbVerInfo" parameterType="com.idm.app.idpconfig.adbVersionManage.model.AdbVerInfo">
+    UPDATE IDM_ADBVERSION
+    <set>
+        <if test="versionName !=null and versionName!=''">
+        VERSIONNAME=#{versionName},
+        </if>
+        <if test="versionDesc !=null and versionDesc!=''">
+            VERSIONDESC=#{versionDesc},
+        </if>
+        <if test="isValid!=null and isValid!=''">
+            STATUS=#{isValid},
+        </if>
+        <if test="updateTime!=null and updateTime!=''">
+            UPDATETIME=#{updateTime},
+        </if>
+        <if test="updateUser!=null and updateUser!=''">
+            UPDATEUSER=#{updateUser},
+        </if>
+        <if test="versionState!=null and versionState!=''">
+            VERSIONSTATE=#{versionState}
+        </if>
+    </set>
+    WHERE VERSIONNO=#{versionNo} 
+  </update>
+  
+  <delete id="deleteAdbVerInfo" parameterType="java.lang.String">
+    delete IDM_ADBVERSION  
+      where VERSIONNO=#{versionNo,jdbcType=VARCHAR}
+  </delete>
+  
+  <select id="checkAdbVerState" parameterType="com.idm.app.idpconfig.adbVersionManage.model.AdbVerExample"  resultType="java.lang.Integer">
+   select count(1) from
+   (select * from IDM_ADBVERSION where VERSIONSTATE = '1' or VERSIONSTATE = '2') t   
+   <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  
+  <select id="selectMaxId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+   select max(ADBID) from (select to_number(ADBID) as ADBID  from IDM_ADBVERSION t)
+  </select>
+
+  <select id="selectMaxVersionNo" parameterType="java.lang.String" resultType="java.lang.String">
+   select max(VERSIONNO) from IDM_ADBVERSION
+  </select>
+  
+  <select id="selectVersionState" parameterType="java.lang.String" resultType="java.lang.String">
+   select VERSIONSTATE from IDM_ADBVERSION
+   where VERSIONNO =#{versionNo,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectVersionIsValid" parameterType="java.lang.String" resultType="java.lang.String">
+   select STATUS from IDM_ADBVERSION
+   where VERSIONNO =#{versionNo,jdbcType=VARCHAR}
+  </select>
+  
+  <update id="setAdbVerState" parameterType="com.idm.app.idpconfig.adbVersionManage.model.AdbVerInfo">
+    update IDM_ADBVERSION set  
+      VERSIONSTATE='5'
+      where VERSIONSTATE =#{versionState,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="publishOrRecoverAdbVer" parameterType="com.idm.app.idpconfig.adbVersionManage.model.AdbVerInfo">
+    update IDM_ADBVERSION set  
+      VERSIONSTATE='3',
+     <if test="updateTime!=null and updateTime!=''">
+            UPDATETIME=#{updateTime,jdbcType=VARCHAR},
+     </if>
+     <if test="updateUser!=null and updateUser!=''">
+            UPDATEUSER=#{updateUser,jdbcType=VARCHAR}
+     </if>
+      where VERSIONNO=#{versionNo,jdbcType=VARCHAR}
+  </update>
+  
+   <select id="selectFileName" parameterType="java.lang.String" resultType="java.lang.String">
+   select filename from (select a.* from IDM_ADBVERSION a order by createtime desc )where rownum = 1 
+  </select>
+  
+  <update id="setAdbVerStatus" parameterType="com.idm.app.idpconfig.adbVersionManage.model.AdbVerInfo">
+    update IDM_ADBVERSION set  
+      STATUS='1'
+      where FILENAME =#{fileName,jdbcType=VARCHAR}
+  </update>
+  <update id="updateApproveState" parameterType="com.idm.app.idpconfig.adbVersionManage.model.AdbVerInfo">
+    update IDM_ADBVERSION set  
+      VERSIONSTATE=#{versionState,jdbcType=VARCHAR}
+      where VERSIONNO =#{versionNo,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="checkApproveOrNot" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+   select count(1) from (select * from IDM_ADBVERSION where VERSIONSTATE = '3' or VERSIONSTATE = '4') t 
+  </select>
+  
+</mapper>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.system.control.mapper.ExceptionTransferMapper">
+
+	<sql id ="searchStatus">
+     	<if test="searchStatus == '0'.toString() ">
+  		 	SUBSTR(i.STARTTIME, 1, 8)  
+	    </if>
+	    <if test="searchStatus == '1'.toString() ">
+		    SUBSTR(i.STARTTIME, 1, 6) 
+ 	 	</if>
+ 	 	<if test="searchStatus == '2'.toString() ">
+  		 	SUBSTR(i.STARTTIME, 1, 4) 
+ 	 	</if>
+ 	 	<if test="searchStatus == null ">
+  		 	SUBSTR(i.STARTTIME, 1, 8) 
+ 	 	</if>
+     </sql>
+     
+     <select id = "selectByAll" parameterType="com.idm.app.system.control.model.ExceptionInvok" 
+     	resultType="com.idm.app.system.control.model.ExceptionInvok">
+     	select *
+  		from (
+  	  		select s1.* ,rownum rnm 
+  		 	 from (
+     			select ROWNUM as exceptionID, t.*
+     	 		  from (  select <include refid="searchStatus"/> exceptionTime, p.PRODUCTNAME as productName, count(r.PRODUCTNAME) as exceptionCount, i.INTERFACENAME as implName 
+     		  				from IDM_PRODUCT_INFO p, IDP_REQUEST_INFO r, IDP_INTERFACEINVOK_INFO i
+							where p.PRODUCTCODE = r.PRODUCTCODE and i.BUSINESSNO = r.BUSINESSNO and i.ISSUCCESS = '0'
+							<if test="productName!=null and productName!='' ">
+		  					and p.PRODUCTNAME like '%'||#{productName}||'%'
+		 					 </if>
+		 					 <if test="implName!=null and implName!='' ">
+		  					and i.INTERFACENAME like '%'||#{implName}||'%'
+		 					 </if>
+		 					 <if test="startDate!=null and startDate!='' ">
+		 				 	and SUBSTR(i.STARTTIME, 1, 8) &gt;= #{startDate}
+		 					 </if>
+		 					 <if test="endDate!=null and endDate!='' ">
+		 				 	and SUBSTR(i.ENDTIME, 1, 8) &lt;= #{endDate}
+		 					 </if>
+					group by p.PRODUCTNAME, i.INTERFACENAME, <include refid="searchStatus"/>
+ 					order by <include refid="searchStatus"/> )t) s1 
+			 <if test="page!= null and size!= null">
+     		 where rownum &lt;= #{page}*#{size}
+    		</if>
+    		)
+    	<if test="page!= null and size!= null">
+       	where rnm &gt;= (#{page}-1)*#{size} +1 
+    	</if>
+     	
+     </select>
+     
+      <select id = "selectCountByAll" parameterType="com.idm.app.system.control.model.ExceptionInvok" 
+      	resultType="java.lang.Integer">
+      	select count(t.productName)
+     	  from (   select p.PRODUCTNAME as productName
+     		  	 	 from IDM_PRODUCT_INFO p, IDP_REQUEST_INFO r, IDP_INTERFACEINVOK_INFO i
+					where p.PRODUCTCODE = r.PRODUCTCODE and i.BUSINESSNO = r.BUSINESSNO and i.ISSUCCESS = '0'
+					<if test="productName!=null and productName!='' ">
+		  					and p.PRODUCTNAME like '%'||#{productName}||'%'
+		 				 </if>
+		 				 <if test="implName!=null and implName!='' ">
+		  					and i.INTERFACENAME like '%'||#{implName}||'%'
+		 				 </if>
+		 				 <if test="startDate!=null and startDate!='' ">
+		 				 	and SUBSTR(i.STARTTIME, 1, 8) &gt;= #{startDate}
+		 				 </if>
+		 				 <if test="endDate!=null and endDate!='' ">
+		 				 	and SUBSTR(i.ENDTIME, 1, 8) &lt;= #{endDate}
+		 				 </if>
+					group by p.PRODUCTNAME, i.INTERFACENAME, <include refid="searchStatus"/>
+ 					order by <include refid="searchStatus"/> )t
+      </select>
+      
+      <select id = "selectExceptionInfo" parameterType="com.idm.app.system.control.model.ExceptionInvok" 
+     	resultType="com.idm.app.system.control.model.ExceptionInvok">
+     	select *
+  		from (
+  	  		select s1.* ,rownum rnm 
+  		 	 from (
+				select p.PRODUCTNAME as productName, i.STARTTIME as exceptionTime, i.INTERFACENAME as implName, i.ERRORCODE as errorCode, i.ERRORMSG as errorMsg
+		 		 from IDM_PRODUCT_INFO p, IDP_REQUEST_INFO r, IDP_INTERFACEINVOK_INFO i
+				 where p.PRODUCTCODE = r.PRODUCTCODE and i.BUSINESSNO = r.BUSINESSNO and i.ISSUCCESS = '0'
+  		 		  and i.STARTTIME like #{exceptionTime,jdbcType=VARCHAR}||'%' and i.INTERFACENAME = #{implName,jdbcType=VARCHAR} and p.PRODUCTNAME = #{productName,jdbcType=VARCHAR}
+  		 		  ) s1 
+			 <if test="page!= null and size!= null">
+     		 where rownum &lt;= #{page}*#{size}
+    		</if>
+    		)
+    	<if test="page!= null and size!= null">
+       	where rnm &gt;= (#{page}-1)*#{size} +1 
+    	</if>
+      </select>
+      
+      <select id = "selectCountExceptionInfo" parameterType="com.idm.app.system.control.model.ExceptionInvok" 
+      	resultType="java.lang.Integer">
+      	select count(t.productName) 
+      	  from (select p.PRODUCTNAME as productName
+				  from IDM_PRODUCT_INFO p, IDP_REQUEST_INFO r, IDP_INTERFACEINVOK_INFO i
+ 				 where p.PRODUCTCODE = r.PRODUCTCODE and i.BUSINESSNO = r.BUSINESSNO and i.ISSUCCESS = '0'
+  				   and i.STARTTIME like #{exceptionTime,jdbcType=VARCHAR}||'%' and i.INTERFACENAME = #{implName,jdbcType=VARCHAR} and p.PRODUCTNAME = #{productName,jdbcType=VARCHAR}) t
+      </select>
+      
+      <select id = "selectForExcel" parameterType="com.idm.app.system.control.model.ExceptionInvok" 
+     	resultType="com.idm.app.system.control.model.ExceptionInvok">
+     	select ROWNUM as exceptionID, t.*
+     	 		  from (  select <include refid="searchStatus"/> exceptionTime, p.PRODUCTNAME as productName, count(r.PRODUCTNAME) as exceptionCount, i.INTERFACENAME as implName 
+     		  				from IDM_PRODUCT_INFO p, IDP_REQUEST_INFO r, IDP_INTERFACEINVOK_INFO i
+							where p.PRODUCTCODE = r.PRODUCTCODE and i.BUSINESSNO = r.BUSINESSNO and i.ISSUCCESS = '0'
+							<if test="productName!=null and productName!='' ">
+		  					and p.PRODUCTNAME like '%'||#{productName}||'%'
+		 					 </if>
+		 					 <if test="implName!=null and implName!='' ">
+		  					and i.INTERFACENAME like '%'||#{implName}||'%'
+		 					 </if>
+		 					 <if test="startDate!=null and startDate!='' ">
+		 				 	and SUBSTR(i.STARTTIME, 1, 8) &gt;= #{startDate}
+		 					 </if>
+		 					 <if test="endDate!=null and endDate!='' ">
+		 				 	and SUBSTR(i.ENDTIME, 1, 8) &lt;= #{endDate}
+		 					 </if>
+					group by p.PRODUCTNAME, i.INTERFACENAME, <include refid="searchStatus"/>
+ 					order by <include refid="searchStatus"/> )t
+      </select>
+</mapper>

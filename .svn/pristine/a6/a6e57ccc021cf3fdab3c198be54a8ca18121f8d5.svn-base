@@ -1,0 +1,39 @@
+.tooltip-view{
+	position: absolute;
+	left:10px;
+	border-radius: 3px;
+	box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
+	padding: 4px 5px 4px 5px;
+}
+.tooltip-view{
+	&-normal{
+		.tooltip-view;
+		color: @tooltipText;
+		background: @tooltipBackground;
+		border: 1px dashed @tooltipBorder;
+	}
+	&-success{
+		.tooltip-view;
+		color: lighten(@successText,3%);
+		background: lighten(@successBackground,15%);
+		border: 1px dashed @successBorder;
+	}
+	&-info{
+		.tooltip-view;
+		color: lighten(@infoText,3%);
+		background: lighten(@infoBackground,15%);
+		border: 1px dashed @infoBorder;
+	}
+	&-warning{
+		.tooltip-view;
+		color: lighten(@warningText,0%);
+		background: lighten(@warningBackground,15%);
+		border: 1px dashed @warningBorder;
+	}
+	&-error{
+		.tooltip-view;
+		color: lighten(@errorText,3%);
+		background: lighten(@errorBackground,15%);
+		border: 1px dashed @errorBorder;
+	}
+}

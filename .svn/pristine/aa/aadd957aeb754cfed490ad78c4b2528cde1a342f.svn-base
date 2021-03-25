@@ -1,0 +1,289 @@
+package com.idm.app.idpconfig.bom.util;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
+
+import com.idm.app.idpconfig.bom.model.Field;
+import com.idm.app.idpconfig.eventconfig.model.InterfaceInfo;
+import com.idm.app.idpconfig.proModelParaConfig.model.ModelQParaField;
+import com.idm.app.idpconfig.proModelParaConfig.model.ParaBaseInfo;
+
+
+/**
+ * 
+ *<P>Title:XSDGenerate</P>
+ *@Description:生成XSD文件工具类
+ *@author wangchunzhi
+ *@date 2019年2月27日
+ *@version 1.0
+ */
+
+public class XSDGenerate {	
+	static Logger logger = Logger.getLogger(XSDGenerate.class);
+	static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+	/**
+	 * 
+	 *@Description:将BOM文件输出到固定目录的文件
+	 *@param d 文档对象
+	 *@param path  输出文件地址
+	 * @throws IOException 
+	 */
+	public static void writeToDisk(Document d,String path) throws IOException{		
+			OutputFormat format = OutputFormat.createPrettyPrint();   			
+			XMLWriter writer = new XMLWriter(new FileWriter(					
+					new File(path)),format);			
+			writer.write(d);
+			writer.close();		
+			
+		}
+	
+	/**
+	 * 
+	 *@Description:创建一个dom对象新节点
+	 *@param name 
+	 *@return
+	 */
+	public static Element getNewElement(String name){
+		Document document1= DocumentHelper.createDocument();
+		document1.addElement(name);
+		Element element =document1.getRootElement();
+		return element;
+	}
+	/**
+	 * 
+	 *@Description:在Application节点中添加新数据源dto的引用
+	 *@param root 根节点
+	 *@param name 要添加的数据源标识
+	 *@return
+	 */
+	public static Element addDto(Element root,String name){
+		@SuppressWarnings("unchecked")
+		List<Element> list=root.elements("element");
+		for (Element element : list) {
+			if(element.attributeValue("name").equals("Application")){
+				Element el=getNewElement("xs:element");
+				el.addAttribute("ref",name);
+				el.addAttribute("minOccurs", "0");
+				if(!"baseData".equals(name)||!"modelQbaseData".equals(name)){
+					el.addAttribute("maxOccurs", "unbounded");
+				}
+				element.element("complexType").element("sequence").add(el);
+			}
+		}
+		return root;
+	}
+	
+	/**
+	 * 
+	 *@Description:获取指定父节点下的所有子节点
+	 *@param list
+	 *@param fatherNode
+	 *@return
+	 */
+	public static List<Field> getFieldS(List<Field> list,String fatherNode){
+		List<Field> listf=new ArrayList<Field>();
+		for (Field field : list) {
+			if(field.getFatherNode().equals(fatherNode)){
+				listf.add(field);
+			}
+		}
+		return listf;
+	}
+	/**
+	 * 
+	 *@Description:获取上游传入数据字段节点
+	 *@param field
+	 *@return
+	 */
+	public static Element getAttributeBE(ParaBaseInfo field){
+		Element attribute=getNewElement("xs:attribute");
+		attribute.addAttribute("name", field.getParameterfields());
+		attribute.addAttribute("type", "xs:"+getFieldType(field.getParametertype()));
+		attribute.addAttribute("use","optional");
+		return attribute;
+	}
+	/**
+	 * 
+	 *@Description:获取模型质检传入数据字段节点
+	 *@param field
+	 *@return
+	 */
+	public static Element getAttributeME(ModelQParaField field){
+		Element attribute=getNewElement("xs:attribute");
+		attribute.addAttribute("name", field.getParameterfields());
+		attribute.addAttribute("type", "xs:"+getFieldType(field.getParametertype()));
+		attribute.addAttribute("use","optional");
+		return attribute;
+	}
+	/**
+	 * 
+	 *@Description:获取数据源字段节点
+	 *@param field
+	 *@return
+	 */
+	public static Element getAttributeE(Field field){
+		Element attribute=getNewElement("xs:attribute");
+		attribute.addAttribute("name", field.getFieldName());
+		attribute.addAttribute("type", "xs:"+getFieldType(field.getFieldType()));
+		attribute.addAttribute("use","optional");
+		return attribute;
+	}
+	/**
+	 * 
+	 *@Description:获取dto节点
+	 *@param elementName
+	 *@return
+	 */
+	public static Element getComplexType(String elementName){
+		Element element=getNewElement("xs:element");
+		element.addAttribute("name", elementName);
+		Element complexType=getNewElement("xs:complexType");
+		Element sequence=getNewElement("xs:sequence");
+		complexType.add(sequence);
+		element.add(complexType);
+		return element;
+	}
+	/**
+	 * 
+	 *@Description:获取dto属性节点
+	 *@param name
+	 *@return
+	 */
+	public static Element getElement(String name){
+		Element el=getNewElement("xs:element");
+		el.addAttribute("ref",name);
+		el.addAttribute("minOccurs", "0");
+		el.addAttribute("maxOccurs", "unbounded");
+		return el;
+	}
+	/**
+	 * 
+	 *@Description:将字段的类型转化为bom文件中的类型
+	 *@param fieldType
+	 *@return
+	 */
+	public static String getFieldType(String fieldType){
+		String result=fieldType.toLowerCase();
+		if("int".equals(result)){
+			result="integer";
+		}else if("datetime".equals(result)){
+			result="dateTime";
+		}
+		return result;
+	}
+	/**
+	 * 
+	 *@Description:生成BOM文件的方法
+	 *@param path bom文件的生成路径
+	 *@param listI 智能决策平台用到数据源接口列表
+	 *@param listF
+	 *@return
+	 */
+	public static boolean createBOM(String path,List<InterfaceInfo> listI,List<Field> listF,List<ParaBaseInfo> listPB,List<ModelQParaField> modelFieldlist,String bomPath){
+		SAXReader reader= new SAXReader();
+		File xmlFile = new File(bomPath);//创建bom基础文件
+		Document doc = null;
+		String baseDate="baseData";//上游参数bom中的对象名称
+		String modelQbaseDate="modelQbaseData";//模型质检参数在bom中的名称
+		try {
+			doc = reader.read(xmlFile);
+			Element root= doc.getRootElement();
+			XSDGenerate.addDto(root,baseDate);
+			root.add((getbaseE(listPB,baseDate)));
+			XSDGenerate.addDto(root,modelQbaseDate);
+			root.add((getmodelQBaseE(modelFieldlist,modelQbaseDate)));
+			for (InterfaceInfo interface1 : listI) {
+					XSDGenerate.addDto(root,interface1.getInterfaceCode());
+					getE(getFS(listF,interface1.getInterfaceCode()),interface1.getInterfaceCode(),root);
+			}
+			XSDGenerate.writeToDisk(doc,path);
+			return true;
+		} catch (DocumentException e){
+			logger.error("创建BOM文件时错误"+e);
+		} catch (IOException e) {
+			logger.error("输出BOM文件时错误"+e);
+		}catch (Exception e) {
+			logger.error("生成BOM文件时错误"+e);
+		}
+		return false;
+	}
+	/**
+	 * 
+	 *@Description:递归处理多层级的dto的逻辑
+	 *@param list
+	 *@param fatherNode
+	 *@param root
+	 *@return
+	 */
+	public static Element getE(List<Field> list,String fatherNode,Element root){
+		Element element=getComplexType(fatherNode);
+		List<Field> listf=getFieldS(list,fatherNode);
+		for (Field field : listf) {
+			if(field.getIsChildNode().equals("N")){
+				element.element("xs:complexType").add(getAttributeE(field));
+			}else if(field.getIsChildNode().equals("Y")){
+				element.element("xs:complexType").element("xs:sequence").add(getElement(field.getFieldName()));
+				getE(list,field.getFieldName(),root);
+			}
+		}
+		root.add(element);
+		return root;
+	}
+	/**
+	 * 
+	 *@Description:拼接上游数据dto方法
+	 *@param listPB
+	 *@param fatherNode
+	 *@return
+	 */
+	public static Element getbaseE(List<ParaBaseInfo> listPB,String fatherNode){
+		Element element=getComplexType(fatherNode);
+		for (ParaBaseInfo field : listPB) {
+				element.element("xs:complexType").add(getAttributeBE(field));
+		}
+		return element;
+	}
+	/**
+	 * 
+	 *@Description:拼接模型质检数据dto方法
+	 *@param listPB
+	 *@param fatherNode
+	 *@return
+	 */
+	public static Element getmodelQBaseE(List<ModelQParaField> list,String fatherNode){
+		Element element=getComplexType(fatherNode);
+		for (ModelQParaField field : list) {
+				element.element("xs:complexType").add(getAttributeME(field));
+		}
+		return element;
+	}
+	/**
+	 * 
+	 *@Description:获取单个数据源接口下的所有字段
+	 *@param list
+	 *@param interfaceCode
+	 *@return
+	 */
+	public static List<Field> getFS(List<Field> list,String interfaceCode){
+		List<Field> listf=new ArrayList<Field>();
+		for (Field field : list) {
+			if(field.getInterfaceCode().equals(interfaceCode)){
+				listf.add(field);
+			}
+		}
+		return listf;
+	}
+}
+

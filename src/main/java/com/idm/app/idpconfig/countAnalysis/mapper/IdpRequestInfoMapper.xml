@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.idpconfig.countAnalysis.mapper.IdpRequestInfoMapper">
+  
+	
+	<select  id="selectCountByAll" parameterType="com.idm.app.idpconfig.countAnalysis.model.IdpRequestInfo"  resultType="java.lang.Integer" >
+	
+	    select count(1) from ( 
+      SELECT
+           c.requestid,
+           c.serialno,
+           c.queryseqno,
+           c.businessno,
+           c.requesttype,
+           c.cifname,
+           c.cifno,
+           c.sex,
+           c.age,
+           c.idtype,
+           c.idno,
+           c.mobilephone,
+           c.deptid,
+           c.deptname,
+           c.productid,
+           c.productname,
+           c.modelcode,
+           c.modelname,
+           c.querysystemcode,
+           c.querysystemname,
+           c.respsystemcode,
+           c.respsystemname,
+           c.srcdate,
+           c.srctime,
+           c.rkdate,
+           c.rktime,
+           c.rerunflag,
+           c.message
+         FROM IDP_REQUEST_INFO c WHERE 1=1
+      		<if test="srcDate!=null and srcDate!='' ">
+		        and srcdate like '%'||#{srcDate}||'%'
+		    </if>
+		    <if test="serialNo!=null and serialNo!='' ">
+		        and serialNo like '%'||#{serialNo}||'%'
+		    </if>
+		    <if test="cifName!=null and cifName!='' ">
+		        and cifName like '%'||#{cifName}||'%'
+		    </if>
+		    <if test="querySystemCode!=null and querySystemCode!='' ">
+		        and querySystemCode like '%'||#{querySystemCode}||'%'
+		    </if>
+          ORDER BY
+           c.serialno desc,c.businessno desc     
+          )t1  
+	
+	</select>
+	
+	
+		
+	<select  id="queryIdpRequestInfo" parameterType="com.idm.app.idpconfig.countAnalysis.model.IdpRequestInfo"
+        resultType="com.idm.app.idpconfig.countAnalysis.model.IdpRequestInfo" >
+	 select * from (select t1.*,rownum rnm from ( 
+		  SELECT
+		   c.requestid,
+           c.serialno,
+           c.queryseqno,
+           c.businessno,
+           c.requesttype,
+           c.cifname,
+           c.cifno,
+           c.sex,
+           c.age,
+           c.idtype,
+           c.idno,
+           c.mobilephone,
+           c.deptid,
+           c.deptname,
+           c.productid,
+           c.productname,
+           c.modelcode,
+           c.modelname,
+           c.querysystemcode,
+           c.querysystemname,
+           c.respsystemcode,
+           c.respsystemname,
+           c.srcdate,
+           c.srctime,
+           c.rkdate,
+           c.rktime,
+           c.rerunflag,
+           c.message
+		  FROM IDP_REQUEST_INFO c WHERE 1=1
+		    <if test="srcDate!=null and srcDate!='' ">
+		        and srcdate like '%'||#{srcDate}||'%'
+		    </if>
+		    <if test="serialNo!=null and serialNo!='' ">
+		        and serialno like '%'||#{serialNo}||'%'
+		    </if>
+		   	<if test="cifName!=null and cifName!='' ">
+		        and cifName like '%'||#{cifName}||'%'
+		    </if>
+		    <if test="querySystemCode!=null and querySystemCode!='' ">
+		        and querySystemCode like '%'||#{querySystemCode}||'%'
+		    </if>
+		 
+		      ORDER BY
+		      c.serialno desc,c.businessno desc
+      
+          )t1 
+    <if test="page!= null and size!= null">
+      where rownum &lt;= #{page}*#{size}
+    </if>
+    )
+    <if test="page!= null and size!= null">
+      where rnm &gt;= (#{page}-1)*#{size} +1 
+    </if>
+	
+	
+	</select>
+
+    <!--queryIdpRequestInfoExcel-->
+    <select  id="queryIdpRequestInfoExcel" parameterType="com.idm.app.idpconfig.countAnalysis.model.IdpRequestInfo"
+             resultType="com.idm.app.idpconfig.countAnalysis.model.IdpRequestInfo" >
+        SELECT
+        c.serialno,
+        c.srcdate,
+        c.srctime,
+        c.message
+        FROM IDP_REQUEST_INFO c WHERE 1=1
+        <if test="srcDate!=null and srcDate!='' ">
+            and srcdate like '%'||#{srcDate}||'%'
+        </if>
+        <if test="serialNo!=null and serialNo!='' ">
+            and serialno like '%'||#{serialNo}||'%'
+        </if>
+
+        ORDER BY
+        c.serialno desc
+
+    </select>
+</mapper>

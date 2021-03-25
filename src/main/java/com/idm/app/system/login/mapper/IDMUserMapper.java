@@ -1,0 +1,26 @@
+package com.idm.app.system.login.mapper;
+
+import com.idm.app.system.login.model.IDMUser;
+import com.idm.app.system.login.model.IDMUserExample;
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
+
+public interface IDMUserMapper {
+    long countByExample(IDMUserExample example);
+
+    int deleteByExample(IDMUserExample example);
+
+    int insert(IDMUser record);
+
+    int insertSelective(IDMUser record);
+
+    List<IDMUser> selectByExample(IDMUserExample example);
+
+    int updateByExampleSelective(@Param("record") IDMUser record, @Param("example") IDMUserExample example);
+
+    int updateByExample(@Param("record") IDMUser record, @Param("example") IDMUserExample example);
+
+	int selectLoginNum(String username);
+
+	void updateUserStatus(IDMUser user);
+}

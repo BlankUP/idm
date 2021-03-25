@@ -1,0 +1,17 @@
+package com.idm.app.idpconfig.countAnalysis.mapper;
+
+import java.util.List;
+
+import com.idm.app.idpconfig.countAnalysis.model.IdpRequestInfo;
+
+
+
+public interface IdpRequestInfoMapper {
+
+	int selectCountByAll(IdpRequestInfo idprequestinfo);
+
+	List<IdpRequestInfo> queryIdpRequestInfo(IdpRequestInfo idprequestinfo);
+	
+	
+
+}

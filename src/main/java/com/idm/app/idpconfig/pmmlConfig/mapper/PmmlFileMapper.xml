@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.idpconfig.pmmlConfig.mapper.PmmlFileMapper">
+<select id="queryPmmlFile" parameterType="com.idm.app.idpconfig.pmmlConfig.model.PmmlFile"
+        resultType="com.idm.app.idpconfig.pmmlConfig.model.PmmlFile">
+	SELECT
+			PMMLFILEID,
+			PMMLID,
+			FILEID,
+			VERSION,
+			CREATEUSER,
+			CREATETIME,
+			UPDATEUSER,
+			UPDATETIME,
+			STATUS,
+			VERSIONDESC
+	FROM IDP_PMML_FILE WHERE 1=1
+    <if test="pmmlId!=null and pmmlId!='' ">
+        and PMMLID like '%'||#{pmmlId}||'%'
+    </if>
+</select>
+
+  <insert id="addPmmlFile" parameterType="com.idm.app.idpconfig.pmmlConfig.model.PmmlFile">
+    insert into IDP_PMML_FILE (PMMLFILEID, PMMLID, FILEID, VERSION, CREATEUSER, CREATETIME, STATUS, VERSIONDESC)
+    values (IDP_EVENT_CONFIG_SEQ.NEXTVAL, #{pmmlId,jdbcType=VARCHAR},#{fileId,jdbcType=VARCHAR},#{version,jdbcType=VARCHAR},
+    		#{createUser,jdbcType=VARCHAR},#{createTime,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},#{versionDesc,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="updatePmmlFile" parameterType="com.idm.app.idpconfig.pmmlConfig.model.PmmlFile">
+        UPDATE IDP_PMML_FILE SET status=#{status},UPDATETIME=#{updateTime},UPDATEUSER=#{updateUser},VERSIONDESC=#{versionDesc}
+        WHERE PMMLFILEID=#{pmmlFileId}
+  </update>
+    <select id="selectMaxVersionNo" parameterType="java.lang.String" resultType="java.lang.String">
+   		select max(VERSION) from IDP_PMML_FILE where PMMLID = #{pmmlId,jdbcType=VARCHAR}
+  	</select>
+  	  <update id="updateAllFile">
+        UPDATE IDP_PMML_FILE SET status='0' where status='1'
+  </update>
+    <update id="updateOneFile" parameterType="com.idm.app.idpconfig.pmmlConfig.model.PmmlFile">
+        UPDATE IDP_PMML_FILE SET status=#{status},UPDATETIME=#{updateTime},UPDATEUSER=#{updateUser}
+        WHERE PMMLFILEID=#{pmmlFileId}
+  </update>
+</mapper>

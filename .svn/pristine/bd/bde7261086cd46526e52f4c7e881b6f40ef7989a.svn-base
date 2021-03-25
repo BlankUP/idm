@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idm.app.ruleengine.modelManage.modelMonitor.mapper.VIlRuleIndexDataMapper">
+  <resultMap id="BaseResultMap" type="com.idm.app.ruleengine.modelManage.modelMonitor.model.VIlRuleIndexData">
+    <result column="QUERY_SEQ_NO" jdbcType="VARCHAR" property="querySeqNo" />
+    <result column="CERT_NUM" jdbcType="VARCHAR" property="certNum" />
+    <result column="CERT_TYPE" jdbcType="VARCHAR" property="certType" />
+    <result column="CUST_NAME" jdbcType="VARCHAR" property="custName" />
+    <result column="CUST_NO" jdbcType="VARCHAR" property="custNo" />
+    <result column="RULE_ID" jdbcType="VARCHAR" property="ruleId" />
+    <result column="RULE_NAME" jdbcType="VARCHAR" property="ruleName" />
+    <result column="FIELD_VALUE" jdbcType="VARCHAR" property="fieldValue" />
+    <result column="FIELD_NAME" jdbcType="VARCHAR" property="fieldName" />
+    <result column="SOURCE_NAME" jdbcType="VARCHAR" property="sourceName" />
+    <result column="INDEX_NAME" jdbcType="VARCHAR" property="indexName" />
+    <result column="PROD_ID" jdbcType="VARCHAR" property="prodId" />
+    <result column="PROD_NAME" jdbcType="VARCHAR" property="prodName" />
+    <result column="MODEL_ID" jdbcType="VARCHAR" property="modelId" />
+    <result column="MODEL_NAME" jdbcType="VARCHAR" property="modelName" />
+    <result column="RULE_RESULT" jdbcType="VARCHAR" property="ruleResult" />
+    <result column="REFUSE_REASON" jdbcType="VARCHAR" property="refuseReason" />
+    <result column="DATA_TIME" jdbcType="VARCHAR" property="dataTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    QUERY_SEQ_NO, CERT_NUM, CERT_TYPE, CUST_NAME, CUST_NO, RULE_ID, RULE_NAME, FIELD_VALUE, 
+    FIELD_NAME, SOURCE_NAME, INDEX_NAME, PROD_ID, PROD_NAME, MODEL_ID, MODEL_NAME, RULE_RESULT, 
+    REFUSE_REASON, DATA_TIME
+  </sql>
+  <select id="selectByExample" parameterType="com.idm.app.ruleengine.modelManage.modelMonitor.model.VIlRuleIndexDataExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from V_IL_RULE_INDEX_DATA
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.idm.app.ruleengine.modelManage.modelMonitor.model.VIlRuleIndexDataExample">
+    delete from V_IL_RULE_INDEX_DATA
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.idm.app.ruleengine.modelManage.modelMonitor.model.VIlRuleIndexData">
+    insert into V_IL_RULE_INDEX_DATA (QUERY_SEQ_NO, CERT_NUM, CERT_TYPE, 
+      CUST_NAME, CUST_NO, RULE_ID, 
+      RULE_NAME, FIELD_VALUE, FIELD_NAME, 
+      SOURCE_NAME, INDEX_NAME, PROD_ID, 
+      PROD_NAME, MODEL_ID, MODEL_NAME, 
+      RULE_RESULT, REFUSE_REASON, DATA_TIME
+      )
+    values (#{querySeqNo,jdbcType=VARCHAR}, #{certNum,jdbcType=VARCHAR}, #{certType,jdbcType=VARCHAR}, 
+      #{custName,jdbcType=VARCHAR}, #{custNo,jdbcType=VARCHAR}, #{ruleId,jdbcType=VARCHAR}, 
+      #{ruleName,jdbcType=VARCHAR}, #{fieldValue,jdbcType=VARCHAR}, #{fieldName,jdbcType=VARCHAR}, 
+      #{sourceName,jdbcType=VARCHAR}, #{indexName,jdbcType=VARCHAR}, #{prodId,jdbcType=VARCHAR}, 
+      #{prodName,jdbcType=VARCHAR}, #{modelId,jdbcType=VARCHAR}, #{modelName,jdbcType=VARCHAR}, 
+      #{ruleResult,jdbcType=VARCHAR}, #{refuseReason,jdbcType=VARCHAR}, #{dataTime,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.idm.app.ruleengine.modelManage.modelMonitor.model.VIlRuleIndexData">
+    insert into V_IL_RULE_INDEX_DATA
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="querySeqNo != null">
+        QUERY_SEQ_NO,
+      </if>
+      <if test="certNum != null">
+        CERT_NUM,
+      </if>
+      <if test="certType != null">
+        CERT_TYPE,
+      </if>
+      <if test="custName != null">
+        CUST_NAME,
+      </if>
+      <if test="custNo != null">
+        CUST_NO,
+      </if>
+      <if test="ruleId != null">
+        RULE_ID,
+      </if>
+      <if test="ruleName != null">
+        RULE_NAME,
+      </if>
+      <if test="fieldValue != null">
+        FIELD_VALUE,
+      </if>
+      <if test="fieldName != null">
+        FIELD_NAME,
+      </if>
+      <if test="sourceName != null">
+        SOURCE_NAME,
+      </if>
+      <if test="indexName != null">
+        INDEX_NAME,
+      </if>
+      <if test="prodId != null">
+        PROD_ID,
+      </if>
+      <if test="prodName != null">
+        PROD_NAME,
+      </if>
+      <if test="modelId != null">
+        MODEL_ID,
+      </if>
+      <if test="modelName != null">
+        MODEL_NAME,
+      </if>
+      <if test="ruleResult != null">
+        RULE_RESULT,
+      </if>
+      <if test="refuseReason != null">
+        REFUSE_REASON,
+      </if>
+      <if test="dataTime != null">
+        DATA_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="querySeqNo != null">
+        #{querySeqNo,jdbcType=VARCHAR},
+      </if>
+      <if test="certNum != null">
+        #{certNum,jdbcType=VARCHAR},
+      </if>
+      <if test="certType != null">
+        #{certType,jdbcType=VARCHAR},
+      </if>
+      <if test="custName != null">
+        #{custName,jdbcType=VARCHAR},
+      </if>
+      <if test="custNo != null">
+        #{custNo,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleId != null">
+        #{ruleId,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleName != null">
+        #{ruleName,jdbcType=VARCHAR},
+      </if>
+      <if test="fieldValue != null">
+        #{fieldValue,jdbcType=VARCHAR},
+      </if>
+      <if test="fieldName != null">
+        #{fieldName,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceName != null">
+        #{sourceName,jdbcType=VARCHAR},
+      </if>
+      <if test="indexName != null">
+        #{indexName,jdbcType=VARCHAR},
+      </if>
+      <if test="prodId != null">
+        #{prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="prodName != null">
+        #{prodName,jdbcType=VARCHAR},
+      </if>
+      <if test="modelId != null">
+        #{modelId,jdbcType=VARCHAR},
+      </if>
+      <if test="modelName != null">
+        #{modelName,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleResult != null">
+        #{ruleResult,jdbcType=VARCHAR},
+      </if>
+      <if test="refuseReason != null">
+        #{refuseReason,jdbcType=VARCHAR},
+      </if>
+      <if test="dataTime != null">
+        #{dataTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.idm.app.ruleengine.modelManage.modelMonitor.model.VIlRuleIndexDataExample" resultType="java.lang.Long">
+    select count(*) from V_IL_RULE_INDEX_DATA
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update V_IL_RULE_INDEX_DATA
+    <set>
+      <if test="record.querySeqNo != null">
+        QUERY_SEQ_NO = #{record.querySeqNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.certNum != null">
+        CERT_NUM = #{record.certNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.certType != null">
+        CERT_TYPE = #{record.certType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.custName != null">
+        CUST_NAME = #{record.custName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.custNo != null">
+        CUST_NO = #{record.custNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ruleId != null">
+        RULE_ID = #{record.ruleId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ruleName != null">
+        RULE_NAME = #{record.ruleName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fieldValue != null">
+        FIELD_VALUE = #{record.fieldValue,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fieldName != null">
+        FIELD_NAME = #{record.fieldName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sourceName != null">
+        SOURCE_NAME = #{record.sourceName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.indexName != null">
+        INDEX_NAME = #{record.indexName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prodId != null">
+        PROD_ID = #{record.prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prodName != null">
+        PROD_NAME = #{record.prodName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modelId != null">
+        MODEL_ID = #{record.modelId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modelName != null">
+        MODEL_NAME = #{record.modelName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ruleResult != null">
+        RULE_RESULT = #{record.ruleResult,jdbcType=VARCHAR},
+      </if>
+      <if test="record.refuseReason != null">
+        REFUSE_REASON = #{record.refuseReason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dataTime != null">
+        DATA_TIME = #{record.dataTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update V_IL_RULE_INDEX_DATA
+    set QUERY_SEQ_NO = #{record.querySeqNo,jdbcType=VARCHAR},
+      CERT_NUM = #{record.certNum,jdbcType=VARCHAR},
+      CERT_TYPE = #{record.certType,jdbcType=VARCHAR},
+      CUST_NAME = #{record.custName,jdbcType=VARCHAR},
+      CUST_NO = #{record.custNo,jdbcType=VARCHAR},
+      RULE_ID = #{record.ruleId,jdbcType=VARCHAR},
+      RULE_NAME = #{record.ruleName,jdbcType=VARCHAR},
+      FIELD_VALUE = #{record.fieldValue,jdbcType=VARCHAR},
+      FIELD_NAME = #{record.fieldName,jdbcType=VARCHAR},
+      SOURCE_NAME = #{record.sourceName,jdbcType=VARCHAR},
+      INDEX_NAME = #{record.indexName,jdbcType=VARCHAR},
+      PROD_ID = #{record.prodId,jdbcType=VARCHAR},
+      PROD_NAME = #{record.prodName,jdbcType=VARCHAR},
+      MODEL_ID = #{record.modelId,jdbcType=VARCHAR},
+      MODEL_NAME = #{record.modelName,jdbcType=VARCHAR},
+      RULE_RESULT = #{record.ruleResult,jdbcType=VARCHAR},
+      REFUSE_REASON = #{record.refuseReason,jdbcType=VARCHAR},
+      DATA_TIME = #{record.dataTime,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

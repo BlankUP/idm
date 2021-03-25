@@ -1,0 +1,120 @@
+
+.datepicker-view{
+	@datepicker-padding:10px;
+	width: 260px;
+	height: 240px;
+	border: 1px solid @grayLight;
+	border-radius: 5px;
+	box-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+	position:absolute;
+	background: @lightBackground;
+	background: rgba(255,255,255,0.9);
+	padding: @datepicker-padding;
+
+	.datepicker-header{
+		text-align: center;
+		position: relative;
+		padding: 4px 0px 4px 0px;
+		.prev{
+			position: absolute;
+			top: 4px;
+			left: 5px;
+			-left: -100px;
+			display: block;
+			cursor: pointer;
+			_zoom:1;
+		}
+
+		.next{
+			position: absolute;
+			top:4px;
+			right: 5px;
+			display: block;
+			cursor: pointer;
+			_zoom:1;
+		}
+		.title{
+			font-size: 1.2em;
+			cursor: pointer;
+		}
+	}
+
+	.datepicker-content{
+
+		.datepicker-days,.datepicker-week{
+			overflow: hidden;
+			li{
+				width: 14.28%;
+				border: none !important;
+			}
+		}
+		.datepicker-years li,.datepicker-months li,.datepicker-days li{
+			color: @grayLight;
+		}
+
+		.datepicker-minutes{
+			padding: 20px 10px 10px 10px;
+			overflow: hidden;
+			li{
+				width: 10%;
+				padding:6px 0px 6px 0px;
+				border: none;
+			}
+		}
+		//小时
+		.datepicker-hours{
+			padding: 20px 10px 10px 10px;
+			overflow: hidden;
+			li{
+				width: 20%;
+				padding:8px 0px 8px 0px;
+				border: none;
+			}
+		}
+		//月份
+		.datepicker-months{
+			padding: 20px 10px 10px 10px;
+			overflow: hidden;
+			li{
+				width: 32.5%;
+				padding:8px 0px 8px 0px;
+				border: none;
+			}
+		}
+		.datepicker-years{
+			padding: 20px 10px 10px 10px;
+			overflow: hidden;
+			li{
+				width: 32.5%;
+				padding:8px 0px 8px 0px;
+				border: none;
+			}
+		}
+		li.optional{
+			color: @textColor;
+			cursor: pointer;
+		}
+		li.active,li.optional:hover{
+			color: @white;
+			background-color: @lighterColor;
+			font-weight: bold;
+		}
+		li.active,li.optional:visited {
+			color: @white;
+			background-color: @mainColor;
+			font-weight: bold;	
+		}
+		ul{
+			margin: 0px;
+			list-style: none;
+			li{
+				float: left;
+				list-style: none;
+				padding: 5px 0px 5px 0px;
+				text-align: center;
+			}
+		}
+	}
+}
+
+
