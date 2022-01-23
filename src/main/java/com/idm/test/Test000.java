@@ -15,7 +15,9 @@ import org.dom4j.io.SAXReader;
 import org.xml.sax.Locator;
 import org.xml.sax.helpers.LocatorImpl;
 
-
+/**
+ * 给xml工具类增加行号
+ */
 public class Test000 {
 	public static void main(String[] args) throws DocumentException {
 		String dd = "<Application>\r\n" + 
