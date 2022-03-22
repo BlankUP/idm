@@ -45,9 +45,6 @@ public class ServerConfigController {
 
     @Autowired
     private ServerConfigService serverConfigService;
-
-    @Value("${DECISIONTESTJSON_PROJECT_URL}")
-    private String DECISIONTESTJSON_PROJECT_URL;
     
     @Value("${CACHESYNCHRONIZE_REQUEST_URL}")
     private String CACHESYNCHRONIZE_REQUEST_URL;
@@ -242,7 +239,8 @@ public class ServerConfigController {
 	    		}
 	    		
 	        }
-    	}catch (Exception e) {			e.printStackTrace();
+    	}catch (Exception e) {
+			e.printStackTrace();
 			result= false;
 		}
 		logger.info("******同步缓存结束******");
